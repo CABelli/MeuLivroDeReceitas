@@ -1,4 +1,13 @@
+using MeuLivroDeReceitas.Infra.IoC;
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddInfrastructureAPI(builder.Configuration);
+
+//ativar autenticacao e validar o token
+builder.Services.AddInfrastructureJWT(builder.Configuration);
+builder.Services.AddInfrastructureSwagger();
 
 // Add services to the container.
 
@@ -17,7 +26,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStatusCodePages();
+app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
