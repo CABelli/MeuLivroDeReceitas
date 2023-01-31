@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{F5BC0D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeuLivroDeReceitas.Comunicacao", "src\Shared\MeuLivroDeReceitas.Comunicacao\MeuLivroDeReceitas.Comunicacao.csproj", "{0877855A-02FD-4964-8953-C3DE5B68D6B6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeuLivroDeReceitas.Exceptions", "src\Backend\MeuLivroDeReceitas.Exceptions\MeuLivroDeReceitas.Exceptions.csproj", "{70718CC9-9BF6-46D6-9033-E314ACFE17A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeuLivroDeReceitas.Exceptions", "src\Shared\MeuLivroDeReceitas.Exceptions\MeuLivroDeReceitas.Exceptions.csproj", "{70718CC9-9BF6-46D6-9033-E314ACFE17A8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeuLivroDeReceitas.Application", "src\Backend\MeuLivroDeReceitas.Application\MeuLivroDeReceitas.Application.csproj", "{376A9661-2322-4A07-B03B-299E08D6FE9B}"
 EndProject
@@ -23,11 +23,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeuLivroDeReceitas.Infrastr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeuLivroDeReceitas.Api", "src\Backend\MeuLivroDeReceitas.Api\MeuLivroDeReceitas.Api.csproj", "{AECA9330-7239-4BDA-A043-CF55C74E1DDE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Validators.Test", "tests\Validators.Test\Validators.Test.csproj", "{60E01503-D155-473F-9AFC-555F26881558}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Validators.Test", "tests\Validators.Test\Validators.Test.csproj", "{60E01503-D155-473F-9AFC-555F26881558}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UseCases.Test", "tests\UseCases.Test\UseCases.Test.csproj", "{CF8C07C8-7258-4CDC-AC8C-A705E205F033}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UseCases.Test", "tests\UseCases.Test\UseCases.Test.csproj", "{CF8C07C8-7258-4CDC-AC8C-A705E205F033}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi.Test", "tests\WebApi.Test\WebApi.Test.csproj", "{BF8813C5-8BD5-4F0D-94DC-BAA2BDE8E585}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi.Test", "tests\WebApi.Test\WebApi.Test.csproj", "{BF8813C5-8BD5-4F0D-94DC-BAA2BDE8E585}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeuLivroDeReceitas.Infra.IoC", "src\Backend\MeuLivroDeReceitas.Infra.IoC\MeuLivroDeReceitas.Infra.IoC.csproj", "{3B7D40FD-849E-4859-8130-157A5E963191}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +73,10 @@ Global
 		{BF8813C5-8BD5-4F0D-94DC-BAA2BDE8E585}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF8813C5-8BD5-4F0D-94DC-BAA2BDE8E585}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF8813C5-8BD5-4F0D-94DC-BAA2BDE8E585}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B7D40FD-849E-4859-8130-157A5E963191}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B7D40FD-849E-4859-8130-157A5E963191}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B7D40FD-849E-4859-8130-157A5E963191}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B7D40FD-849E-4859-8130-157A5E963191}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,6 +93,7 @@ Global
 		{60E01503-D155-473F-9AFC-555F26881558} = {10CEB7E4-39AB-4C79-B6B5-3D022618054D}
 		{CF8C07C8-7258-4CDC-AC8C-A705E205F033} = {10CEB7E4-39AB-4C79-B6B5-3D022618054D}
 		{BF8813C5-8BD5-4F0D-94DC-BAA2BDE8E585} = {10CEB7E4-39AB-4C79-B6B5-3D022618054D}
+		{3B7D40FD-849E-4859-8130-157A5E963191} = {846AF935-E633-4A9A-924E-E0D440ADD188}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {474FFE23-B734-4FCB-BC6A-721A4F755681}
