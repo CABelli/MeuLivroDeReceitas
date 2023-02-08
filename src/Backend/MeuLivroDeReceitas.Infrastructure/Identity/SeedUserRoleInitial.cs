@@ -21,7 +21,7 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
             {
                 ApplicationUser user = new ApplicationUser();
                 user.UserName = "usuario@localhost";
-                user.Email = "usuario@localhost";
+                user.Email    = "usuario@localhost";
                 user.NormalizedUserName = "USUARIO@LOCALHOST";
                 user.NormalizedEmail = "USUARIO@LOCALHOST";
                 user.EmailConfirmed = true;
