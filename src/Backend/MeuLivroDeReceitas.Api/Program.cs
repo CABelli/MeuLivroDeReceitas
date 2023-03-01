@@ -1,4 +1,5 @@
 using MeuLivroDeReceitas.Infra.IoC;
+using MeuLivroDeReceitas.Domain.Account;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,15 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStatusCodePages();
 app.UseRouting();
+
+//app.Services.GetRequiredService<ISeedUserRoleInitial>().SeedRoles();
+
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<ISeedUserRoleInitial>();
+    userManager.SeedRoles();
+    userManager.SeedUsers();
+}
 
 app.UseAuthentication();
 app.UseAuthorization();

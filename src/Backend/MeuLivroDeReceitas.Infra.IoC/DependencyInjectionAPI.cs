@@ -22,14 +22,13 @@ namespace MeuLivroDeReceitas.Infra.IoC
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            ///services.ConfigureApplicationCookie(options => options.AccessDeniedPath = "/Account/Login");
+            services.ConfigureApplicationCookie(options => options.AccessDeniedPath = "/Account/Login");
 
 
             services.AddScoped<IAuthenticate, AuthenticateService>();
-            ///services.AddScoped<ISeedUserRoleInitial, SeedUserRoleInitial>();
+            //services.AddScoped<ISeedUserRoleInitial, SeedUserRoleInitial>();
 
-            //services.AddAutoMapper(typeof(DomainToDTOMappingProfile));
-            //
+            //services.AddAutoMapper(typeof(DomainToDTOMappingProfile));            
 
             var myHandlers = AppDomain.CurrentDomain.Load("MeuLivroDeReceitas.Application");
             services.AddMediatR(myHandlers);
