@@ -1,8 +1,9 @@
-using MeuLivroDeReceitas.Infra.IoC;
 using MeuLivroDeReceitas.Domain.Account;
+using MeuLivroDeReceitas.Infra.IoC;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services to the container.
 
 builder.Services.AddInfrastructureAPI(builder.Configuration);
 
@@ -10,12 +11,11 @@ builder.Services.AddInfrastructureAPI(builder.Configuration);
 builder.Services.AddInfrastructureJWT(builder.Configuration);
 builder.Services.AddInfrastructureSwagger();
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddControllers();                     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//builder.Services.AddAutoMapper();
 
 var app = builder.Build();
 
@@ -26,18 +26,20 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.UseHttpsRedirection();
 app.UseStatusCodePages();
 app.UseRouting();
 
-//app.Services.GetRequiredService<ISeedUserRoleInitial>().SeedRoles();
+//using (var scope = app.Services.CreateScope())
+//{
+//    //var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+//    //context.Database.Migrate();
 
-using (var scope = app.Services.CreateScope())
-{
-    var userManager = scope.ServiceProvider.GetRequiredService<ISeedUserRoleInitial>();
-    userManager.SeedRoles();
-    userManager.SeedUsers();
-}
+//    var userManager = scope.ServiceProvider.GetRequiredService<ISeedUserRoleInitial>();
+//    userManager.SeedRoles();
+//    userManager.SeedUsers();
+//}
 
 app.UseAuthentication();
 app.UseAuthorization();

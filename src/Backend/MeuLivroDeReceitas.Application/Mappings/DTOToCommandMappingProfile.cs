@@ -1,14 +1,14 @@
-﻿using AutoMapper;
+﻿using MeuLivroDeReceitas.Application.DTOs;
 
 namespace MeuLivroDeReceitas.Application.Mappings
 {
-    public class DTOToCommandMappingProfile : Profile
+    public class DTOToCommandMappingProfile
     {
-        //public DomainToDTOMappingProfile()
+        //public DTOToCommandMappingProfile()
         //{
-        //    //CreateMap<Category, CategoryDTO>().ReverseMap();
-        //    //CreateMap<Product, ProductDTO>().ReverseMap();            
+        //    CreateMap<IngredientDTO, ProductCreateCommand>();
+        //    CreateMap<IngredientDTO, ProductUpdateCommand>();
+        //    CreateMap<IngredientDTO, ProductRemoveCommand>();
         //}
     }
 }
-

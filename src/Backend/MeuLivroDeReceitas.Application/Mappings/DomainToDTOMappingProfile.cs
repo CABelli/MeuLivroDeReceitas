@@ -1,18 +1,15 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MeuLivroDeReceitas.Application.DTOs;
+using MeuLivroDeReceitas.Domain.Entities;
 
 namespace MeuLivroDeReceitas.Application.Mappings
 {
     public class DomainToDTOMappingProfile : Profile
     {
-        //public DTOToCommandMappingProfile()
-        //{
-        //    //CreateMap<Category, CategoryDTO>().ReverseMap();
-        //    //CreateMap<Product, ProductDTO>().ReverseMap();
-        //}
+        public DomainToDTOMappingProfile()
+        {
+            CreateMap<Recipe, RecipeDTO>().ReverseMap();
+            CreateMap<Ingredient, IngredientDTO>().ReverseMap();
+        }
     }
 }

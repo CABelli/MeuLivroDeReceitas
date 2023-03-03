@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-
 namespace MeuLivroDeReceitas.Infra.IoC
 {
     public static class DependencyInjectionJWT
