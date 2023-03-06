@@ -1,9 +1,8 @@
-﻿using MeuLivroDeReceitas.Application.DTOs;
-using MeuLivroDeReceitas.Application.Interfaces;
+﻿using MeuLivroDeReceitas.Application.Interfaces;
+using MeuLivroDeReceitas.Comunicacao.Dto.Request;
+using MeuLivroDeReceitas.Comunicacao.Dto.Response;
 using MeuLivroDeReceitas.Domain.Entities;
 using MeuLivroDeReceitas.Domain.Interfaces;
-using System.Reflection.Metadata;
-using System.Reflection.Metadata.Ecma335;
 using System.Text;
 
 namespace MeuLivroDeReceitas.Application.Services
@@ -29,73 +28,97 @@ namespace MeuLivroDeReceitas.Application.Services
             // _unitOfWork = unitOfWork;
         }
 
-        public async Task<IEnumerable<RecipeDTO>> GetRecipies()
+        public async Task<IEnumerable<RecipeResponseDTO>> GetRecipies()
         {
             var recipiesEntity = await _recipeRepository.GetRecipies();
 
-            List<RecipeDTO> recipiesDTO = new List<RecipeDTO>();
+            List<RecipeResponseDTO> listRecipeResponseDTO = new List<RecipeResponseDTO>();
 
             foreach (var rec in recipiesEntity)
             {
-                if (rec.DataDraft != null)
+                var recipeResponseDTO = new RecipeResponseDTO()
                 {
-                    var t1 = Encoding.ASCII.GetString(rec.DataDraft);
-                    //var t2 = System.Text.Json.JsonSerializer.Deserialize<string>(t1);
-                }
-
-                var recipeDTO = new RecipeDTO()
-                {
+                    Id = rec.Id,
                     Title = rec.Title,
                     Category = rec.Category,
                     PreparationMode = rec.PreparationMode,
                     PreparationTime = rec.PreparationTime,
-                    DataDraft = rec.DataDraft != null ? Encoding.ASCII.GetString(rec.DataDraft) : null
+                    DataDraft = rec.DataDraft != null ? true : false
                 };
-
-                recipiesDTO.Add(recipeDTO);
+                listRecipeResponseDTO.Add(recipeResponseDTO);
             }
 
-            return recipiesDTO;
+            return listRecipeResponseDTO;
         }
 
-        public async Task<RecipeDTO> GetById(Guid id)
+        public async Task<RecipeResponseDTO> GetById(Guid id)
         {
             var rec = await _recipeRepository.GetId(id);
-            return new RecipeDTO()
+
+            if (rec == null) return new RecipeResponseDTO();
+
+            return new RecipeResponseDTO()
             {
                 Title = rec.Title,
                 Category = rec.Category,
                 PreparationMode = rec.PreparationMode,
                 PreparationTime = rec.PreparationTime,
-                DataDraft = rec.DataDraft != null ? Encoding.ASCII.GetString(rec.DataDraft) : null
+                DataDraft = rec.DataDraft != null ? true : false
             };
         }
 
-        public async Task<IEnumerable<RecipeDTO>> GetRecipiesTitle(string title)
+        public async Task<IEnumerable<RecipeResponseDTO>> GetRecipiesTitle(string title)
         {
             var recipiesEntity = await _recipeRepository.GetRecTitle(title);
 
-            List<RecipeDTO> recipiesDTO = new List<RecipeDTO>();
+            List<RecipeResponseDTO> listRecipeResponseDTO = new List<RecipeResponseDTO>();
 
             foreach (var rec in recipiesEntity)
             {
-                var recipeDTO = new RecipeDTO()
+                var recipeDTO = new RecipeResponseDTO()
                 {
+                    Id = rec.Id,
                     Title = rec.Title,
                     Category = rec.Category,
                     PreparationMode = rec.PreparationMode,
                     PreparationTime = rec.PreparationTime,
-                    DataDraft = rec.DataDraft != null ? Encoding.ASCII.GetString(rec.DataDraft) : null
+                    DataDraft = rec.DataDraft != null ? true : false
                 };
-                recipiesDTO.Add(recipeDTO);
+                listRecipeResponseDTO.Add(recipeDTO);
             }
-            return recipiesDTO;
+            return listRecipeResponseDTO;
         }
 
-        public async Task Add(RecipeDTO recipeDTO)
+        public async Task<IEnumerable<Comunicacao.Dto.Response.RecipeImageDraftDTO>> GetRecipiesDownLoad(string title)
         {
-            var recipiesTitle = await _recipeRepository.GetRecTitle(recipeDTO.Title);
-            if (recipiesTitle == null)
+            if (title == null) return Enumerable.Empty<Comunicacao.Dto.Response.RecipeImageDraftDTO>();
+
+            var recipies = await _recipeRepository.GetRecTitle(title);
+
+            if(recipies == null || recipies.Count() == 0) return Enumerable.Empty<Comunicacao.Dto.Response.RecipeImageDraftDTO>();
+
+            List<Comunicacao.Dto.Response.RecipeImageDraftDTO> listRecipeImageDraftDTO = new List<Comunicacao.Dto.Response.RecipeImageDraftDTO>();
+
+            Comunicacao.Dto.Response.RecipeImageDraftDTO recipeImageDraftDTO = new Comunicacao.Dto.Response.RecipeImageDraftDTO();
+
+            foreach (var rec in recipies)
+            {                
+                recipeImageDraftDTO.Title = rec.Title;
+                recipeImageDraftDTO.NamyFile = DateTime.Now.ToString("HH:mm:ss") + "imagem.png";
+                recipeImageDraftDTO.ListDataDraft.Add(rec.DataDraft);
+            }
+            listRecipeImageDraftDTO.Add(recipeImageDraftDTO);
+            return listRecipeImageDraftDTO;
+        }
+
+
+        public async Task Add(Comunicacao.Dto.Request.RecipeDTO recipeDTO)
+        {
+            if(recipeDTO == null) await Task.FromException<Exception>(new Exception("Recipe is null"));
+            if (recipeDTO.Title == null) await Task.FromException<Exception>(new Exception("Recipe is null"));
+
+            var recipies = await _recipeRepository.GetRecTitle(recipeDTO.Title);
+            if (recipies == null || recipies.Count() == 0)
             {
                 var recipe = new Recipe()
                 {
@@ -112,57 +135,22 @@ namespace MeuLivroDeReceitas.Application.Services
             }
         }
 
-        public async Task Update(RecipeDraftDTO dataDraft)
+        public async Task Update(RecipeStringDraftDTO dataDraft)
         {
-            //var recipe = new Recipe()
-            //{
-            //    Title = recipeDTO.Title,
-            //    DataDraft = recipeDTO.DataDraft
-            //};
-
-
-            //var recipe = await _recipeRepository.GetTitle(dataDraft.Title);
-            // var recipe = await _recipeRepository.GetByWhere(dataDraft.Title);
-
             var recipe = await _recipeRepository.GetId(dataDraft.Id);
 
             recipe.DataDraft = Encoding.ASCII.GetBytes(dataDraft.DataDraft);
 
             await _recipeRepository.UpdateAsync(recipe);
-
-            //foreach (IFormFile obj in recipeDraftDto.DataDraft)
-            //{
-
-            /// //Imagem img = new Imagem();
-            /////img.ImagemTitulo = file.FileName;
-
-            /////recipe.DataDraft = recipeDraftDto.DataDraft;
-
-            //MemoryStream ms = new MemoryStream();
-
-            //obj.CopyTo(ms);
-
-            //recipe.DataDraft = ms.ToArray();
-
-            //ms.Close();
-            //ms.Dispose();
-
-            /////_recipeContext.Recipies.Add(recipe);
-            /////_recipeContext.SaveChanges();
-
-            //await _recipeRepository.UpdateAsync(recipe);
-
-            //await _recipeRepository.SaveChangesAsync();
-            //}
-
-
-
-            //await _recipeRepository.UpdateAsync(recipe);
         }
 
-        public async Task Update(RecipeImageDraftDTO dataDraft)
+        public async Task Update(RecipeImageDraftRequestDTO dataDraft)
         {
-            var recipe = await _recipeRepository.GetId(dataDraft.Id);
+            var recipies = await GetRecipiesTitle(dataDraft.Title);
+
+            if (recipies == null) await Task.FromException<Exception>(new Exception("Recipe is null"));
+
+            var recipe = await _recipeRepository.GetId(recipies.First().Id);
 
             recipe.DataDraft = dataDraft.DataDraft;
 

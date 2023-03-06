@@ -1,21 +1,22 @@
-﻿using MeuLivroDeReceitas.Application.DTOs;
-using MeuLivroDeReceitas.Domain.Entities;
-using MeuLivroDeReceitas.Domain.Enum;
+﻿using MeuLivroDeReceitas.Comunicacao.Dto.Request;
+using MeuLivroDeReceitas.Comunicacao.Dto.Response;
 
 namespace MeuLivroDeReceitas.Application.Interfaces
 {
     public interface IRecipeService
     {
-        Task<IEnumerable<RecipeDTO>> GetRecipies();
+        Task<IEnumerable<RecipeResponseDTO>> GetRecipies();
 
-        Task<RecipeDTO> GetById(Guid id);
+        Task<RecipeResponseDTO> GetById(Guid id);
 
-        Task<IEnumerable<RecipeDTO>> GetRecipiesTitle(string title);
+        Task<IEnumerable<RecipeResponseDTO>> GetRecipiesTitle(string title);
 
-        Task Add(RecipeDTO recipeDTO);
+        Task<IEnumerable<Comunicacao.Dto.Response.RecipeImageDraftDTO>> GetRecipiesDownLoad(string title);
 
-        Task Update(RecipeDraftDTO dataDraft);
+        Task Add(Comunicacao.Dto.Request.RecipeDTO recipeDTO);
 
-        Task Update(RecipeImageDraftDTO dataDraft);
+        Task Update(RecipeStringDraftDTO dataDraft);
+
+        Task Update(RecipeImageDraftRequestDTO dataDraft);
     }
 }

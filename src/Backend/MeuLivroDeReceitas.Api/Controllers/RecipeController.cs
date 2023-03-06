@@ -1,5 +1,7 @@
 ﻿using MeuLivroDeReceitas.Application.DTOs;
 using MeuLivroDeReceitas.Application.Interfaces;
+using MeuLivroDeReceitas.Comunicacao.Dto.Request;
+using MeuLivroDeReceitas.Comunicacao.Dto.Response;
 using MeuLivroDeReceitas.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,7 +20,7 @@ namespace MeuLivroDeReceitas.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RecipeDTO>>> Get()
+        public async Task<ActionResult<IEnumerable<RecipeResponseDTO>>> Get()
         {
             var recipies = await _recipeService.GetRecipies();
             if (recipies == null)
@@ -29,7 +31,7 @@ namespace MeuLivroDeReceitas.Api.Controllers
         }
 
         [HttpGet("{title}")]
-        public async Task<ActionResult<IEnumerable<RecipeDTO>>> Get(string title)
+        public async Task<ActionResult<IEnumerable<RecipeResponseDTO>>> Get(string title)
         {
             var recipies = await _recipeService.GetRecipiesTitle(title);
             if (recipies == null)
@@ -43,68 +45,79 @@ namespace MeuLivroDeReceitas.Api.Controllers
         public async Task<IActionResult> Get(Guid id) => Ok(await _recipeService.GetById(id));
 
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] RecipeDTO recipeDTO)
+        public async Task<ActionResult> Post([FromBody] Comunicacao.Dto.Request.RecipeDTO recipeDTO)
         {
-            if (recipeDTO == null)
-                return BadRequest("Invalid Data");
-
             await _recipeService.Add(recipeDTO);
 
             return Ok("Ok Data");
-            //return new CreatedAtRouteResult("GetCaregory", new { Title = recipeDTO.Title }, recipeDTO);
         }
 
         [HttpPut]
-        public async Task<ActionResult> Put([FromBody] RecipeDraftDTO recipeDTO)
+        public async Task<ActionResult> Put([FromBody] RecipeStringDraftDTO recipeStringDraftDTO)
         {
-
-            if (recipeDTO == null)
+            if (recipeStringDraftDTO == null)
             {
                 return BadRequest();
             }
 
+            await _recipeService.Update(recipeStringDraftDTO);
 
-            //var draft  = new byte[0] ;
-
-            //MemoryStream ms = new MemoryStream();
-            //foreach (IFormFile file in Request.Form.Files)
-            //{
-            //    file.CopyTo(ms);
-            //    draft = ms.ToArray();
-            //    ms.Close();
-            //    ms.Dispose();
-            //}
-
-            await _recipeService.Update(recipeDTO);
-
-            return Ok(recipeDTO);
+            return Ok(recipeStringDraftDTO);
         }
 
         [HttpPut]
         [Route("img")]
-        public async Task<ActionResult> PutImage([FromForm] IFormFile file, [FromBody] RecipeImageDraftDTO recipeDTO)
+        public async Task<ActionResult> PutImage([FromForm] ICollection<IFormFile> files, string title)
+        //([FromForm] IFormFile file, [FromBody] RecipeImageDraftRequestDTO recipeImageDraftRequestDTO)
         {
-            if (recipeDTO == null)
+            if (title == null || files == null) return BadRequest();
+
+            var fileDrfat = new byte[0];
+            List<byte[]> lista = new();
+
+            foreach (IFormFile fil in files)
             {
-                return BadRequest();
+                if (fil.Length > 0)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        fil.CopyTo(memoryStream);
+                        fileDrfat = memoryStream.ToArray();
+                        lista.Add(memoryStream.ToArray());
+                    }
+                }
+                else
+                    return BadRequest();
             }
 
-            var draft = new byte[0];
-
-            MemoryStream ms = new MemoryStream();
-            foreach (IFormFile fil in Request.Form.Files)
+            var recipeImageDraftDTO = new RecipeImageDraftRequestDTO
             {
-                fil.CopyTo(ms);
-                draft = ms.ToArray();
-                ms.Close();
-                ms.Dispose();
-            }
+                Title = title,
+                DataDraft = fileDrfat
+            };
 
-            recipeDTO.DataDraft = draft;
+            await _recipeService.Update(recipeImageDraftDTO);
 
-            await _recipeService.Update(recipeDTO);
+            //return Ok("ok " + name + File(fileDrfat, contentType, "Imagem01.png") );
 
-            return Ok(recipeDTO);
+            var x = files.FirstOrDefault().ContentType;
+
+            var nomeArq = DateTime.Now.ToString("HH:mm:ss") + Path.GetFileName(files.FirstOrDefault().FileName);
+
+            return File(lista[0], files.FirstOrDefault().ContentType, nomeArq);
+        }
+
+        [HttpGet]
+        [Route("DownLoadimage")]
+        public async Task<ActionResult> DownLoadimage(string title)
+        {
+            var listRecipeImageDraftDTO = await _recipeService.GetRecipiesDownLoad(title);
+
+            if (listRecipeImageDraftDTO == null || listRecipeImageDraftDTO.Count() == 0) { return BadRequest(); }
+
+            return File(listRecipeImageDraftDTO.FirstOrDefault().ListDataDraft[0],
+                "image/png", 
+                listRecipeImageDraftDTO.FirstOrDefault().NamyFile );
         }
     }
 }

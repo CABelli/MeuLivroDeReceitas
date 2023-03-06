@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace MeuLivroDeReceitas.Application.DTOs
+namespace MeuLivroDeReceitas.Comunicacao.Dto.Request.Ingredient
 {
     public class IngredientDTO
     {

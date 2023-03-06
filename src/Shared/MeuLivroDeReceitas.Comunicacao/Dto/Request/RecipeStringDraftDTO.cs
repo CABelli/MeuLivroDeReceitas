@@ -1,13 +1,13 @@
 ﻿using Newtonsoft.Json;
 
-namespace MeuLivroDeReceitas.Application.DTOs
+namespace MeuLivroDeReceitas.Comunicacao.Dto.Request
 {
-    public class RecipeImageDraftDTO
+    public class RecipeStringDraftDTO
     {
         [JsonProperty("id")]
         public Guid Id { get; set; }
 
         [JsonProperty("dataDraft")]
-        public byte[] DataDraft { get; set; }
+        public string DataDraft { get; set; }
     }
 }

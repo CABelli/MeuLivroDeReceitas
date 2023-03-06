@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Shared\MeuLivroDeReceitas.Comunicacao\MeuLivroDeReceitas.Comunicacao.csproj" />
     <ProjectReference Include="..\MeuLivroDeReceitas.Infra.IoC\MeuLivroDeReceitas.Infra.IoC.csproj" />
   </ItemGroup>
 

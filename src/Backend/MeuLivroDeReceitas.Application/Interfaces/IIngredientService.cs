@@ -1,4 +1,4 @@
-﻿using MeuLivroDeReceitas.Application.DTOs;
+﻿using MeuLivroDeReceitas.Comunicacao.Dto.Request.Ingredient;
 
 namespace MeuLivroDeReceitas.Application.Interfaces
 {

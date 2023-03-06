@@ -1,8 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MeuLivroDeReceitas.Domain.Enum;
 using System.ComponentModel;
-using MeuLivroDeReceitas.Domain.Enum;
+using System.ComponentModel.DataAnnotations;
 
-namespace MeuLivroDeReceitas.Application.DTOs
+namespace MeuLivroDeReceitas.Comunicacao.Dto.Request
 {
     public class RecipeDTO
     {

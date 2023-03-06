@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using MeuLivroDeReceitas.Application.DTOs;
+using MeuLivroDeReceitas.Comunicacao.Dto.Request;
+using MeuLivroDeReceitas.Comunicacao.Dto.Request.Ingredient;
 using MeuLivroDeReceitas.Domain.Entities;
 
 namespace MeuLivroDeReceitas.Application.Mappings
