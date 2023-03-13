@@ -17,5 +17,9 @@ namespace MeuLivroDeReceitas.Comunicacao.Dto.Response
         public bool DataDraft { get; set; }
 
         public Category Category { get; set; }
+
+        public string? NameCategoty { get; set; }
+
+        public string? FileExtension { get; set; }
     }
 }

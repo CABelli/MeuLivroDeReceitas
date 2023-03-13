@@ -7,6 +7,9 @@ namespace MeuLivroDeReceitas.Comunicacao.Dto.Request
         [JsonProperty("id")]
         public string Title { get; set; }
 
+        [JsonProperty("fileextension")]
+        public string FileExtension { get; set; }
+
         [JsonProperty("dataDraft")]
         public byte[] DataDraft { get; set; }
     }

@@ -13,6 +13,8 @@ namespace MeuLivroDeReceitas.Domain.Entities
 
         public int PreparationTime { get; set; }
 
+        public string? FileExtension { get; set; }
+
         public byte[]? DataDraft { get; set; }
 
         public ICollection<Ingredient>? Ingredients { get; set; }

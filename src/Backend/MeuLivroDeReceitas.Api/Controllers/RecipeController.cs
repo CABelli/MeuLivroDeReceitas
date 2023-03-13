@@ -1,8 +1,6 @@
-﻿using MeuLivroDeReceitas.Application.DTOs;
-using MeuLivroDeReceitas.Application.Interfaces;
+﻿using MeuLivroDeReceitas.Application.Interfaces;
 using MeuLivroDeReceitas.Comunicacao.Dto.Request;
 using MeuLivroDeReceitas.Comunicacao.Dto.Response;
-using MeuLivroDeReceitas.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MeuLivroDeReceitas.Api.Controllers
@@ -67,10 +65,10 @@ namespace MeuLivroDeReceitas.Api.Controllers
 
         [HttpPut]
         [Route("img")]
-        public async Task<ActionResult> PutImage([FromForm] ICollection<IFormFile> files, string title)
+        public async Task<ActionResult> PutImage([FromForm] ICollection<IFormFile> files, string title, string fileExtension)
         //([FromForm] IFormFile file, [FromBody] RecipeImageDraftRequestDTO recipeImageDraftRequestDTO)
         {
-            if (title == null || files == null) return BadRequest();
+            if (title == null || fileExtension == null || files == null) return BadRequest();
 
             var fileDrfat = new byte[0];
             List<byte[]> lista = new();
@@ -93,6 +91,7 @@ namespace MeuLivroDeReceitas.Api.Controllers
             var recipeImageDraftDTO = new RecipeImageDraftRequestDTO
             {
                 Title = title,
+                FileExtension = fileExtension,
                 DataDraft = fileDrfat
             };
 
@@ -113,11 +112,22 @@ namespace MeuLivroDeReceitas.Api.Controllers
         {
             var listRecipeImageDraftDTO = await _recipeService.GetRecipiesDownLoad(title);
 
-            if (listRecipeImageDraftDTO == null || listRecipeImageDraftDTO.Count() == 0) { return BadRequest(); }
+            //if (listRecipeImageDraftDTO == null || listRecipeImageDraftDTO.Count() == 0) { return BadRequest(); }
 
-            return File(listRecipeImageDraftDTO.FirstOrDefault().ListDataDraft[0],
-                "image/png", 
-                listRecipeImageDraftDTO.FirstOrDefault().NamyFile );
+            return File(listRecipeImageDraftDTO.FirstOrDefault().DataDraft,
+                //listRecipeImageDraftDTO.FirstOrDefault().ListDataDraft[0],
+                "image/png",
+                listRecipeImageDraftDTO.FirstOrDefault().NameFile);
+
+
+            //byte[] b = listRecipeImageDraftDTO.FirstOrDefault().DataDraft;
+            //    //listRecipeImageDraftDTO.FirstOrDefault().ListDataDraft[0];
+
+            //b = await System.IO.File.ReadAllBytesAsync(
+            //    Path.Combine("", //_environment.ContentRootPath,
+            //                "Images", 
+            //                $"{title}"));
+            //return File(b, "image/jpeg");
         }
     }
 }
