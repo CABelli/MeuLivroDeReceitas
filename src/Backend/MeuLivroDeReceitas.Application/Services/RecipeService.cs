@@ -1,9 +1,16 @@
-﻿using MeuLivroDeReceitas.Application.Interfaces;
+﻿using MediatR;
+using MeuLivroDeReceitas.Application.Interfaces;
 using MeuLivroDeReceitas.Comunicacao.Dto.Request;
 using MeuLivroDeReceitas.Comunicacao.Dto.Response;
 using MeuLivroDeReceitas.Domain.Entities;
 using MeuLivroDeReceitas.Domain.Enum;
 using MeuLivroDeReceitas.Domain.Interfaces;
+using MeuLivroDeReceitas.Exceptions.ExceptionsBase;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Rewrite;
+using System.Collections.Generic;
+using System.Net;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 
 namespace MeuLivroDeReceitas.Application.Services
@@ -14,6 +21,7 @@ namespace MeuLivroDeReceitas.Application.Services
         private IRecipeRepository _recipeRepository;
 
         public const string JA_EXISTE = "Haaaa    hummm     já existe";
+        public const string SEM_ARQUIVO = "Haaaa    hummm     sem arquivo";
 
         //private readonly IMapper _mapper;
         //private readonly IUnitOfWork _unitOfWork;
@@ -58,7 +66,11 @@ namespace MeuLivroDeReceitas.Application.Services
 
             var recipies = await _recipeRepository.GetRecTitle(title);
 
-            if(recipies == null || recipies.Count() == 0) return Enumerable.Empty<Comunicacao.Dto.Response.RecipeImageDraftDTO>();
+            if (recipies == null || recipies.Count() == 0)
+                return Enumerable.Empty<Comunicacao.Dto.Response.RecipeImageDraftDTO>();
+                //return  Ok("  Vaaazio ");
+                //ReturnTypeEncoder(ReturnTypeEncoder);
+            
 
             List<Comunicacao.Dto.Response.RecipeImageDraftDTO> listRecipeImageDraftDTO = new List<Comunicacao.Dto.Response.RecipeImageDraftDTO>();
 
@@ -66,49 +78,76 @@ namespace MeuLivroDeReceitas.Application.Services
 
             foreach (var rec in recipies)
             {
-
-                //byte[] img;
-                //using (var str = new FileStream("", FileMode.Open, FileAccess.Read))
-                //{
-                //    using (var rd = new BinaryReader(str))
-                //    {
-                //        img = rd.ReadBytes((int)str.Length);
-                //    }
-                //}
-
+                if (rec.FileExtension == null || String.IsNullOrEmpty(rec.FileExtension))
+                {
+                    //await Task.FromResult(HttpStatusCode.NoContent + SEM_ARQUIVO);
+                    return listRecipeImageDraftDTO;
+                }
+                    //await Task.FromException<Exception>(new Exception(JA_EXISTE));
+                //return Request.CreateResponse(HttpStatusCode.NoContent, rec);
                 recipeImageDraftDTO.Title = rec.Title;
                 recipeImageDraftDTO.NameFile = DateTime.Now.ToString("HH:mm:ss") + "_" + rec.Title + "." + rec.FileExtension;
                 recipeImageDraftDTO.DataDraft = rec.DataDraft;
-                //recipeImageDraftDTO.ListDataDraft.Add(rec.DataDraft);
-
             }
             listRecipeImageDraftDTO.Add(recipeImageDraftDTO);
             return listRecipeImageDraftDTO;
         }
 
-
         public async Task Add(Comunicacao.Dto.Request.RecipeDTO recipeDTO)
         {
-            if (recipeDTO == null) await Task.FromException<Exception>(new Exception("Recipe is null"));
-            if (recipeDTO.Title == null) await Task.FromException<Exception>(new Exception("Recipe is null"));
+
+            await ValidarRecipeDTO(recipeDTO);
+
+            var recipe = new Recipe()
+            {
+                Title = recipeDTO.Title,
+                PreparationMode = recipeDTO.PreparationMode,
+                PreparationTime = recipeDTO.PreparationTime,
+                Category = recipeDTO.Category,
+                FileExtension = recipeDTO.FileExtension
+            };
+            await _recipeRepository.Create(recipe);
+
+            //if (recipeDTO == null) await Task.FromException<Exception>(new Exception("Recipe is null"));
+            //if (recipeDTO.Title == null) await Task.FromException<Exception>(new Exception("Recipe Title is null"));
+
+            //var recipies = await _recipeRepository.GetRecTitle(recipeDTO.Title);
+            //if (recipies == null || recipies.Count() == 0)
+            //{
+            //    var recipe = new Recipe()
+            //    {
+            //        Title = recipeDTO.Title,
+            //        PreparationMode = recipeDTO.PreparationMode,
+            //        PreparationTime = recipeDTO.PreparationTime,
+            //        Category = recipeDTO.Category,
+            //        FileExtension = recipeDTO.FileExtension
+            //    };
+            //    await _recipeRepository.Create(recipe);
+            //}
+            //else
+            //{
+            //    await Task.FromException<Exception>(new Exception(JA_EXISTE));
+            //}
+        }
+
+        private  async Task  ValidarRecipeDTO(RecipeDTO recipeDTO)
+        {
+            var validator = new RecipeValidator();
+            var resultado = validator.Validate(recipeDTO);
 
             var recipies = await _recipeRepository.GetRecTitle(recipeDTO.Title);
-            if (recipies == null || recipies.Count() == 0)
+            if (!recipies.Any() || recipies.Count() > 0)
             {
-                var recipe = new Recipe()
-                {
-                    Title = recipeDTO.Title,
-                    PreparationMode = recipeDTO.PreparationMode,
-                    PreparationTime = recipeDTO.PreparationTime,
-                    Category = recipeDTO.Category,
-                    FileExtension = recipeDTO.FileExtension
-                };
-                await _recipeRepository.Create(recipe);
+                //resultado.Errors.Add(new FluentValidation.Results.ValidationFailure("email", ResourceMensagensDeErro.EMAIL_JA_REGISTRADO));
+                resultado.Errors.Add(new FluentValidation.Results.ValidationFailure("Receita", JA_EXISTE));
             }
-            else
+
+            if (!resultado.IsValid)
             {
-                await Task.FromException<Exception>(new Exception(JA_EXISTE));
+                var mensagesDeErro = resultado.Errors.Select(c => c.ErrorMessage).ToList();
+                throw new ErrosDeValidacaoException(mensagesDeErro);
             }
+
         }
 
         public async Task Update(RecipeStringDraftDTO dataDraft)
@@ -124,10 +163,24 @@ namespace MeuLivroDeReceitas.Application.Services
             await _recipeRepository.UpdateAsync(recipe);
         }
 
-        public async Task Update(RecipeImageDraftRequestDTO dataDraft)
+        public async Task Update(ICollection<IFormFile> files, RecipeImageDraftRequestDTO dataDraft)
         {
-            if (dataDraft.FileExtension == null && dataDraft.DataDraft != null) await Task.FromException<Exception>(new Exception("FileExtension is null"));
-            if (dataDraft.FileExtension != null && dataDraft.DataDraft == null) await Task.FromException<Exception>(new Exception("DataDraft is null"));
+            var listByteFiles = ConverteFilesToBytes(files);
+
+            //var recipeImageDraftDTO = new RecipeImageDraftRequestDTO
+            //{
+            //    Title = title,
+            //    FileExtension = fileExtension,
+            //    DataDraft = fileDrfat
+            //};
+
+            var fileDrfat = new byte[0];
+
+            fileDrfat = listByteFiles.FirstOrDefault();
+
+
+            if (dataDraft.FileExtension == null && fileDrfat != null) await Task.FromException<Exception>(new Exception("FileExtension is null"));
+            if (dataDraft.FileExtension != null && fileDrfat == null) await Task.FromException<Exception>(new Exception("DataDraft is null"));
 
             var recipies = await GetRecipiesTitle(dataDraft.Title);
 
@@ -136,7 +189,7 @@ namespace MeuLivroDeReceitas.Application.Services
             var recipe = await _recipeRepository.GetId(recipies.First().Id);
 
             recipe.FileExtension = dataDraft.FileExtension;
-            recipe.DataDraft = dataDraft.DataDraft;
+            recipe.DataDraft = fileDrfat;   // dataDraft.DataDraft;
 
             await _recipeRepository.UpdateAsync(recipe);
         }
@@ -166,6 +219,28 @@ namespace MeuLivroDeReceitas.Application.Services
                 FileExtension = recipe.FileExtension
             };
             return recipeResponseDTO;
+        }
+
+        private List<byte[]> ConverteFilesToBytes(ICollection<IFormFile> files)
+        {
+            var fileDrfat = new byte[0];
+            List<byte[]> lista = new();
+
+            foreach (IFormFile fil in files)
+            {
+                if (fil.Length > 0)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        fil.CopyTo(memoryStream);
+                        fileDrfat = memoryStream.ToArray();
+                        lista.Add(memoryStream.ToArray());
+                    }
+                }
+                else
+                    return lista;
+            }
+            return lista;
         }
     }
 }

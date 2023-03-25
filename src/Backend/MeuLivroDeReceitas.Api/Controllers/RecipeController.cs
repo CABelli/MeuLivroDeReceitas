@@ -2,6 +2,7 @@
 using MeuLivroDeReceitas.Comunicacao.Dto.Request;
 using MeuLivroDeReceitas.Comunicacao.Dto.Response;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace MeuLivroDeReceitas.Api.Controllers
 {
@@ -21,10 +22,8 @@ namespace MeuLivroDeReceitas.Api.Controllers
         public async Task<ActionResult<IEnumerable<RecipeResponseDTO>>> Get()
         {
             var recipies = await _recipeService.GetRecipies();
-            if (recipies == null)
-            {
-                return NotFound("Recipies not found");
-            }
+            if (recipies == null) return NotFound("Recipies not found");
+            
             return Ok(recipies);
         }
 
@@ -32,10 +31,8 @@ namespace MeuLivroDeReceitas.Api.Controllers
         public async Task<ActionResult<IEnumerable<RecipeResponseDTO>>> Get(string title)
         {
             var recipies = await _recipeService.GetRecipiesTitle(title);
-            if (recipies == null)
-            {
-                return NotFound("Recipies not found");
-            }
+            if (recipies == null) return NotFound("Recipies not found");
+            
             return Ok(recipies);
         }
 
@@ -43,7 +40,8 @@ namespace MeuLivroDeReceitas.Api.Controllers
         public async Task<IActionResult> Get(Guid id) => Ok(await _recipeService.GetById(id));
 
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] Comunicacao.Dto.Request.RecipeDTO recipeDTO)
+        [ProducesResponseType(typeof(RecipeResponseDTO), StatusCodes.Status201Created)]
+        public async Task<ActionResult> Post([FromBody] RecipeDTO recipeDTO)
         {
             await _recipeService.Add(recipeDTO);
 
@@ -53,10 +51,7 @@ namespace MeuLivroDeReceitas.Api.Controllers
         [HttpPut]
         public async Task<ActionResult> Put([FromBody] RecipeStringDraftDTO recipeStringDraftDTO)
         {
-            if (recipeStringDraftDTO == null)
-            {
-                return BadRequest();
-            }
+            if (recipeStringDraftDTO == null) return BadRequest();            
 
             await _recipeService.Update(recipeStringDraftDTO);
 
@@ -66,44 +61,20 @@ namespace MeuLivroDeReceitas.Api.Controllers
         [HttpPut]
         [Route("img")]
         public async Task<ActionResult> PutImage([FromForm] ICollection<IFormFile> files, string title, string fileExtension)
-        //([FromForm] IFormFile file, [FromBody] RecipeImageDraftRequestDTO recipeImageDraftRequestDTO)
         {
             if (title == null || fileExtension == null || files == null) return BadRequest();
-
-            var fileDrfat = new byte[0];
-            List<byte[]> lista = new();
-
-            foreach (IFormFile fil in files)
-            {
-                if (fil.Length > 0)
-                {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        fil.CopyTo(memoryStream);
-                        fileDrfat = memoryStream.ToArray();
-                        lista.Add(memoryStream.ToArray());
-                    }
-                }
-                else
-                    return BadRequest();
-            }
 
             var recipeImageDraftDTO = new RecipeImageDraftRequestDTO
             {
                 Title = title,
-                FileExtension = fileExtension,
-                DataDraft = fileDrfat
+                FileExtension = fileExtension 
             };
 
-            await _recipeService.Update(recipeImageDraftDTO);
-
-            //return Ok("ok " + name + File(fileDrfat, contentType, "Imagem01.png") );
-
-            var x = files.FirstOrDefault().ContentType;
+            await _recipeService.Update(files, recipeImageDraftDTO);
 
             var nomeArq = DateTime.Now.ToString("HH:mm:ss") + Path.GetFileName(files.FirstOrDefault().FileName);
 
-            return File(lista[0], files.FirstOrDefault().ContentType, nomeArq);
+            return Ok(nomeArq);
         }
 
         [HttpGet]
@@ -112,22 +83,12 @@ namespace MeuLivroDeReceitas.Api.Controllers
         {
             var listRecipeImageDraftDTO = await _recipeService.GetRecipiesDownLoad(title);
 
-            //if (listRecipeImageDraftDTO == null || listRecipeImageDraftDTO.Count() == 0) { return BadRequest(); }
-
-            return File(listRecipeImageDraftDTO.FirstOrDefault().DataDraft,
-                //listRecipeImageDraftDTO.FirstOrDefault().ListDataDraft[0],
-                "image/png",
-                listRecipeImageDraftDTO.FirstOrDefault().NameFile);
-
-
-            //byte[] b = listRecipeImageDraftDTO.FirstOrDefault().DataDraft;
-            //    //listRecipeImageDraftDTO.FirstOrDefault().ListDataDraft[0];
-
-            //b = await System.IO.File.ReadAllBytesAsync(
-            //    Path.Combine("", //_environment.ContentRootPath,
-            //                "Images", 
-            //                $"{title}"));
-            //return File(b, "image/jpeg");
+            //if (listRecipeImageDraftDTO.Count() == 0)
+                return Ok("...  Recipe not found or Title not found  ...");
+            //else
+            //return File(listRecipeImageDraftDTO.FirstOrDefault().DataDraft,
+            //    "image/png",
+            //    listRecipeImageDraftDTO.FirstOrDefault().NameFile);
         }
     }
 }

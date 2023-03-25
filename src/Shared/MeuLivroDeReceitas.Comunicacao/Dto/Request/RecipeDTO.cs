@@ -8,9 +8,9 @@ namespace MeuLivroDeReceitas.Comunicacao.Dto.Request
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "The Title is Required")]
-        [MinLength(3)]
-        [MaxLength(100)]
+        //[Required(ErrorMessage = "The Title is Required")]
+        //[MinLength(3)]
+        //[MaxLength(100)]
         [DisplayName("Title")]
         public string Title { get; set; }
 

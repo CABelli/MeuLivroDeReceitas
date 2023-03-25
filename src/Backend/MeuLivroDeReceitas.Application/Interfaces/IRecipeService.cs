@@ -1,5 +1,6 @@
 ﻿using MeuLivroDeReceitas.Comunicacao.Dto.Request;
 using MeuLivroDeReceitas.Comunicacao.Dto.Response;
+using Microsoft.AspNetCore.Http;
 
 namespace MeuLivroDeReceitas.Application.Interfaces
 {
@@ -17,6 +18,6 @@ namespace MeuLivroDeReceitas.Application.Interfaces
 
         Task Update(RecipeStringDraftDTO dataDraft);
 
-        Task Update(RecipeImageDraftRequestDTO dataDraft);
+        Task Update(ICollection<IFormFile> files, RecipeImageDraftRequestDTO dataDraft);
     }
 }
