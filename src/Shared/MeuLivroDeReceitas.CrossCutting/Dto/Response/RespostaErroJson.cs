@@ -1,4 +1,4 @@
-﻿namespace MeuLivroDeReceitas.Comunicacao.Dto.Response;
+﻿namespace MeuLivroDeReceitas.CrossCutting.Dto.Response;
 
 public class RespostaErroJson
 {

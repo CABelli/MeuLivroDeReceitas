@@ -1,5 +1,5 @@
-﻿using MeuLivroDeReceitas.Comunicacao.Dto.Request;
-using MeuLivroDeReceitas.Comunicacao.Dto.Response;
+﻿using MeuLivroDeReceitas.CrossCutting.Dto.Request;
+using MeuLivroDeReceitas.CrossCutting.Dto.Response;
 using Microsoft.AspNetCore.Http;
 
 namespace MeuLivroDeReceitas.Application.Interfaces
@@ -12,9 +12,9 @@ namespace MeuLivroDeReceitas.Application.Interfaces
 
         Task<IEnumerable<RecipeResponseDTO>> GetRecipiesTitle(string title);
 
-        Task<IEnumerable<Comunicacao.Dto.Response.RecipeImageDraftDTO>> GetRecipiesDownLoad(string title);
+        Task<IEnumerable<CrossCutting.Dto.Response.RecipeImageDraftDTO>> GetRecipiesDownLoad(string title);
 
-        Task Add(Comunicacao.Dto.Request.RecipeDTO recipeDTO);
+        Task Add(CrossCutting.Dto.Request.RecipeDTO recipeDTO);
 
         Task Update(RecipeStringDraftDTO dataDraft);
 

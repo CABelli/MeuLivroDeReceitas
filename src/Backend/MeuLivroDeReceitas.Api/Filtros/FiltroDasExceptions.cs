@@ -1,10 +1,10 @@
-﻿using MeuLivroDeReceitas.Exceptions.ExceptionsBase;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc;
-using System.Net;
+﻿using MeuLivroDeReceitas.CrossCutting.Dto.Response;
+using MeuLivroDeReceitas.CrossCutting.Resources.API;
 using MeuLivroDeReceitas.Exceptions.ExceptionBase;
-using MeuLivroDeReceitas.Comunicacao.Dto.Response;
-using System.Runtime.ConstrainedExecution;
+using MeuLivroDeReceitas.Exceptions.ExceptionsBase;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using System.Net;
 
 namespace MeuLivroDeReceitas.Api.Filtros;
 
@@ -18,7 +18,7 @@ public class FiltroDasExceptions : IExceptionFilter
         }
         else
         {
-            LancarErroDesconhecido(context);
+            ThrowUnknownError(context);
         }
     }
 
@@ -50,9 +50,10 @@ public class FiltroDasExceptions : IExceptionFilter
         context.Result = new ObjectResult(new RespostaErroJson(erroLogin.Message));
     }
 
-    private static void LancarErroDesconhecido(ExceptionContext context)
+    private static void ThrowUnknownError(ExceptionContext context)
     {
         context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-        context.Result = new ObjectResult(new RespostaErroJson(" Erro desconhecido  aqui "));
+        Console.WriteLine(Resource.ThrowUnknownError_Error_Throw, nameof(ThrowUnknownError), context.Exception.Message);
+        context.Result = new ObjectResult(new RespostaErroJson(string.Format(Resource.ThrowUnknownError_Error_Throw, nameof(ThrowUnknownError), context.Exception.Message)));
     }
 }

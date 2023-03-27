@@ -1,4 +1,4 @@
-﻿using MeuLivroDeReceitas.Comunicacao.Dto.Request.Ingredient;
+﻿using MeuLivroDeReceitas.CrossCutting.Dto.Request.Ingredient;
 
 namespace MeuLivroDeReceitas.Application.Interfaces
 {

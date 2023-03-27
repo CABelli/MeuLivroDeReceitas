@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using MeuLivroDeReceitas.Comunicacao.Dto.Request;
-using MeuLivroDeReceitas.Comunicacao.Dto.Request.Ingredient;
+using MeuLivroDeReceitas.CrossCutting.Dto.Request;
+using MeuLivroDeReceitas.CrossCutting.Dto.Request.Ingredient;
 using MeuLivroDeReceitas.Domain.Entities;
 
 namespace MeuLivroDeReceitas.Application.Mappings

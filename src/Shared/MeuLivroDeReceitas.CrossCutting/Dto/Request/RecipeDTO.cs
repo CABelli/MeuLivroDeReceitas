@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace MeuLivroDeReceitas.Comunicacao.Dto.Request
+namespace MeuLivroDeReceitas.CrossCutting.Dto.Request
 {
     public class RecipeDTO
     {

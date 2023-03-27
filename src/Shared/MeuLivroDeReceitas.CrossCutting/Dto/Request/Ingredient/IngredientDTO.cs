@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace MeuLivroDeReceitas.Comunicacao.Dto.Request.Ingredient
+namespace MeuLivroDeReceitas.CrossCutting.Dto.Request.Ingredient
 {
     public class IngredientDTO
     {

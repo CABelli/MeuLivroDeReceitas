@@ -1,6 +1,7 @@
 ﻿using MeuLivroDeReceitas.Application.Interfaces;
-using MeuLivroDeReceitas.Comunicacao.Dto.Request;
-using MeuLivroDeReceitas.Comunicacao.Dto.Response;
+using MeuLivroDeReceitas.CrossCutting.Dto.Request;
+using MeuLivroDeReceitas.CrossCutting.Dto.Response;
+using MeuLivroDeReceitas.CrossCutting.Resources.API;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -43,9 +44,10 @@ namespace MeuLivroDeReceitas.Api.Controllers
         [ProducesResponseType(typeof(RecipeResponseDTO), StatusCodes.Status201Created)]
         public async Task<ActionResult> Post([FromBody] RecipeDTO recipeDTO)
         {
-            await _recipeService.Add(recipeDTO);
+            //Resource.Culture = new System.Globalization.CultureInfo("en-US");
 
-            return Ok("Ok Data");
+            await _recipeService.Add(recipeDTO);
+            return Ok(Resource.Post_Return_SuccessfullyEnteredRecipe);
         }
 
         [HttpPut]
