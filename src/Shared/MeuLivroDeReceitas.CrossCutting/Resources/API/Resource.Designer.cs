@@ -63,9 +63,9 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.API {
         /// <summary>
         ///   Looks up a localized string similar to Inclusão da receita com sucesso..
         /// </summary>
-        public static string Post_Return_SuccessfullyEnteredRecipe {
+        public static string IncludeRecipe_Return_Successfully {
             get {
-                return ResourceManager.GetString("Post_Return_SuccessfullyEnteredRecipe", resourceCulture);
+                return ResourceManager.GetString("IncludeRecipe_Return_Successfully", resourceCulture);
             }
         }
         

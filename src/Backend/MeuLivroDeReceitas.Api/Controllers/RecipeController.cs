@@ -3,7 +3,6 @@ using MeuLivroDeReceitas.CrossCutting.Dto.Request;
 using MeuLivroDeReceitas.CrossCutting.Dto.Response;
 using MeuLivroDeReceitas.CrossCutting.Resources.API;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 namespace MeuLivroDeReceitas.Api.Controllers
 {
@@ -20,48 +19,58 @@ namespace MeuLivroDeReceitas.Api.Controllers
         }
 
         [HttpGet]
+        [Route("get-list")]
         public async Task<ActionResult<IEnumerable<RecipeResponseDTO>>> Get()
         {
-            var recipies = await _recipeService.GetRecipies();
-            if (recipies == null) return NotFound("Recipies not found");
-            
+            var recipies = await _recipeService.GetRecipies();            
             return Ok(recipies);
         }
 
-        [HttpGet("{title}")]
+        [HttpGet]
+        [Route("get-title")]
         public async Task<ActionResult<IEnumerable<RecipeResponseDTO>>> Get(string title)
         {
-            Resource.Culture = new System.Globalization.CultureInfo("en");
-            var recipies = await _recipeService.GetRecipiesTitle(title);
-            
+            var recipies = await _recipeService.GetRecipiesTitle(title);            
             return Ok(recipies);
         }
 
-        [HttpGet("{id:Guid}")]
+        [HttpGet]
+        [Route("get-id")]
         public async Task<IActionResult> Get(Guid id) => Ok(await _recipeService.GetRecipeById(id));
 
+        [HttpGet]
+        [Route("get-downloadimage")]
+        public async Task<ActionResult> DownLoadimage(string title)
+        {
+            var listRecipeImageDraftDTO = await _recipeService.GetRecipiesDownLoad(title);
+
+            //if (listRecipeImageDraftDTO.Count() == 0)
+            return Ok("...  Recipe not found or Title not found  ...");
+            //else
+            //return File(listRecipeImageDraftDTO.FirstOrDefault().DataDraft,
+            //    "image/png",
+            //    listRecipeImageDraftDTO.FirstOrDefault().NameFile);
+        }
+
         [HttpPost]
-        [ProducesResponseType(typeof(RecipeResponseDTO), StatusCodes.Status201Created)]
-        public async Task<ActionResult> Post([FromBody] RecipeDTO recipeDTO)
+        [Route("post-add")]
+        //[ProducesResponseType(typeof(RecipeResponseDTO), StatusCodes.Status201Created)]
+        public async Task<ActionResult> IncludeRecipe([FromBody] RecipeDTO recipeDTO)
         {
-            Resource.Culture = new System.Globalization.CultureInfo("en-US");
-
-            await _recipeService.Add(recipeDTO);
-            return Ok(Resource.Post_Return_SuccessfullyEnteredRecipe);
+            await _recipeService.AddRecipe(recipeDTO);
+            return CreatedAtAction(nameof(IncludeRecipe), Resource.IncludeRecipe_Return_Successfully);
         }
 
         [HttpPut]
-        public async Task<ActionResult> Put([FromBody] RecipeStringDraftDTO recipeStringDraftDTO)
-        {
-            if (recipeStringDraftDTO == null) return BadRequest();            
-
-            await _recipeService.Update(recipeStringDraftDTO);
-
-            return Ok(recipeStringDraftDTO);
+        [Route("put-draftstring")]
+        public async Task<ActionResult> PutString([FromBody] RecipeDTO recipeDTO)
+        {       
+            await _recipeService.Update(recipeDTO);
+            return Ok(recipeDTO);
         }
 
         [HttpPut]
-        [Route("img")]
+        [Route("put-draftimage")]
         public async Task<ActionResult> PutImage([FromForm] ICollection<IFormFile> files, string title, string fileExtension)
         {
             if (title == null || fileExtension == null || files == null) return BadRequest();
@@ -77,20 +86,6 @@ namespace MeuLivroDeReceitas.Api.Controllers
             var nomeArq = DateTime.Now.ToString("HH:mm:ss") + Path.GetFileName(files.FirstOrDefault().FileName);
 
             return Ok(nomeArq);
-        }
-
-        [HttpGet]
-        [Route("DownLoadimage")]
-        public async Task<ActionResult> DownLoadimage(string title)
-        {
-            var listRecipeImageDraftDTO = await _recipeService.GetRecipiesDownLoad(title);
-
-            //if (listRecipeImageDraftDTO.Count() == 0)
-                return Ok("...  Recipe not found or Title not found  ...");
-            //else
-            //return File(listRecipeImageDraftDTO.FirstOrDefault().DataDraft,
-            //    "image/png",
-            //    listRecipeImageDraftDTO.FirstOrDefault().NameFile);
         }
     }
 }

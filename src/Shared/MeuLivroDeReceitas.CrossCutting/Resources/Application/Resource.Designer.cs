@@ -61,6 +61,33 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.Application {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Iniciando. Método: {0}. Título: {1}.
+        /// </summary>
+        public static string AddRecipe_Info_Starting {
+            get {
+                return ResourceManager.GetString("AddRecipe_Info_Starting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Receita nao encontrada. Metodo {0}. Titulo {1}.
+        /// </summary>
+        public static string GetRecipeById_Info_RecipeNotFound {
+            get {
+                return ResourceManager.GetString("GetRecipeById_Info_RecipeNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Receitas nao encontradas. Metodo {0}..
+        /// </summary>
+        public static string GetRecipies_Info_RecipeNotFound {
+            get {
+                return ResourceManager.GetString("GetRecipies_Info_RecipeNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Receita nao encontrada. Metodo {0}. Titulo {1}.
         /// </summary>
         public static string GetRecipiesTitle_Info_RecipeNotFound {

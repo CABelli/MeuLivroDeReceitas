@@ -117,8 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddRecipe_Info_Starting" xml:space="preserve">
+    <value>Starting. Method:{0}. Title:{1}.</value>
+  </data>
+  <data name="GetRecipeById_Info_RecipeNotFound" xml:space="preserve">
+    <value>Recipe not found. Method:{0}. Title:{1}.</value>
+  </data>
   <data name="GetRecipiesTitle_Info_RecipeNotFound" xml:space="preserve">
     <value>Recipe not found. Method:{0}. Title:{1}.</value>
+  </data>
+  <data name="GetRecipies_Info_RecipeNotFound" xml:space="preserve">
+    <value>Recipes not found. Method:{0}.</value>
   </data>
   <data name="RecipeValidator_Error_NonStandardCellNumber" xml:space="preserve">
     <value>Non-standard cell phone number. Method:{0}. Number:{1}.</value>
