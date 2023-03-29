@@ -8,7 +8,7 @@ namespace MeuLivroDeReceitas.Application.Interfaces
     {
         Task<IEnumerable<RecipeResponseDTO>> GetRecipies();
 
-        Task<RecipeResponseDTO> GetById(Guid id);
+        Task<RecipeResponseDTO> GetRecipeById(Guid id);
 
         Task<IEnumerable<RecipeResponseDTO>> GetRecipiesTitle(string title);
 

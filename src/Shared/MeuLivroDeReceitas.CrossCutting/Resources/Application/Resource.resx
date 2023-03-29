@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="GetRecipiesTitle_Info_RecipeNotFound" xml:space="preserve">
+    <value>Receita nao encontrada. Metodo {0}. Titulo {1}</value>
+  </data>
   <data name="RecipeValidator_Error_NonStandardCellNumber" xml:space="preserve">
     <value>Número do telefone celular fora do padrão. Método:{0}. Número:{1}</value>
   </data>

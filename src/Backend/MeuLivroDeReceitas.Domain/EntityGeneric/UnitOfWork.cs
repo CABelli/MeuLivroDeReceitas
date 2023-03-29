@@ -1,6 +1,7 @@
 ﻿using MeuLivroDeReceitas.Domain.InterfacesGeneric;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace MeuLivroDeReceitas.Domain.EntityGeneric
 {

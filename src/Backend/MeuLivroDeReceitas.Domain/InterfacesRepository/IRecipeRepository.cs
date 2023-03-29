@@ -1,17 +1,9 @@
 ﻿using MeuLivroDeReceitas.Domain.Entities;
+using MeuLivroDeReceitas.Domain.InterfacesGeneric;
 
 namespace MeuLivroDeReceitas.Domain.Interfaces
 {
-    public interface IRecipeRepository // : IGenericRepository<Recipe>
+    public interface IRecipeRepository : IGenericRepository<Recipe>
     {
-        Task<IEnumerable<Recipe>> GetRecipies();
-
-        Task<Recipe> Create(Recipe recipe);
-
-        Task<Recipe> UpdateAsync(Recipe recipe);
-
-        Task<Recipe> GetId(Guid id);
-
-        Task<IEnumerable<Recipe>> GetRecTitle(string title);
     }
 }

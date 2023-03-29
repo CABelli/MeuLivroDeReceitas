@@ -31,20 +31,20 @@ namespace MeuLivroDeReceitas.Api.Controllers
         [HttpGet("{title}")]
         public async Task<ActionResult<IEnumerable<RecipeResponseDTO>>> Get(string title)
         {
+            Resource.Culture = new System.Globalization.CultureInfo("en");
             var recipies = await _recipeService.GetRecipiesTitle(title);
-            if (recipies == null) return NotFound("Recipies not found");
             
             return Ok(recipies);
         }
 
         [HttpGet("{id:Guid}")]
-        public async Task<IActionResult> Get(Guid id) => Ok(await _recipeService.GetById(id));
+        public async Task<IActionResult> Get(Guid id) => Ok(await _recipeService.GetRecipeById(id));
 
         [HttpPost]
         [ProducesResponseType(typeof(RecipeResponseDTO), StatusCodes.Status201Created)]
         public async Task<ActionResult> Post([FromBody] RecipeDTO recipeDTO)
         {
-            //Resource.Culture = new System.Globalization.CultureInfo("en-US");
+            Resource.Culture = new System.Globalization.CultureInfo("en-US");
 
             await _recipeService.Add(recipeDTO);
             return Ok(Resource.Post_Return_SuccessfullyEnteredRecipe);

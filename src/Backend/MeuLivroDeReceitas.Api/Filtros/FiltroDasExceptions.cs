@@ -5,6 +5,7 @@ using MeuLivroDeReceitas.Exceptions.ExceptionsBase;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Net;
+using System.Web;
 
 namespace MeuLivroDeReceitas.Api.Filtros;
 
@@ -28,6 +29,10 @@ public class FiltroDasExceptions : IExceptionFilter
         {
             TratarErrosDeValidacaoException(context);
         }
+        else if (context.Exception is ErrorsNotFoundException)
+        {
+            TratarErrorsNotFoundException(context);
+        }
         else if (context.Exception is LoginInvalidoException)
         {
             TratarLoginException(context);
@@ -41,6 +46,15 @@ public class FiltroDasExceptions : IExceptionFilter
         context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
 
         context.Result = new ObjectResult(new RespostaErroJson(erroDeValidacaoException.MensagensDeErro));
+    }
+
+    private static void TratarErrorsNotFoundException(ExceptionContext context)
+    {
+        var errorsNotFoundException = context.Exception as ErrorsNotFoundException;
+
+        context.HttpContext.Response.StatusCode = (int)HttpStatusCode.NoContent;
+        context.HttpContext.Response.Headers.Add("Reason", HttpUtility.HtmlEncode(errorsNotFoundException.MensagensDeErro.FirstOrDefault()));
+        context.Result = new ObjectResult("");
     }
 
     private static void TratarLoginException(ExceptionContext context)

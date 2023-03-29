@@ -61,6 +61,15 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.Application {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Receita nao encontrada. Metodo {0}. Titulo {1}.
+        /// </summary>
+        public static string GetRecipiesTitle_Info_RecipeNotFound {
+            get {
+                return ResourceManager.GetString("GetRecipiesTitle_Info_RecipeNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Número do telefone celular fora do padrão. Método:{0}. Número:{1}.
         /// </summary>
         public static string RecipeValidator_Error_NonStandardCellNumber {

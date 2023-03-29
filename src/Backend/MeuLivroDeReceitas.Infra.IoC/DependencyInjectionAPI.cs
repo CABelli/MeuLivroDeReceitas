@@ -1,20 +1,18 @@
-﻿using MeuLivroDeReceitas.Domain.Account;
+﻿using MediatR;
+using MeuLivroDeReceitas.Application.Interfaces;
+using MeuLivroDeReceitas.Application.Services;
+using MeuLivroDeReceitas.Domain.Account;
+using MeuLivroDeReceitas.Domain.EntityGeneric;
+using MeuLivroDeReceitas.Domain.Interfaces;
+using MeuLivroDeReceitas.Domain.InterfacesGeneric;
+using MeuLivroDeReceitas.Domain.InterfacesRepository;
 using MeuLivroDeReceitas.Infrastructure.Context;
 using MeuLivroDeReceitas.Infrastructure.Identity;
-using MediatR;
+using MeuLivroDeReceitas.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MeuLivroDeReceitas.Application.Mappings;
-using MeuLivroDeReceitas.Infrastructure.Repositories;
-using MeuLivroDeReceitas.Domain.Interfaces;
-using MeuLivroDeReceitas.Domain.InterfacesRepository;
-using Microsoft.AspNetCore.Hosting;
-using MeuLivroDeReceitas.Domain.EntityGeneric;
-using MeuLivroDeReceitas.Domain.InterfacesGeneric;
-using MeuLivroDeReceitas.Application.Interfaces;
-using MeuLivroDeReceitas.Application.Services;
 
 namespace MeuLivroDeReceitas.Infra.IoC
 {
@@ -23,7 +21,7 @@ namespace MeuLivroDeReceitas.Infra.IoC
         public static IServiceCollection AddInfrastructureAPI(this IServiceCollection services,
             IConfiguration configuration)
         {
-            //services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddDbContext<ApplicationDbContext>(opions =>
             opions.UseSqlServer(configuration.GetConnectionString("DefaultConnection"
@@ -33,6 +31,7 @@ namespace MeuLivroDeReceitas.Infra.IoC
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddScoped<DbContext, ApplicationDbContext>();
 
             services.AddScoped<IAuthenticate, AuthenticateService>();
             services.AddScoped<ISeedUserRoleInitial, SeedUserRoleInitial>();
@@ -44,8 +43,6 @@ namespace MeuLivroDeReceitas.Infra.IoC
             //services.AddScoped<IIngredientService, IngredientService>();
 
             //services.AddAutoMapper(typeof(DomainToDTOMappingProfile));
-
-            //services.AddScoped<DbContext, ApplicationDbContext>();
 
             var myHandlers = AppDomain.CurrentDomain.Load("MeuLivroDeReceitas.Application");
 

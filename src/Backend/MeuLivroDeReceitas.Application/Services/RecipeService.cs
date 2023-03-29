@@ -1,61 +1,72 @@
-﻿using MediatR;
-using MeuLivroDeReceitas.Application.Interfaces;
+﻿using MeuLivroDeReceitas.Application.Interfaces;
 using MeuLivroDeReceitas.CrossCutting.Dto.Request;
 using MeuLivroDeReceitas.CrossCutting.Dto.Response;
+using MeuLivroDeReceitas.CrossCutting.Resources.Application;
 using MeuLivroDeReceitas.Domain.Entities;
+using MeuLivroDeReceitas.Domain.EntityGeneric;
 using MeuLivroDeReceitas.Domain.Enum;
 using MeuLivroDeReceitas.Domain.Interfaces;
+using MeuLivroDeReceitas.Domain.InterfacesGeneric;
+using MeuLivroDeReceitas.Exceptions.ExceptionBase;
 using MeuLivroDeReceitas.Exceptions.ExceptionsBase;
 using Microsoft.AspNetCore.Http;
-using MeuLivroDeReceitas.CrossCutting.Resources.Application;
-using Microsoft.AspNetCore.Rewrite;
-using System.Collections.Generic;
-using System.Net;
-using System.Reflection.Metadata.Ecma335;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System.Text;
 
 namespace MeuLivroDeReceitas.Application.Services
 {
     public class RecipeService : IRecipeService
     {
-
+        private readonly ILogger<RecipeService> _logger;
+        private IUnitOfWork _unitOfWork;
         private IRecipeRepository _recipeRepository;
 
-        public const string JA_EXISTE = "Haaaa    hummm     já existe";
         public const string SEM_ARQUIVO = "Haaaa    hummm     sem arquivo";
 
         //private readonly IMapper _mapper;
-        //private readonly IUnitOfWork _unitOfWork;
 
-        public RecipeService(IRecipeRepository recipeRepository
-            //,
-            //  IMapper mapper, 
-            //  IUnitOfWork unitOfWork
+        public RecipeService(IServiceProvider serviceProvider, IUnitOfWork unitOfWork
+        //  IMapper mapper, 
             )
         {
-            _recipeRepository = recipeRepository;
+            _unitOfWork = unitOfWork;
+            _logger = serviceProvider.GetRequiredService<ILogger<RecipeService>>();
+            _recipeRepository = serviceProvider.GetRequiredService<IRecipeRepository>();
             // _mapper = mapper;
-            // _unitOfWork = unitOfWork;
         }
 
         public async Task<IEnumerable<RecipeResponseDTO>> GetRecipies()
         {
-            var recipies = await _recipeRepository.GetRecipies();
+            var recipies = await _recipeRepository.GetAll();
             var listRecipeResponseDTO = ListRecipeResponseDTO(recipies);
             return listRecipeResponseDTO;
         }
 
-        public async Task<RecipeResponseDTO> GetById(Guid id)
+        public async Task<RecipeResponseDTO> GetRecipeById(Guid id)
         {
-            var recipe = await _recipeRepository.GetId(id);
-            if (recipe == null) return new RecipeResponseDTO();
+            var recipe = await _recipeRepository.GetById(id);
+            if (recipe == null)
+            {
+                _logger.LogInformation(Resource.GetRecipiesTitle_Info_RecipeNotFound, nameof(GetRecipiesTitle), id);
+                throw new ErrorsNotFoundException(new List<string>() { string.Format(Resource.GetRecipiesTitle_Info_RecipeNotFound, nameof(GetRecipiesTitle), id) });
+            }
 
             return RecipeResult(recipe);
         }
 
         public async Task<IEnumerable<RecipeResponseDTO>> GetRecipiesTitle(string title)
         {
-            var recipies = await _recipeRepository.GetRecTitle(title);
+            Resource.Culture = new System.Globalization.CultureInfo("en");
+            var recipies = await _recipeRepository.WhereAsync(x => x.Title == title);
+
+            if (recipies.Count() == 0)
+            {
+                _logger.LogInformation(Resource.GetRecipiesTitle_Info_RecipeNotFound, nameof(GetRecipiesTitle), title);
+                throw new ErrorsNotFoundException(new List<string>() { string.Format(Resource.GetRecipiesTitle_Info_RecipeNotFound, nameof(GetRecipiesTitle), title) });                
+            }
+
             var listRecipeResponseDTO = ListRecipeResponseDTO(recipies);
 
             return listRecipeResponseDTO;
@@ -65,7 +76,7 @@ namespace MeuLivroDeReceitas.Application.Services
         {
             if (title == null) return Enumerable.Empty<CrossCutting.Dto.Response.RecipeImageDraftDTO>();
 
-            var recipies = await _recipeRepository.GetRecTitle(title);
+            var recipies = await _recipeRepository.WhereAsync(x => x.Title == title);
 
             if (recipies == null || recipies.Count() == 0)
                 return Enumerable.Empty<CrossCutting.Dto.Response.RecipeImageDraftDTO>();
@@ -99,6 +110,8 @@ namespace MeuLivroDeReceitas.Application.Services
             //int a = 0; int b = 0;
             //a = a / b;
 
+            _logger.LogInformation("Iniciando Add");
+
             await ValidarRecipeDTO(recipeDTO);
 
             var recipe = new Recipe()
@@ -112,12 +125,14 @@ namespace MeuLivroDeReceitas.Application.Services
 
             if (recipeDTO.FileExtension == "Cel") recipe.DataDraft = Encoding.ASCII.GetBytes(recipeDTO.DataDraft);
 
-            await _recipeRepository.Create(recipe);
+            _recipeRepository.Create(recipe);
+
+            await _unitOfWork.CommitAsync();
         }
 
         private  async Task  ValidarRecipeDTO(RecipeDTO recipeDTO)
         {
-            var recipie = await _recipeRepository.GetRecTitle(recipeDTO.Title);
+            var recipie = await _recipeRepository.WhereAsync(x => x.Title == recipeDTO.Title);
             if (recipie.Count() > 0)
             {
                 throw new ErrosDeValidacaoException(new List<string>() { Resource.ValidarRecipeDTO_Info_RecipeAlreadyExists });
@@ -126,7 +141,7 @@ namespace MeuLivroDeReceitas.Application.Services
             var validator = new RecipeValidator();
             var resultado = validator.Validate(recipeDTO);
 
-            var recipies = await _recipeRepository.GetRecTitle(recipeDTO.Title);
+            var recipies = await _recipeRepository.WhereAsync(x => x.Title == recipeDTO.Title);
             if (recipies.Count() > 0)
             {
                 resultado.Errors.Add(new FluentValidation.Results.ValidationFailure("Receita", Resource.ValidarRecipeDTO_Info_RecipeAlreadyExists));
@@ -144,12 +159,13 @@ namespace MeuLivroDeReceitas.Application.Services
             if (dataDraft.FileExtension == null && dataDraft.DataDraft != null) await Task.FromException<Exception>(new Exception("FileExtension is null"));
             if (dataDraft.FileExtension != null && dataDraft.DataDraft == null) await Task.FromException<Exception>(new Exception("DataDraft is null"));
 
-            var recipe = await _recipeRepository.GetId(dataDraft.Id);
+            var recipe = await _recipeRepository.GetById(dataDraft.Id);
 
             recipe.FileExtension = dataDraft.FileExtension;
             recipe.DataDraft = Encoding.ASCII.GetBytes(dataDraft.DataDraft);
 
-            await _recipeRepository.UpdateAsync(recipe);
+            _recipeRepository.Update(recipe);
+            await _unitOfWork.CommitAsync();
         }
 
         public async Task Update(ICollection<IFormFile> files, RecipeImageDraftRequestDTO dataDraft)
@@ -175,12 +191,13 @@ namespace MeuLivroDeReceitas.Application.Services
 
             if (recipies == null) await Task.FromException<Exception>(new Exception("Recipe is null"));
 
-            var recipe = await _recipeRepository.GetId(recipies.First().Id);
+            var recipe = await _recipeRepository.GetById(recipies.First().Id);
 
             recipe.FileExtension = dataDraft.FileExtension;
-            recipe.DataDraft = fileDrfat;   // dataDraft.DataDraft;
+            recipe.DataDraft = fileDrfat; 
 
-            await _recipeRepository.UpdateAsync(recipe);
+            _recipeRepository.Update(recipe);
+            await _unitOfWork.CommitAsync();
         }
 
         private List<RecipeResponseDTO> ListRecipeResponseDTO(IEnumerable<Recipe> recipies)

@@ -1,5 +1,4 @@
 using MeuLivroDeReceitas.Api.Filtros;
-using MeuLivroDeReceitas.Domain.Account;
 using MeuLivroDeReceitas.Infra.IoC;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,7 +27,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 
 app.UseHttpsRedirection();
 app.UseStatusCodePages();

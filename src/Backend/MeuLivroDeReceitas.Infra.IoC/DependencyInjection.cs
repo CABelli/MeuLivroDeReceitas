@@ -2,7 +2,9 @@
 using MeuLivroDeReceitas.Application.Interfaces;
 using MeuLivroDeReceitas.Application.Services;
 using MeuLivroDeReceitas.Domain.Account;
+using MeuLivroDeReceitas.Domain.EntityGeneric;
 using MeuLivroDeReceitas.Domain.Interfaces;
+using MeuLivroDeReceitas.Domain.InterfacesGeneric;
 using MeuLivroDeReceitas.Domain.InterfacesRepository;
 using MeuLivroDeReceitas.Infrastructure.Context;
 using MeuLivroDeReceitas.Infrastructure.Identity;
@@ -19,7 +21,8 @@ namespace MeuLivroDeReceitas.Infra.IoC
         public static IServiceCollection AddInfrastructure(this IServiceCollection services,
             IConfiguration configuration)
         {
-            //services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+           // services.AddTransient<IUnitOfWork, UnitOfWork>();            
 
             services.AddDbContext<ApplicationDbContext>(opions =>
             opions.UseSqlServer(configuration.GetConnectionString("DefaultConnection"
@@ -31,10 +34,18 @@ namespace MeuLivroDeReceitas.Infra.IoC
 
             services.ConfigureApplicationCookie(options => options.AccessDeniedPath = "/Account/Login");
 
+            /// services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             services.AddScoped<IRecipeRepository, RecipeRepository>();
+            //services.AddTransient(typeof(IRecipeRepository), typeof(RecipeRepository));
+
+
             services.AddScoped<IIngredientRepository, IngredientRepository>();
 
             services.AddScoped<IRecipeService, RecipeService>();
+           /// services.AddTransient(typeof(IRecipeService), typeof(RecipeService));
+
+
             //services.AddScoped<IIngredientService, IngredientService>();
 
             services.AddScoped<IAuthenticate, AuthenticateService>();

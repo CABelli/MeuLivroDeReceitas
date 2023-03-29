@@ -7,24 +7,26 @@ namespace MeuLivroDeReceitas.Domain.InterfacesGeneric
     {
         void Create(T entity);
 
-        void Create(List<T> entities);
-
         void Update(T entity);
-
-        void Update(List<T> entities);
-
-        void UpdateRange(List<T> entities);
-
-        void Delete(T entity);
 
         Task<List<T>> GetAll();
 
+        Task<List<T>> WhereAsync(Expression<Func<T, bool>> expression);
+
         Task<T> GetById(Guid id);
 
-        Task<T> GetByTitle(string title);
+        //    void Create(List<T> entities);
 
-        Task<List<T>> GetAllWhere(Expression<Func<T, bool>> expression);
+        //    void Update(List<T> entities);
 
-        Task<T> GetByWhere(Expression<Func<T, bool>> expression);
+        //    void UpdateRange(List<T> entities);
+
+        //    void Delete(T entity);
+
+        //    Task<T> GetByTitle(string title);
+
+        //    Task<List<T>> GetAllWhere(Expression<Func<T, bool>> expression);
+
+        //     Task<T> GetByWhere(Expression<Func<T, bool>> expression);
     }
 }
