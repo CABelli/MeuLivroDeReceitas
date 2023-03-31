@@ -65,23 +65,15 @@ namespace MeuLivroDeReceitas.Api.Controllers
         [Route("put-draftstring")]
         public async Task<ActionResult> PutString([FromBody] RecipeDTO recipeDTO)
         {       
-            await _recipeService.Update(recipeDTO);
+            await _recipeService.UpdateRecipeDraftString(recipeDTO);
             return Ok(recipeDTO);
         }
 
         [HttpPut]
         [Route("put-draftimage")]
-        public async Task<ActionResult> PutImage([FromForm] ICollection<IFormFile> files, string title, string fileExtension)
+        public async Task<ActionResult> PutImage([FromForm] ICollection<IFormFile> files, RecipeImageDraftRequestDTO recipeImageDraftRequestDTO)
         {
-            if (title == null || fileExtension == null || files == null) return BadRequest();
-
-            var recipeImageDraftDTO = new RecipeImageDraftRequestDTO
-            {
-                Title = title,
-                FileExtension = fileExtension 
-            };
-
-            await _recipeService.Update(files, recipeImageDraftDTO);
+            await _recipeService.UpdateRecipeDraftImage(files, recipeImageDraftRequestDTO);
 
             var nomeArq = DateTime.Now.ToString("HH:mm:ss") + Path.GetFileName(files.FirstOrDefault().FileName);
 

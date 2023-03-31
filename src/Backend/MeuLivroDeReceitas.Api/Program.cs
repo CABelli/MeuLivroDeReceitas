@@ -5,7 +5,7 @@ using ResourcesApplication = MeuLivroDeReceitas.CrossCutting.Resources.Applicati
 
 var builder = WebApplication.CreateBuilder(args);
 
-var KeyVaultGlobalCultureLanguage = "pt"; /// en pt
+var KeyVaultGlobalCultureLanguage = "en"; /// en pt
 Resource.Culture = new System.Globalization.CultureInfo(KeyVaultGlobalCultureLanguage);
 ResourcesApplication.Resource.Culture = new System.Globalization.CultureInfo(KeyVaultGlobalCultureLanguage);
 

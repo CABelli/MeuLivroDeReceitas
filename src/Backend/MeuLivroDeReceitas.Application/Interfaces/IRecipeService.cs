@@ -16,8 +16,8 @@ namespace MeuLivroDeReceitas.Application.Interfaces
 
         Task AddRecipe(CrossCutting.Dto.Request.RecipeDTO recipeDTO);
 
-        Task Update(RecipeDTO recipeDTO);
+        Task UpdateRecipeDraftString(RecipeDTO recipeDTO);
 
-        Task Update(ICollection<IFormFile> files, RecipeImageDraftRequestDTO dataDraft);
+        Task UpdateRecipeDraftImage(ICollection<IFormFile> files, RecipeImageDraftRequestDTO dataDraft);
     }
 }

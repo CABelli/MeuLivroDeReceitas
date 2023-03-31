@@ -97,6 +97,33 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.Application {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Caracteres do atributo título não pode ser {0}, deve ficar entre {1} e {2}. Método:{3}..
+        /// </summary>
+        public static string RecipeValidator_Error_CharactersTitle {
+            get {
+                return ResourceManager.GetString("RecipeValidator_Error_CharactersTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DataDraft não preenchido. Método:{0}..
+        /// </summary>
+        public static string RecipeValidator_Error_DataDraftIsNull {
+            get {
+                return ResourceManager.GetString("RecipeValidator_Error_DataDraftIsNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FileExtension não preenchido. Método:{0}..
+        /// </summary>
+        public static string RecipeValidator_Error_FileExtensionIsNull {
+            get {
+                return ResourceManager.GetString("RecipeValidator_Error_FileExtensionIsNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Número do telefone celular fora do padrão. Método:{0}. Número:{1}.
         /// </summary>
         public static string RecipeValidator_Error_NonStandardCellNumber {
@@ -142,11 +169,47 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.Application {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Receita já existe..
+        ///   Looks up a localized string similar to DataDraft não preenchido. Método:{0}..
+        /// </summary>
+        public static string UpdateRecipeDraftImage_Error_DataDraftIsNull {
+            get {
+                return ResourceManager.GetString("UpdateRecipeDraftImage_Error_DataDraftIsNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FileExtension não preenchido. Método:{0}..
+        /// </summary>
+        public static string UpdateRecipeDraftImage_Error_FileExtensionIsNull {
+            get {
+                return ResourceManager.GetString("UpdateRecipeDraftImage_Error_FileExtensionIsNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Receita já cadastrada.
         /// </summary>
         public static string ValidarRecipeDTO_Info_RecipeAlreadyExists {
             get {
                 return ResourceManager.GetString("ValidarRecipeDTO_Info_RecipeAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Receita não encontrada..
+        /// </summary>
+        public static string ValidateRecipeModification_Info_RecipeNotExists {
+            get {
+                return ResourceManager.GetString("ValidateRecipeModification_Info_RecipeNotExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Receita nao encontrada. Metodo {0}. Titulo {1}.
+        /// </summary>
+        public static string ValidateRecipeModification_Info_RecipeNotFound {
+            get {
+                return ResourceManager.GetString("ValidateRecipeModification_Info_RecipeNotFound", resourceCulture);
             }
         }
     }

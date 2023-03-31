@@ -6,7 +6,7 @@ namespace MeuLivroDeReceitas.CrossCutting.Dto.Request
 {
     public class RecipeDTO
     {
-        public int Id { get; set; }
+        //public int Id { get; set; }
 
         //[Required(ErrorMessage = "The Title is Required")]
         //[MinLength(3)]

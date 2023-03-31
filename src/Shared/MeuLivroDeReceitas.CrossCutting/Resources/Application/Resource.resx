@@ -129,6 +129,15 @@
   <data name="GetRecipies_Info_RecipeNotFound" xml:space="preserve">
     <value>Receitas nao encontradas. Metodo {0}.</value>
   </data>
+  <data name="RecipeValidator_Error_CharactersTitle" xml:space="preserve">
+    <value>Caracteres do atributo título não pode ser {0}, deve ficar entre {1} e {2}. Método:{3}.</value>
+  </data>
+  <data name="RecipeValidator_Error_DataDraftIsNull" xml:space="preserve">
+    <value>DataDraft não preenchido. Método:{0}.</value>
+  </data>
+  <data name="RecipeValidator_Error_FileExtensionIsNull" xml:space="preserve">
+    <value>FileExtension não preenchido. Método:{0}.</value>
+  </data>
   <data name="RecipeValidator_Error_NonStandardCellNumber" xml:space="preserve">
     <value>Número do telefone celular fora do padrão. Método:{0}. Número:{1}</value>
   </data>
@@ -144,7 +153,19 @@
   <data name="RecipeValidator_Error_UnfilledTitle" xml:space="preserve">
     <value>Titulo não preenchido. Método:{0}.</value>
   </data>
+  <data name="UpdateRecipeDraftImage_Error_DataDraftIsNull" xml:space="preserve">
+    <value>DataDraft não preenchido. Método:{0}.</value>
+  </data>
+  <data name="UpdateRecipeDraftImage_Error_FileExtensionIsNull" xml:space="preserve">
+    <value>FileExtension não preenchido. Método:{0}.</value>
+  </data>
   <data name="ValidarRecipeDTO_Info_RecipeAlreadyExists" xml:space="preserve">
-    <value>Receita já existe.</value>
+    <value>Receita já cadastrada</value>
+  </data>
+  <data name="ValidateRecipeModification_Info_RecipeNotExists" xml:space="preserve">
+    <value>Receita não encontrada.</value>
+  </data>
+  <data name="ValidateRecipeModification_Info_RecipeNotFound" xml:space="preserve">
+    <value>Receita nao encontrada. Metodo {0}. Titulo {1}</value>
   </data>
 </root>

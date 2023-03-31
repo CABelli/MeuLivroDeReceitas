@@ -120,6 +120,9 @@
   <data name="AddRecipe_Info_Starting" xml:space="preserve">
     <value>Starting. Method:{0}. Title:{1}.</value>
   </data>
+  <data name="DataDraft não preenchido. Método:{0}." xml:space="preserve">
+    <value>FileExtension not filled. Method:{0}.</value>
+  </data>
   <data name="GetRecipeById_Info_RecipeNotFound" xml:space="preserve">
     <value>Recipe not found. Method:{0}. Title:{1}.</value>
   </data>
@@ -128,6 +131,12 @@
   </data>
   <data name="GetRecipies_Info_RecipeNotFound" xml:space="preserve">
     <value>Recipes not found. Method:{0}.</value>
+  </data>
+  <data name="RecipeValidator_Error_CharactersTitle" xml:space="preserve">
+    <value>Title attribute characters cannot be {0}, must be between {1} and {2}. Method:{3}.</value>
+  </data>
+  <data name="RecipeValidator_Error_DataDraftIsNull" xml:space="preserve">
+    <value>DataDraft not filled. Method:{0}.</value>
   </data>
   <data name="RecipeValidator_Error_NonStandardCellNumber" xml:space="preserve">
     <value>Non-standard cell phone number. Method:{0}. Number:{1}.</value>
@@ -144,7 +153,19 @@
   <data name="RecipeValidator_Error_UnfilledTitle" xml:space="preserve">
     <value>Title not filled. Method:{0}.</value>
   </data>
+  <data name="UpdateRecipeDraftImage_Error_DataDraftIsNull" xml:space="preserve">
+    <value>DataDraft not filled. Method:{0}.</value>
+  </data>
+  <data name="UpdateRecipeDraftImage_Error_FileExtensionIsNull" xml:space="preserve">
+    <value>FileExtension not filled. Method:{0}.</value>
+  </data>
   <data name="ValidarRecipeDTO_Info_RecipeAlreadyExists" xml:space="preserve">
     <value>Recipe already exists.</value>
+  </data>
+  <data name="ValidateRecipeModification_Info_RecipeNotExists" xml:space="preserve">
+    <value>Recipe already not exists.</value>
+  </data>
+  <data name="ValidateRecipeModification_Info_RecipeNotFound" xml:space="preserve">
+    <value>Recipe not found. Method:{0}. Title:{1}.</value>
   </data>
 </root>
