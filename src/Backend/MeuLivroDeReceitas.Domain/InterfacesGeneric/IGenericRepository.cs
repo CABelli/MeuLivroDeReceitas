@@ -9,6 +9,8 @@ namespace MeuLivroDeReceitas.Domain.InterfacesGeneric
 
         void Update(T entity);
 
+        void Delete(T entity);
+
         Task<List<T>> GetAll();
 
         Task<List<T>> WhereAsync(Expression<Func<T, bool>> expression);

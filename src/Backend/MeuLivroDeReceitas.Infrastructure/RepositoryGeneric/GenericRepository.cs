@@ -45,6 +45,11 @@ namespace MeuLivroDeReceitas.Infrastructure.RepositoryGeneric
             _dbSet.Update(entity);
         }
 
+        public void Delete(T entity)
+        {
+            _dbSet.Remove(entity);
+        }
+
         //public void Update(T entity)
         //{
         //    Console.WriteLine(entity.Id);

@@ -72,6 +72,15 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.Application {
         /// <summary>
         ///   Looks up a localized string similar to Receita nao encontrada. Metodo {0}. Titulo {1}.
         /// </summary>
+        public static string DeleteRecipeByTitle_Info_RecipeNotFound {
+            get {
+                return ResourceManager.GetString("DeleteRecipeByTitle_Info_RecipeNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Receita nao encontrada. Metodo {0}. Titulo {1}.
+        /// </summary>
         public static string GetRecipeById_Info_RecipeNotFound {
             get {
                 return ResourceManager.GetString("GetRecipeById_Info_RecipeNotFound", resourceCulture);
@@ -84,6 +93,15 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.Application {
         public static string GetRecipies_Info_RecipeNotFound {
             get {
                 return ResourceManager.GetString("GetRecipies_Info_RecipeNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Receita não contem arquivo de imagem. Metodo {0}. Titulo: {1}.
+        /// </summary>
+        public static string GetRecipiesDownLoad_Info_NotContainImageFile {
+            get {
+                return ResourceManager.GetString("GetRecipiesDownLoad_Info_NotContainImageFile", resourceCulture);
             }
         }
         

@@ -48,7 +48,7 @@ namespace MeuLivroDeReceitas.Api.Controllers
         }
 
         [HttpPut]
-        [Route("put-draftstring")]
+        [Route("put-binaryfilestring")]
         public async Task<ActionResult> PutString([FromBody] RecipeDTO recipeDTO)
         {
             await _recipeService.UpdateRecipeDraftString(recipeDTO);
@@ -56,12 +56,19 @@ namespace MeuLivroDeReceitas.Api.Controllers
         }
 
         [HttpPut]
-        [Route("put-draftimage")]
-        public async Task<ActionResult> PutImage([FromForm] ICollection<IFormFile> files, string title, string fileExtension)
+        [Route("put-binaryfileimage")]
+        public async Task<ActionResult> PutImage([FromForm] ICollection<IFormFile> binaryfiles, string title, string fileExtension)
         {
-            await _recipeService.UpdateRecipeDraftImage(files, title, fileExtension);
-            var nomeArq = Path.GetFileName(files.FirstOrDefault().FileName) + "_" + DateTime.Now.ToString("HH:mm:ss");
-            return Ok(nomeArq);
+            var fileName = await _recipeService.UpdateRecipeDraftImage(binaryfiles, title, fileExtension);
+            return Ok(fileName);
+        }
+
+        [HttpDelete]
+        [Route("delete-recipe")]
+        public async Task<ActionResult> Delete(string title)
+        {
+            await _recipeService.DeleteRecipeByTitle(title);
+            return Ok();
         }
     }
 }

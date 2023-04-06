@@ -5,8 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MeuLivroDeReceitas.Infrastructure.Repositories
 {
-    public class RecipeRepository //: IRecipeRepository 
-        : GenericRepository<Recipe>, IRecipeRepository
+    public class RecipeRepository : GenericRepository<Recipe>, IRecipeRepository
     {
         public RecipeRepository(DbContext dbContext) : base(dbContext)
         {

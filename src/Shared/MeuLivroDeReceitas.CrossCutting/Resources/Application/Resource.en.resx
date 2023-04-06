@@ -123,8 +123,14 @@
   <data name="DataDraft não preenchido. Método:{0}." xml:space="preserve">
     <value>FileExtension not filled. Method:{0}.</value>
   </data>
+  <data name="DeleteRecipeByTitle_Info_RecipeNotFound" xml:space="preserve">
+    <value>Recipe not found. Method:{0}. Title:{1}.</value>
+  </data>
   <data name="GetRecipeById_Info_RecipeNotFound" xml:space="preserve">
     <value>Recipe not found. Method:{0}. Title:{1}.</value>
+  </data>
+  <data name="GetRecipiesDownLoad_Info_NotContainImageFile" xml:space="preserve">
+    <value>Recipe does not contain image file. Method:{0}. Title:{1}.</value>
   </data>
   <data name="GetRecipiesTitle_Info_RecipeNotFound" xml:space="preserve">
     <value>Recipe not found. Method:{0}. Title:{1}.</value>

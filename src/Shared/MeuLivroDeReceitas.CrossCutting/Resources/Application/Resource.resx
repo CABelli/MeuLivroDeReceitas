@@ -120,8 +120,14 @@
   <data name="AddRecipe_Info_Starting" xml:space="preserve">
     <value>Iniciando. Método: {0}. Título: {1}</value>
   </data>
+  <data name="DeleteRecipeByTitle_Info_RecipeNotFound" xml:space="preserve">
+    <value>Receita nao encontrada. Metodo {0}. Titulo {1}</value>
+  </data>
   <data name="GetRecipeById_Info_RecipeNotFound" xml:space="preserve">
     <value>Receita nao encontrada. Metodo {0}. Titulo {1}</value>
+  </data>
+  <data name="GetRecipiesDownLoad_Info_NotContainImageFile" xml:space="preserve">
+    <value>Receita não contem arquivo de imagem. Metodo {0}. Titulo: {1}</value>
   </data>
   <data name="GetRecipiesTitle_Info_RecipeNotFound" xml:space="preserve">
     <value>Receita nao encontrada. Metodo {0}. Titulo {1}</value>

@@ -1,21 +1,22 @@
 ﻿using MeuLivroDeReceitas.Domain.Entities;
 using MeuLivroDeReceitas.Domain.InterfacesRepository;
-using MeuLivroDeReceitas.Infrastructure.Context;
+using MeuLivroDeReceitas.Infrastructure.RepositoryGeneric;
 using Microsoft.EntityFrameworkCore;
 
 namespace MeuLivroDeReceitas.Infrastructure.Repositories
 {
-    public class IngredientRepository : IIngredientRepository  // : GenericRepository<Ingredient>, IIngredientRepository
+    public class IngredientRepository : GenericRepository<Ingredient>, IIngredientRepository    
     {
         //public IngredientRepository(DbContext dbContext) : base(dbContext)
         //{
         //}
 
-        ApplicationDbContext _ingredientContext;
+       // ApplicationDbContext _ingredientContext;
 
-        public IngredientRepository(ApplicationDbContext context) //: base(context)
+        public IngredientRepository(DbContext dbContext) : base(dbContext)
+        //(ApplicationDbContext context) //: base(context)
         {
-            _ingredientContext = context;
+         //   _ingredientContext = context;
         }
     }
 }

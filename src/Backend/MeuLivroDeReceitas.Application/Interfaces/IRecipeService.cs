@@ -18,6 +18,8 @@ namespace MeuLivroDeReceitas.Application.Interfaces
 
         Task UpdateRecipeDraftString(RecipeDTO recipeDTO);
 
-        Task UpdateRecipeDraftImage(ICollection<IFormFile> files, string title, string fileExtension);
+        Task<string> UpdateRecipeDraftImage(ICollection<IFormFile> files, string title, string fileExtension);
+
+        Task DeleteRecipeByTitle(string title);
     }
 }
