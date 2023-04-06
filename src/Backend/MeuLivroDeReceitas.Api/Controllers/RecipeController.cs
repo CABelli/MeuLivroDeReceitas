@@ -20,20 +20,12 @@ namespace MeuLivroDeReceitas.Api.Controllers
 
         [HttpGet]
         [Route("get-list")]
-        public async Task<ActionResult<IEnumerable<RecipeResponseDTO>>> Get()
-        {
-            var recipies = await _recipeService.GetRecipies();            
-            return Ok(recipies);
-        }
+        public async Task<ActionResult<IEnumerable<RecipeResponseDTO>>> Get() => Ok(await _recipeService.GetRecipies());
 
         [HttpGet]
         [Route("get-title")]
-        public async Task<ActionResult<IEnumerable<RecipeResponseDTO>>> Get(string title)
-        {
-            var recipies = await _recipeService.GetRecipiesTitle(title);            
-            return Ok(recipies);
-        }
-
+        public async Task<ActionResult<IEnumerable<RecipeResponseDTO>>> Get(string title) => Ok(await _recipeService.GetRecipiesTitle(title));
+        
         [HttpGet]
         [Route("get-id")]
         public async Task<IActionResult> Get(Guid id) => Ok(await _recipeService.GetRecipeById(id));
@@ -42,14 +34,8 @@ namespace MeuLivroDeReceitas.Api.Controllers
         [Route("get-downloadimage")]
         public async Task<ActionResult> DownLoadimage(string title)
         {
-            var listRecipeImageDraftDTO = await _recipeService.GetRecipiesDownLoad(title);
-
-            //if (listRecipeImageDraftDTO.Count() == 0)
-            return Ok("...  Recipe not found or Title not found  ...");
-            //else
-            //return File(listRecipeImageDraftDTO.FirstOrDefault().DataDraft,
-            //    "image/png",
-            //    listRecipeImageDraftDTO.FirstOrDefault().NameFile);
+            var listRecImageDraftDTO = await _recipeService.GetRecipiesDownLoad(title);
+            return File(listRecImageDraftDTO.FirstOrDefault().DataDraft,"image/png", listRecImageDraftDTO.FirstOrDefault().NameFile);
         }
 
         [HttpPost]
@@ -64,19 +50,17 @@ namespace MeuLivroDeReceitas.Api.Controllers
         [HttpPut]
         [Route("put-draftstring")]
         public async Task<ActionResult> PutString([FromBody] RecipeDTO recipeDTO)
-        {       
+        {
             await _recipeService.UpdateRecipeDraftString(recipeDTO);
             return Ok(recipeDTO);
         }
 
         [HttpPut]
         [Route("put-draftimage")]
-        public async Task<ActionResult> PutImage([FromForm] ICollection<IFormFile> files, RecipeImageDraftRequestDTO recipeImageDraftRequestDTO)
+        public async Task<ActionResult> PutImage([FromForm] ICollection<IFormFile> files, string title, string fileExtension)
         {
-            await _recipeService.UpdateRecipeDraftImage(files, recipeImageDraftRequestDTO);
-
-            var nomeArq = DateTime.Now.ToString("HH:mm:ss") + Path.GetFileName(files.FirstOrDefault().FileName);
-
+            await _recipeService.UpdateRecipeDraftImage(files, title, fileExtension);
+            var nomeArq = Path.GetFileName(files.FirstOrDefault().FileName) + "_" + DateTime.Now.ToString("HH:mm:ss");
             return Ok(nomeArq);
         }
     }

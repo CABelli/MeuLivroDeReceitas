@@ -21,16 +21,12 @@ namespace MeuLivroDeReceitas.Application.Services
         private IUnitOfWork _unitOfWork;
         private IRecipeRepository _recipeRepository;
 
-        //private readonly IMapper _mapper;
-
         public RecipeService(IServiceProvider serviceProvider, IUnitOfWork unitOfWork
-        //  IMapper mapper, 
             )
         {
             _unitOfWork = unitOfWork;
             _logger = serviceProvider.GetRequiredService<ILogger<RecipeService>>();
             _recipeRepository = serviceProvider.GetRequiredService<IRecipeRepository>();
-            // _mapper = mapper;
         }
 
         public async Task<IEnumerable<RecipeResponseDTO>> GetRecipies()
@@ -38,7 +34,6 @@ namespace MeuLivroDeReceitas.Application.Services
             var recipies = await _recipeRepository.GetAll();
             if (recipies == null)
             {
-                _logger.LogInformation(Resource.GetRecipies_Info_RecipeNotFound, nameof(GetRecipies));
                 throw new ErrorsNotFoundException(new List<string>() { string.Format(Resource.GetRecipies_Info_RecipeNotFound, nameof(GetRecipies)) });
             }
             var listRecipeResponseDTO = ListRecipeResponseDTO(recipies);
@@ -50,7 +45,6 @@ namespace MeuLivroDeReceitas.Application.Services
             var recipe = await _recipeRepository.GetById(id);
             if (recipe == null)
             {
-                _logger.LogInformation(Resource.GetRecipeById_Info_RecipeNotFound, nameof(GetRecipeById), id);
                 throw new ErrorsNotFoundException(new List<string>() { string.Format(Resource.GetRecipeById_Info_RecipeNotFound, nameof(GetRecipeById), id) });
             }
 
@@ -60,10 +54,8 @@ namespace MeuLivroDeReceitas.Application.Services
         public async Task<IEnumerable<RecipeResponseDTO>> GetRecipiesTitle(string title)
         {
             var recipies = await _recipeRepository.WhereAsync(x => x.Title == title);
-
             if (recipies.Count() == 0)
             {
-                _logger.LogInformation(Resource.GetRecipiesTitle_Info_RecipeNotFound, nameof(GetRecipiesTitle), title);
                 throw new ErrorsNotFoundException(new List<string>() { string.Format(Resource.GetRecipiesTitle_Info_RecipeNotFound, nameof(GetRecipiesTitle), title) });                
             }
 
@@ -79,9 +71,14 @@ namespace MeuLivroDeReceitas.Application.Services
             var recipies = await _recipeRepository.WhereAsync(x => x.Title == title);
 
             if (recipies == null || recipies.Count() == 0)
-                return Enumerable.Empty<CrossCutting.Dto.Response.RecipeImageDraftDTO>();
-                //return  Ok("  Vaaazio ");
-                //ReturnTypeEncoder(ReturnTypeEncoder);            
+
+                ///return Enumerable.Empty<CrossCutting.Dto.Response.RecipeImageDraftDTO>();
+
+            //return  Ok("  Vaaazio ");
+            //ReturnTypeEncoder(ReturnTypeEncoder);
+            
+                throw new ErrorsNotFoundException(new List<string>() { string.Format(Resource.GetRecipiesTitle_Info_RecipeNotFound, nameof(GetRecipiesTitle), title) });
+
 
             List<CrossCutting.Dto.Response.RecipeImageDraftDTO> listRecipeImageDraftDTO = new List<CrossCutting.Dto.Response.RecipeImageDraftDTO>();
 
@@ -147,6 +144,9 @@ namespace MeuLivroDeReceitas.Application.Services
                 resultado.Errors.Add(new FluentValidation.Results.ValidationFailure("Receita", Resource.ValidarRecipeDTO_Info_RecipeAlreadyExists));
             }
 
+            ///int a = 0, b = 0;
+            ///a = a / b;
+
             if (!resultado.IsValid)
             {
                 var mensagesDeErro = resultado.Errors.Select(c => c.ErrorMessage).ToList();
@@ -173,7 +173,6 @@ namespace MeuLivroDeReceitas.Application.Services
             var recipie = await _recipeRepository.WhereAsync(x => x.Title == recipeDTO.Title);
             if (recipie.Count() == 0)
             {
-                _logger.LogInformation(Resource.ValidateRecipeModification_Info_RecipeNotFound, nameof(GetRecipiesTitle), recipeDTO.Title);
                 throw new ErrorsNotFoundException(new List<string>() { string.Format(Resource.ValidateRecipeModification_Info_RecipeNotFound, nameof(GetRecipiesTitle), recipeDTO.Title) });               
             }
 
@@ -195,28 +194,27 @@ namespace MeuLivroDeReceitas.Application.Services
             return recipie.FirstOrDefault();
         }
 
-        public async Task UpdateRecipeDraftImage(ICollection<IFormFile> files, RecipeImageDraftRequestDTO dataDraft)
+        public async Task UpdateRecipeDraftImage(ICollection<IFormFile> files, string title, string fileExtension) 
+            //RecipeImageDraftRequestDTO dataDraft)
         {
-            var recipies = await GetRecipiesTitle(dataDraft.Title);
+            var recipies = await GetRecipiesTitle(title);
             // if (recipies == null) await Task.FromException<Exception>(new Exception("Recipe is null"));
 
             var listByteFiles = ConverteFilesToBytes(files);
-
             var fileDrfat = new byte[0];
-
             fileDrfat = listByteFiles.FirstOrDefault();
 
-            if (dataDraft.FileExtension == null && fileDrfat != null) 
+            if (fileExtension == null && fileDrfat != null) 
                 await Task.FromException<Exception>
                     (new Exception(string.Format(Resource.UpdateRecipeDraftImage_Error_FileExtensionIsNull, nameof(UpdateRecipeDraftImage))));
 
-            if (dataDraft.FileExtension != null && fileDrfat == null) 
+            if (fileExtension != null && fileDrfat == null) 
                 await Task.FromException<Exception>
                     (new Exception(string.Format(Resource.UpdateRecipeDraftImage_Error_DataDraftIsNull, nameof(UpdateRecipeDraftImage))));
 
             var recipe = await _recipeRepository.GetById(recipies.First().Id);
 
-            recipe.FileExtension = dataDraft.FileExtension;
+            recipe.FileExtension = fileExtension;
             recipe.DataDraft = fileDrfat; 
 
             _recipeRepository.Update(recipe);

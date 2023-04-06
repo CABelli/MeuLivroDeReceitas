@@ -169,6 +169,15 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.Application {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Receita nao encontrada. Metodo {0}. Origem {1}. Filtro{2}.
+        /// </summary>
+        public static string TreatInformNotFound_Info {
+            get {
+                return ResourceManager.GetString("TreatInformNotFound_Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to DataDraft não preenchido. Método:{0}..
         /// </summary>
         public static string UpdateRecipeDraftImage_Error_DataDraftIsNull {

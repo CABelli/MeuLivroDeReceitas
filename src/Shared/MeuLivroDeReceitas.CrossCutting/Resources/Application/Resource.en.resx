@@ -153,6 +153,9 @@
   <data name="RecipeValidator_Error_UnfilledTitle" xml:space="preserve">
     <value>Title not filled. Method:{0}.</value>
   </data>
+  <data name="TreatInformNotFound_Info" xml:space="preserve">
+    <value>Recipe not found. Method:{0}. Origin:{1}, Filter:{2}.</value>
+  </data>
   <data name="UpdateRecipeDraftImage_Error_DataDraftIsNull" xml:space="preserve">
     <value>DataDraft not filled. Method:{0}.</value>
   </data>

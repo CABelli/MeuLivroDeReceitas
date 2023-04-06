@@ -8,7 +8,7 @@ namespace MeuLivroDeReceitas.Application.Services
     public class RecipeValidator : AbstractValidator<RecipeDTO>
     {
         public int MinimumNumberOfCharactersInTitle = 5;
-        public int MaximumNumberOfCharactersInTitle = 10;
+        public int MaximumNumberOfCharactersInTitle = 20;
 
         public RecipeValidator(int action, int CharactersTitle)
         {

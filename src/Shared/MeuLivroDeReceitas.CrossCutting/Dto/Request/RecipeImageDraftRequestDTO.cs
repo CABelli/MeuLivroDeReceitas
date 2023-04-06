@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace MeuLivroDeReceitas.CrossCutting.Dto.Request
 {
@@ -9,5 +10,8 @@ namespace MeuLivroDeReceitas.CrossCutting.Dto.Request
 
         [JsonProperty("fileextension")]
         public string FileExtension { get; set; }
+
+        [JsonProperty("dataDraft")]
+        public byte[] DataDraft { get; set; }
     }
 }
