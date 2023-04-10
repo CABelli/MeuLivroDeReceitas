@@ -35,17 +35,17 @@ public class FiltroDasExceptions : IExceptionFilter
 
     private void OutPutLogger(ExceptionContext context)
     {
-        if ((context.Exception is MeuLivroDeReceitasException) && (context.Exception is ErrosDeValidacaoException))
+        if (context.Exception is ErrosDeValidacaoException)
         {
             var validationErros = context.Exception as ErrosDeValidacaoException;
             validationErros?.MensagensDeErro.ForEach(mensageError => _logger.LogInformation(mensageError));
         }
-        else if ((context.Exception is MeuLivroDeReceitasException) && (context.Exception is ErrorsNotFoundException))
+        else if (context.Exception is ErrorsNotFoundException)
         {
             var notFoundErros = context.Exception as ErrorsNotFoundException;
             notFoundErros?.MensagensDeErro.ForEach(mensageError => _logger.LogInformation(mensageError));
         }
-        else if ((context.Exception is MeuLivroDeReceitasException) && (context.Exception is LoginInvalidoException))
+        else if (context.Exception is LoginInvalidoException)
         {
             var loginInvalidoException = context.Exception as LoginInvalidoException;
             _logger.LogInformation(loginInvalidoException?.Message);
@@ -54,18 +54,14 @@ public class FiltroDasExceptions : IExceptionFilter
 
     private static void TratarMeuLivroDeReceitasException(ExceptionContext context)
     {
-        if (context.Exception is ErrosDeValidacaoException)
-        {
+        if (context.Exception is ErrosDeValidacaoException)        
             TratarErrosDeValidacaoException(context);
-        }
-        else if (context.Exception is ErrorsNotFoundException)
-        {
-            TratarErrorsNotFoundException(context);
-        }
-        else if (context.Exception is LoginInvalidoException)
-        {
-            TratarLoginException(context);
-        }
+        
+        else if (context.Exception is ErrorsNotFoundException)        
+            TratarErrorsNotFoundException(context); 
+        
+        else if (context.Exception is LoginInvalidoException)        
+            TratarLoginException(context);        
     }
 
     private static void TratarErrosDeValidacaoException(ExceptionContext context)
@@ -80,7 +76,6 @@ public class FiltroDasExceptions : IExceptionFilter
         var errorsNotFoundException = context.Exception as ErrorsNotFoundException;
         context.HttpContext.Response.StatusCode = (int)HttpStatusCode.NoContent;
         context.HttpContext.Response.Headers.Add("Reason", HttpUtility.HtmlEncode(errorsNotFoundException.MensagensDeErro.FirstOrDefault()));
-
         context.Result = new ObjectResult("");
     }
 

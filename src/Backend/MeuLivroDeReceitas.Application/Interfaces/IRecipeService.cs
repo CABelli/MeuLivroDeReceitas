@@ -10,7 +10,7 @@ namespace MeuLivroDeReceitas.Application.Interfaces
 
         Task<RecipeResponseDTO> GetRecipeById(Guid id);
 
-        Task<IEnumerable<RecipeResponseDTO>> GetRecipiesTitle(string title);
+        Task<RecipeResponseDTO> GetRecipiesTitle(string title);
 
         Task<IEnumerable<CrossCutting.Dto.Response.RecipeImageDraftDTO>> GetRecipiesDownLoad(string title);
 
@@ -18,7 +18,7 @@ namespace MeuLivroDeReceitas.Application.Interfaces
 
         Task UpdateRecipeDraftString(RecipeDTO recipeDTO);
 
-        Task<string> UpdateRecipeDraftImage(ICollection<IFormFile> files, string title, string fileExtension);
+        Task<string> UpdateRecipeDraftImage(ICollection<IFormFile> files, string title);
 
         Task DeleteRecipeByTitle(string title);
     }

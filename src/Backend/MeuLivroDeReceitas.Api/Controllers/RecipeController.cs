@@ -24,7 +24,7 @@ namespace MeuLivroDeReceitas.Api.Controllers
 
         [HttpGet]
         [Route("get-title")]
-        public async Task<ActionResult<IEnumerable<RecipeResponseDTO>>> Get(string title) => Ok(await _recipeService.GetRecipiesTitle(title));
+        public async Task<ActionResult<RecipeResponseDTO>> Get(string title) => Ok(await _recipeService.GetRecipiesTitle(title));
         
         [HttpGet]
         [Route("get-id")]
@@ -57,9 +57,9 @@ namespace MeuLivroDeReceitas.Api.Controllers
 
         [HttpPut]
         [Route("put-binaryfileimage")]
-        public async Task<ActionResult> PutImage([FromForm] ICollection<IFormFile> binaryfiles, string title, string fileExtension)
+        public async Task<ActionResult> PutImage([FromForm] ICollection<IFormFile> binaryfiles, string title)
         {
-            var fileName = await _recipeService.UpdateRecipeDraftImage(binaryfiles, title, fileExtension);
+            var fileName = await _recipeService.UpdateRecipeDraftImage(binaryfiles, title);
             return Ok(fileName);
         }
 

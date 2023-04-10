@@ -14,12 +14,14 @@ namespace MeuLivroDeReceitas.CrossCutting.Dto.Response
 
         public int PreparationTime { get; set; }
 
-        public bool DataDraft { get; set; }
-
         public Category Category { get; set; }
 
         public string? NameCategoty { get; set; }
 
+        public bool DataDraftBool { get; set; }
+
         public string? FileExtension { get; set; }
+
+        public string? DataDraftCel { get; set; }
     }
 }

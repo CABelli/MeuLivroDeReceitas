@@ -15,6 +15,8 @@ namespace MeuLivroDeReceitas.Domain.InterfacesGeneric
 
         Task<List<T>> WhereAsync(Expression<Func<T, bool>> expression);
 
+        Task<T> WhereFirstAsync(Expression<Func<T, bool>> expression);
+
         Task<T> GetById(Guid id);
 
         //    void Create(List<T> entities);

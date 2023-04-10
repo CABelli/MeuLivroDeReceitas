@@ -31,6 +31,12 @@ namespace MeuLivroDeReceitas.Infrastructure.RepositoryGeneric
             return _dbSet.Where(expression).ToListAsync();
         }
 
+        public async Task<T?> WhereFirstAsync(Expression<Func<T, bool>> expression)
+        {
+            return await _dbSet.FirstOrDefaultAsync(expression);
+        }
+        
+
         public async Task<T> GetById(Guid id)
         {
             return await _dbSet.FirstOrDefaultAsync(d => d.Id == id);
