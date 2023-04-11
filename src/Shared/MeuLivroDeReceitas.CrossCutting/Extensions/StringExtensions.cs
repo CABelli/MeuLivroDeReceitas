@@ -12,5 +12,10 @@
         {
             return title + "_" + DateTime.Now.ToString("HH:mm:ss") + extension;
         }
+
+        public static bool EmptyOrFilledText(this string? text)
+        {
+            return string.IsNullOrEmpty(text) ? false : true;
+        }
     }
 }

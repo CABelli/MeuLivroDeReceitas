@@ -10,9 +10,6 @@ namespace MeuLivroDeReceitas.CrossCutting.Dto.Response
         [JsonProperty("dataDraft")]
         public byte[]? DataDraft { get; set; }
 
-        [JsonProperty("listDataDraft")]
-        public List<byte[]>? ListDataDraft { get; set; }
-
         [JsonProperty("nameFile")]
         public string? NameFile { get; set; }
     }

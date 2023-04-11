@@ -35,7 +35,7 @@ namespace MeuLivroDeReceitas.Api.Controllers
         public async Task<ActionResult> DownLoadimage(string title)
         {
             var listRecImageDraftDTO = await _recipeService.GetRecipiesDownLoad(title);
-            return File(listRecImageDraftDTO.FirstOrDefault().DataDraft,"image/png", listRecImageDraftDTO.FirstOrDefault().NameFile);
+            return File(listRecImageDraftDTO.DataDraft, "image/png", listRecImageDraftDTO.NameFile);
         }
 
         [HttpPost]

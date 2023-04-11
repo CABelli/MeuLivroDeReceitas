@@ -12,7 +12,7 @@ namespace MeuLivroDeReceitas.Application.Interfaces
 
         Task<RecipeResponseDTO> GetRecipiesTitle(string title);
 
-        Task<IEnumerable<CrossCutting.Dto.Response.RecipeImageDraftDTO>> GetRecipiesDownLoad(string title);
+        Task<RecipeImageDraftDTO> GetRecipiesDownLoad(string title);
 
         Task AddRecipe(CrossCutting.Dto.Request.RecipeDTO recipeDTO);
 

@@ -12,6 +12,7 @@ using MeuLivroDeReceitas.Exceptions.ExceptionsBase;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualBasic.FileIO;
 using System.Text;
 
 namespace MeuLivroDeReceitas.Application.Services
@@ -60,7 +61,7 @@ namespace MeuLivroDeReceitas.Application.Services
             return RecipeResult(recipe);
         }
 
-        public async Task<IEnumerable<RecipeImageDraftDTO>> GetRecipiesDownLoad(string title)
+        public async Task<RecipeImageDraftDTO> GetRecipiesDownLoad(string title)
         {
             var recipe = await _recipeRepository.WhereFirstAsync(x => x.Title == title);
 
@@ -69,13 +70,11 @@ namespace MeuLivroDeReceitas.Application.Services
             if (recipe.FileExtension == null || String.IsNullOrEmpty(recipe.FileExtension))
                 throw new ErrosDeValidacaoException(new List<string>() { string.Format(Resource.GetRecipiesDownLoad_Info_NotContainImageFile, nameof(GetRecipiesTitle), title) });
 
-            return new List<RecipeImageDraftDTO>() 
-            { new RecipeImageDraftDTO()
-                {
-                    Title = recipe.Title,
-                    NameFile = recipe.Title?.TitleNameFileExtension(recipe.FileExtension),
-                    DataDraft = recipe.DataDraft
-                }
+            return new RecipeImageDraftDTO
+            {
+                Title = recipe.Title,
+                NameFile = recipe.Title?.TitleNameFileExtension(recipe.FileExtension),
+                DataDraft = recipe.DataDraft
             };
         }
 
@@ -216,7 +215,7 @@ namespace MeuLivroDeReceitas.Application.Services
                 NameCategoty = ((Category)recipe.Category).ToString(),
                 PreparationMode = recipe.PreparationMode,
                 PreparationTime = recipe.PreparationTime,
-                DataDraftBool = recipe.DataDraft != null ? true : false,
+                DataDraftBool = recipe.FileExtension.EmptyOrFilledText(),
                 FileExtension = recipe.FileExtension,
                 DataDraftCel = recipe.FileExtension == "Cel" ? Encoding.ASCII.GetString(recipe.DataDraft) : null                
             };
