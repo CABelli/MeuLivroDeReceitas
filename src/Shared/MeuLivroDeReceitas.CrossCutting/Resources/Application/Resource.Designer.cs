@@ -214,6 +214,15 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.Application {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Extensão de arquivo não aceita. Metodo {0}. Titulo: {1}. Extensão: {2}.
+        /// </summary>
+        public static string UpdateRecipeDraftImage_Info_FileExtensionNotAccepted {
+            get {
+                return ResourceManager.GetString("UpdateRecipeDraftImage_Info_FileExtensionNotAccepted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Receita já cadastrada.
         /// </summary>
         public static string ValidarRecipeDTO_Info_RecipeAlreadyExists {

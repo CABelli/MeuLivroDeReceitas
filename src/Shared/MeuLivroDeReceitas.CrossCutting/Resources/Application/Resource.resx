@@ -168,6 +168,9 @@
   <data name="UpdateRecipeDraftImage_Error_FileExtensionIsNull" xml:space="preserve">
     <value>FileExtension não preenchido. Método:{0}.</value>
   </data>
+  <data name="UpdateRecipeDraftImage_Info_FileExtensionNotAccepted" xml:space="preserve">
+    <value>Extensão de arquivo não aceita. Metodo {0}. Titulo: {1}. Extensão: {2}</value>
+  </data>
   <data name="ValidarRecipeDTO_Info_RecipeAlreadyExists" xml:space="preserve">
     <value>Receita já cadastrada</value>
   </data>

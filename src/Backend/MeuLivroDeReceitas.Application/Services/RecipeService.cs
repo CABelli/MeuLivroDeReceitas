@@ -12,7 +12,6 @@ using MeuLivroDeReceitas.Exceptions.ExceptionsBase;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic.FileIO;
 using System.Text;
 
 namespace MeuLivroDeReceitas.Application.Services
@@ -156,30 +155,28 @@ namespace MeuLivroDeReceitas.Application.Services
 
             string fileExtension = Path.GetExtension(files.FirstOrDefault().FileName);
 
-            if (!Path.GetExtension(files.FirstOrDefault().FileName).ExtensionToBool())           
-                throw new ErrosDeValidacaoException(new List<string>() { "Extensão: " + fileExtension + " invalida" });            
+            if (!fileExtension.ExtensionToBool())           
+                throw new ErrosDeValidacaoException(new List<string>() 
+                { string.Format(Resource.UpdateRecipeDraftImage_Info_FileExtensionNotAccepted, nameof(UpdateRecipeDraftImage), title, fileExtension) });            
 
             var recipeTitle = await GetRecipiesTitle(title);
 
-            var listByteFiles = ConverteFilesToBytes(files);
-            var fileDrfat = new byte[0];
-            fileDrfat = listByteFiles.FirstOrDefault();
-
-            //  Exemplos de criticas com saida da API
-            // await Task.FromException<Exception>(new Exception(string.Format(Resource.UpdateRecipeDraftImage_Error_DataDraftIsNull, nameof(UpdateRecipeDraftImage))));
-            // throw new ErrorsNotFoundException(new List<string>() { string.Format(Resource.GetRecipiesTitle_Info_RecipeNotFound, nameof(GetRecipiesTitle), title) });
-            // throw new ErrosDeValidacaoException(new List<string>() { Resource.ValidarRecipeDTO_Info_RecipeAlreadyExists });
+            var fileDrfat = ConverteFilesToBytes(files);
 
             var recipe = await _recipeRepository.GetById(recipeTitle.Id);
             recipe.FileExtension = fileExtension;
             recipe.DataDraft = fileDrfat; 
 
             _recipeRepository.Update(recipe);
+
             await _unitOfWork.CommitAsync();
 
-            //return title + "_"+ DateTime.Now.ToString("HH:mm:ss") + fileExtension;
-
             return title.TitleNameFileExtension(fileExtension);
+
+            //  Exemplos de criticas com saida da API
+            // await Task.FromException<Exception>(new Exception(string.Format(Resource.UpdateRecipeDraftImage_Error_DataDraftIsNull, nameof(UpdateRecipeDraftImage))));
+            // throw new ErrorsNotFoundException(new List<string>() { string.Format(Resource.GetRecipiesTitle_Info_RecipeNotFound, nameof(GetRecipiesTitle), title) });
+            // throw new ErrosDeValidacaoException(new List<string>() { Resource.ValidarRecipeDTO_Info_RecipeAlreadyExists });
         }
 
         public async Task DeleteRecipeByTitle(string title)
@@ -222,26 +219,19 @@ namespace MeuLivroDeReceitas.Application.Services
             return recipeResponseDTO;
         }
 
-        private List<byte[]> ConverteFilesToBytes(ICollection<IFormFile> files)
-        {           
+        private byte[] ConverteFilesToBytes(ICollection<IFormFile> files)
+        {
             var lista = files.Select(formFile => BuildList(formFile));
-            return lista.First();
+            return lista.First().FirstOrDefault();
         }
 
-        private List<byte[]> BuildList(IFormFile fil)
+        private List<byte[]> BuildList(IFormFile file)
         {
-            var fileDrfat = new byte[0];
-            List<byte[]> lista = new();
-            if (fil.Length > 0)
+            using (var memoryStream = new MemoryStream())
             {
-                using (var memoryStream = new MemoryStream())
-                {
-                    fil.CopyTo(memoryStream);
-                    fileDrfat = memoryStream.ToArray();
-                    lista.Add(memoryStream.ToArray());
-                }
+                file.CopyTo(memoryStream);
+                return new List<byte[]> { memoryStream.ToArray() };
             }
-            return lista;
         }
 
         #endregion

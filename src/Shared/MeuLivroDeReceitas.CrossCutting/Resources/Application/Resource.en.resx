@@ -168,6 +168,9 @@
   <data name="UpdateRecipeDraftImage_Error_FileExtensionIsNull" xml:space="preserve">
     <value>FileExtension not filled. Method:{0}.</value>
   </data>
+  <data name="UpdateRecipeDraftImage_Info_FileExtensionNotAccepted" xml:space="preserve">
+    <value>File extension not accepted. Method: {0}. Title: {1}. Extension: {2}</value>
+  </data>
   <data name="ValidarRecipeDTO_Info_RecipeAlreadyExists" xml:space="preserve">
     <value>Recipe already exists.</value>
   </data>
@@ -175,6 +178,6 @@
     <value>Recipe already not exists.</value>
   </data>
   <data name="ValidateRecipeModification_Info_RecipeNotFound" xml:space="preserve">
-    <value>Recipe not found. Method:{0}. Title:{1}.</value>
+    <value>Recipe not found. Method:{0}. Title: {1}.</value>
   </data>
 </root>
