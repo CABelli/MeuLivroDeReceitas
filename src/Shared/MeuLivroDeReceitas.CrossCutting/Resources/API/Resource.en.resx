@@ -120,6 +120,12 @@
   <data name="IncludeRecipe_Return_Successfully" xml:space="preserve">
     <value>Successfully entered the recipe.</value>
   </data>
+  <data name="OnException_Error_UnknownCompleteMessage" xml:space="preserve">
+    <value>Complete message. Method:{0}, Error:{1}</value>
+  </data>
+  <data name="OnException_Error_UnknownShortMessage" xml:space="preserve">
+    <value>Short message. Method:{0}, Error:{1}</value>
+  </data>
   <data name="RecipeValidator_Error_UnfilledTitle" xml:space="preserve">
     <value>xxx</value>
   </data>

@@ -1,4 +1,4 @@
-﻿using MeuLivroDeReceitas.Domain.Enum;
+﻿using MeuLivroDeReceitas.CrossCutting.EnumClass;
 using System.ComponentModel;
 
 namespace MeuLivroDeReceitas.CrossCutting.Dto.Response

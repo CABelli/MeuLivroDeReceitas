@@ -120,6 +120,12 @@
   <data name="IncludeRecipe_Return_Successfully" xml:space="preserve">
     <value>Inclusão da receita com sucesso.</value>
   </data>
+  <data name="OnException_Error_UnknownCompleteMessage" xml:space="preserve">
+    <value>Mensagem completa. Método:{0}, Erro: {1}</value>
+  </data>
+  <data name="OnException_Error_UnknownShortMessage" xml:space="preserve">
+    <value>Mensagem curta. Método: {0}, Erro: {1}</value>
+  </data>
   <data name="ThrowUnknownError_Error_Throw" xml:space="preserve">
     <value>Erro não tratado. Método:{0}, Descrição:{1}</value>
   </data>

@@ -117,67 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AddRecipe_Info_Starting" xml:space="preserve">
-    <value>Iniciando. Método: {0}. Título: {1}</value>
+  <data name="Category_Enum_Breakfast" xml:space="preserve">
+    <value>Breakfast</value>
   </data>
-  <data name="DeleteRecipeByTitle_Info_RecipeNotFound" xml:space="preserve">
-    <value>Receita nao encontrada. Metodo {0}. Titulo {1}</value>
+  <data name="Category_Enum_Dessert" xml:space="preserve">
+    <value>Category_Enum_Dessert</value>
   </data>
-  <data name="GetRecipeById_Info_RecipeNotFound" xml:space="preserve">
-    <value>Receita nao encontrada. Metodo {0}. Titulo {1}</value>
+  <data name="Category_Enum_Dinner" xml:space="preserve">
+    <value>Dinner</value>
   </data>
-  <data name="GetRecipiesDownLoad_Info_NotContainImageFile" xml:space="preserve">
-    <value>Receita não contem arquivo de imagem. Metodo {0}. Titulo: {1}</value>
-  </data>
-  <data name="GetRecipiesTitle_Info_RecipeNotFound" xml:space="preserve">
-    <value>Receita não encontrada. Método: {0}. Título: {1}</value>
-  </data>
-  <data name="GetRecipies_Info_RecipeNotFound" xml:space="preserve">
-    <value>Receitas nao encontradas. Metodo {0}.</value>
-  </data>
-  <data name="RecipeValidator_Error_CharactersTitle" xml:space="preserve">
-    <value>Caracteres do atributo título não pode ser {0}, deve ficar entre {1} e {2}. Método:{3}.</value>
-  </data>
-  <data name="RecipeValidator_Error_DataDraftIsNull" xml:space="preserve">
-    <value>DataDraft não preenchido. Método:{0}.</value>
-  </data>
-  <data name="RecipeValidator_Error_FileExtensionIsNull" xml:space="preserve">
-    <value>FileExtension não preenchido. Método:{0}.</value>
-  </data>
-  <data name="RecipeValidator_Error_NonStandardCellNumber" xml:space="preserve">
-    <value>Número do telefone celular fora do padrão. Método:{0}. Número:{1}</value>
-  </data>
-  <data name="RecipeValidator_Error_UnfilledCategory" xml:space="preserve">
-    <value>Categoria não preenchida. Método:{0}.</value>
-  </data>
-  <data name="RecipeValidator_Error_UnfilledPreparationMode" xml:space="preserve">
-    <value>Modo de preparo não preenchido. Método:{0}.</value>
-  </data>
-  <data name="RecipeValidator_Error_UnfilledPreparationTime" xml:space="preserve">
-    <value>Tempo de preparo não preenchido. Método:{0}.</value>
-  </data>
-  <data name="RecipeValidator_Error_UnfilledTitle" xml:space="preserve">
-    <value>Titulo não preenchido. Método:{0}.</value>
-  </data>
-  <data name="TreatInformNotFound_Info" xml:space="preserve">
-    <value>Receita nao encontrada. Metodo {0}. Origem {1}. Filtro{2}</value>
-  </data>
-  <data name="UpdateRecipeDraftImage_Error_DataDraftIsNull" xml:space="preserve">
-    <value>DataDraft não preenchido. Método:{0}.</value>
-  </data>
-  <data name="UpdateRecipeDraftImage_Error_FileExtensionIsNull" xml:space="preserve">
-    <value>FileExtension não preenchido. Método:{0}.</value>
-  </data>
-  <data name="UpdateRecipeDraftImage_Info_FileExtensionNotAccepted" xml:space="preserve">
-    <value>Extensão de arquivo não aceita. Metodo {0}. Titulo: {1}. Extensão: {2}</value>
-  </data>
-  <data name="ValidarRecipeDTO_Info_RecipeAlreadyExists" xml:space="preserve">
-    <value>Receita já cadastrada</value>
-  </data>
-  <data name="ValidateRecipeModification_Info_RecipeNotExists" xml:space="preserve">
-    <value>Receita não encontrada.</value>
-  </data>
-  <data name="ValidateRecipeModification_Info_RecipeNotFound" xml:space="preserve">
-    <value>Receita nao encontrada. Metodo {0}. Titulo {1}</value>
+  <data name="Category_Enum_Lunch" xml:space="preserve">
+    <value>Lunch</value>
   </data>
 </root>

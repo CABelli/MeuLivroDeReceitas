@@ -106,7 +106,7 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.Application {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Receita nao encontrada. Metodo {0}. Titulo {1}.
+        ///   Looks up a localized string similar to Receita não encontrada. Método: {0}. Título: {1}.
         /// </summary>
         public static string GetRecipiesTitle_Info_RecipeNotFound {
             get {

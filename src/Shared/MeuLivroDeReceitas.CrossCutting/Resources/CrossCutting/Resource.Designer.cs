@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MeuLivroDeReceitas.CrossCutting.Resources.API {
+namespace MeuLivroDeReceitas.CrossCutting.Resources.CrossCutting {
     using System;
     
     
@@ -22,7 +22,7 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.API {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Resource {
+    internal class Resource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,10 +36,10 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.API {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MeuLivroDeReceitas.CrossCutting.Resources.API.Resource", typeof(Resource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MeuLivroDeReceitas.CrossCutting.Resources.CrossCutting.Resource", typeof(Resource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.API {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,38 +61,38 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.API {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Inclusão da receita com sucesso..
+        ///   Looks up a localized string similar to Café Da Manha.
         /// </summary>
-        public static string IncludeRecipe_Return_Successfully {
+        internal static string Category_Enum_Breakfast {
             get {
-                return ResourceManager.GetString("IncludeRecipe_Return_Successfully", resourceCulture);
+                return ResourceManager.GetString("Category_Enum_Breakfast", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mensagem completa. Método:{0}, Erro: {1}.
+        ///   Looks up a localized string similar to Sobremesa.
         /// </summary>
-        public static string OnException_Error_UnknownCompleteMessage {
+        internal static string Category_Enum_Dessert {
             get {
-                return ResourceManager.GetString("OnException_Error_UnknownCompleteMessage", resourceCulture);
+                return ResourceManager.GetString("Category_Enum_Dessert", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mensagem curta. Método: {0}, Erro: {1}.
+        ///   Looks up a localized string similar to Jantar.
         /// </summary>
-        public static string OnException_Error_UnknownShortMessage {
+        internal static string Category_Enum_Dinner {
             get {
-                return ResourceManager.GetString("OnException_Error_UnknownShortMessage", resourceCulture);
+                return ResourceManager.GetString("Category_Enum_Dinner", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Erro não tratado. Método:{0}, Descrição:{1}.
+        ///   Looks up a localized string similar to Almoço.
         /// </summary>
-        public static string ThrowUnknownError_Error_Throw {
+        internal static string Category_Enum_Lunch {
             get {
-                return ResourceManager.GetString("ThrowUnknownError_Error_Throw", resourceCulture);
+                return ResourceManager.GetString("Category_Enum_Lunch", resourceCulture);
             }
         }
     }

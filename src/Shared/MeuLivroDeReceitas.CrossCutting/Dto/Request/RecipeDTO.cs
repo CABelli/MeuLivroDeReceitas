@@ -1,6 +1,5 @@
-﻿using MeuLivroDeReceitas.Domain.Enum;
+﻿using MeuLivroDeReceitas.CrossCutting.EnumClass;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 
 namespace MeuLivroDeReceitas.CrossCutting.Dto.Request
 {

@@ -1,5 +1,5 @@
-﻿using MeuLivroDeReceitas.Domain.EntityGeneric;
-using MeuLivroDeReceitas.Domain.Enum;
+﻿using MeuLivroDeReceitas.CrossCutting.EnumClass;
+using MeuLivroDeReceitas.Domain.EntityGeneric;
 
 namespace MeuLivroDeReceitas.Domain.Entities
 {

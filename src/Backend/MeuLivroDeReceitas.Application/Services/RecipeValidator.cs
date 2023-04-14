@@ -30,9 +30,8 @@ namespace MeuLivroDeReceitas.Application.Services
                 RuleFor(c => c.PreparationTime).NotEmpty()
                     .WithMessage(string.Format(Resource.RecipeValidator_Error_UnfilledPreparationTime, nameof(RecipeValidator)));
             
-            if (action == 1) 
-                RuleFor(c => c.Category).NotEmpty()
-                    .WithMessage(string.Format(Resource.RecipeValidator_Error_UnfilledCategory, nameof(RecipeValidator)));
+            RuleFor(c => c.Category).NotEmpty()
+                .WithMessage(string.Format(Resource.RecipeValidator_Error_UnfilledCategory, nameof(RecipeValidator)));
 
             RuleFor(c => c.FileExtension).Empty().When(c => c.DataDraft == null || c.DataDraft == "")
                 .WithMessage(string.Format(Resource.RecipeValidator_Error_DataDraftIsNull, nameof(RecipeValidator)));

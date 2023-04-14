@@ -4,7 +4,6 @@ using MeuLivroDeReceitas.CrossCutting.Dto.Response;
 using MeuLivroDeReceitas.CrossCutting.Extensions;
 using MeuLivroDeReceitas.CrossCutting.Resources.Application;
 using MeuLivroDeReceitas.Domain.Entities;
-using MeuLivroDeReceitas.Domain.Enum;
 using MeuLivroDeReceitas.Domain.Interfaces;
 using MeuLivroDeReceitas.Domain.InterfacesGeneric;
 using MeuLivroDeReceitas.Exceptions.ExceptionBase;
@@ -51,11 +50,9 @@ namespace MeuLivroDeReceitas.Application.Services
 
         public async Task<RecipeResponseDTO> GetRecipiesTitle(string title)
         {
-            //var recipe = await _recipeRepository.WhereFirstAsync(x => x.Title == title);
             var recipe = await _recipeRepository.WhereFirstAsync(x => x.Title == title);
-            
             if (recipe == null)
-                throw new ErrorsNotFoundException(new List<string>() { string.Format(Resource.GetRecipiesTitle_Info_RecipeNotFound, nameof(GetRecipiesTitle), title) });
+                throw new ErrorsNotFoundException(new List<string>() { string.Format(Resource.GetRecipiesTitle_Info_RecipeNotFound.RemoveAccents(), nameof(GetRecipiesTitle), title.RemoveAccents()) });
 
             return RecipeResult(recipe);
         }
@@ -112,8 +109,8 @@ namespace MeuLivroDeReceitas.Application.Services
             //if (recipies.Count() > 0)            
             //    resultado.Errors.Add(new FluentValidation.Results.ValidationFailure("Receita", Resource.ValidarRecipeDTO_Info_RecipeAlreadyExists));            
 
-            ///  int a = 0, b = 0;
-            ///  a = a / b;
+            int a = 0, b = 0;
+            a = a / b;
 
             if (!resultado.IsValid)
                 throw new ErrosDeValidacaoException(resultado.Errors.Select(c => c.ErrorMessage).ToList());
@@ -125,7 +122,7 @@ namespace MeuLivroDeReceitas.Application.Services
 
             recipe.PreparationTime = recipeDTO.PreparationTime == 0 ? recipe.PreparationTime : recipeDTO.PreparationTime;
             recipe.PreparationMode = recipeDTO.PreparationMode == null ? recipe.PreparationMode : recipeDTO.PreparationMode;
-            recipe.Category = recipeDTO.Category == 0 ? recipe.Category : recipeDTO.Category;
+            recipe.Category = recipeDTO.Category;
             recipe.FileExtension = recipeDTO.FileExtension;
             if (recipeDTO.FileExtension != null) recipe.DataDraft = Encoding.ASCII.GetBytes(recipeDTO.DataDraft);
 
@@ -209,7 +206,7 @@ namespace MeuLivroDeReceitas.Application.Services
                 Id = recipe.Id,
                 Title = recipe.Title,
                 Category = recipe.Category,
-                NameCategoty = ((Category)recipe.Category).ToString(),
+                NameCategoty = recipe.Category.GetDescriptionResources(),
                 PreparationMode = recipe.PreparationMode,
                 PreparationTime = recipe.PreparationTime,
                 DataDraftBool = recipe.FileExtension.EmptyOrFilledText(),

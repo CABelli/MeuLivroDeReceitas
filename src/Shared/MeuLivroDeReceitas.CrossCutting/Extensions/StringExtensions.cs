@@ -1,4 +1,8 @@
-﻿namespace MeuLivroDeReceitas.CrossCutting.Extensions
+﻿using System.Globalization;
+using System.Text;
+using System.Text.RegularExpressions;
+
+namespace MeuLivroDeReceitas.CrossCutting.Extensions
 {
     public static class StringExtensions
     {
@@ -11,6 +15,18 @@
         public static string TitleNameFileExtension(this string title, string extension)
         {
             return title + "_" + DateTime.Now.ToString("HH:mm:ss") + extension;
+        }
+
+        public static string RemoveAccents(this string text)
+        {
+            StringBuilder sbReturn = new StringBuilder();
+            var arrayText = text.Normalize(NormalizationForm.FormD).ToCharArray();
+            foreach (char letter in arrayText)
+            {
+                if (CharUnicodeInfo.GetUnicodeCategory(letter) != UnicodeCategory.NonSpacingMark)
+                    sbReturn.Append(letter);
+            }
+            return sbReturn.ToString();
         }
 
         public static bool EmptyOrFilledText(this string? text)
