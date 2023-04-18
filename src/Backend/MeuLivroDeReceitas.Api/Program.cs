@@ -2,6 +2,7 @@ using MeuLivroDeReceitas.Api.Filtros;
 using MeuLivroDeReceitas.Infra.IoC;
 using MeuLivroDeReceitas.CrossCutting.Resources.API;
 using ResourcesApplication = MeuLivroDeReceitas.CrossCutting.Resources.Application;
+using MeuLivroDeReceitas.Domain.Account;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,15 +39,15 @@ app.UseHttpsRedirection();
 app.UseStatusCodePages();
 app.UseRouting();
 
-//using (var scope = app.Services.CreateScope())
-//{
-//    //var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-//    //context.Database.Migrate();
+using (var scope = app.Services.CreateScope())
+{
+    //var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    //context.Database.Migrate();
 
-//    var userManager = scope.ServiceProvider.GetRequiredService<ISeedUserRoleInitial>();
-//    userManager.SeedRoles();
-//    userManager.SeedUsers();
-//}
+    var userManager = scope.ServiceProvider.GetRequiredService<ISeedUserRoleInitial>();
+    userManager.SeedRoles();
+    userManager.SeedUsers();
+}
 
 app.UseAuthentication();
 app.UseAuthorization();

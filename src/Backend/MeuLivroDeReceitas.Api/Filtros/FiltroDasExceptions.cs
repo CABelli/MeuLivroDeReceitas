@@ -45,11 +45,6 @@ public class FiltroDasExceptions : IExceptionFilter
             var notFoundErros = context.Exception as ErrorsNotFoundException;
             notFoundErros?.MensagensDeErro.ForEach(mensageError => _logger.LogInformation(mensageError));
         }
-        else if (context.Exception is LoginInvalidoException)
-        {
-            var loginInvalidoException = context.Exception as LoginInvalidoException;
-            _logger.LogInformation(loginInvalidoException?.Message);
-        }
     }
 
     private static void TratarMeuLivroDeReceitasException(ExceptionContext context)
@@ -59,9 +54,6 @@ public class FiltroDasExceptions : IExceptionFilter
         
         else if (context.Exception is ErrorsNotFoundException)        
             TratarErrorsNotFoundException(context); 
-        
-        else if (context.Exception is LoginInvalidoException)        
-            TratarLoginException(context);        
     }
 
     private static void TratarErrosDeValidacaoException(ExceptionContext context)
@@ -77,13 +69,6 @@ public class FiltroDasExceptions : IExceptionFilter
         context.HttpContext.Response.StatusCode = (int)HttpStatusCode.NoContent;
         context.HttpContext.Response.Headers.Add("Reason", HttpUtility.HtmlEncode(errorsNotFoundException.MensagensDeErro.FirstOrDefault()));
         context.Result = new ObjectResult("");
-    }
-
-    private static void TratarLoginException(ExceptionContext context)
-    {
-        var erroLogin = context.Exception as LoginInvalidoException;
-        context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-        context.Result = new ObjectResult(new RespostaErroJson(erroLogin.Message));
     }
 
     private static void ThrowUnknownError(ExceptionContext context)

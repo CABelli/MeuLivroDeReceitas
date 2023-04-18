@@ -2,13 +2,14 @@
 using MeuLivroDeReceitas.CrossCutting.Dto.Request;
 using MeuLivroDeReceitas.CrossCutting.Dto.Response;
 using MeuLivroDeReceitas.CrossCutting.Resources.API;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MeuLivroDeReceitas.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class RecipeController : ControllerBase
     {
         private readonly IRecipeService _recipeService;

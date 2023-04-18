@@ -218,11 +218,11 @@ namespace MeuLivroDeReceitas.Application.Services
 
         private byte[] ConverteFilesToBytes(ICollection<IFormFile> files)
         {
-            var lista = files.Select(formFile => BuildList(formFile));
+            var lista = files.Select(formFile => BuildListByte(formFile));
             return lista.First().FirstOrDefault();
         }
 
-        private List<byte[]> BuildList(IFormFile file)
+        private List<byte[]> BuildListByte(IFormFile file)
         {
             using (var memoryStream = new MemoryStream())
             {

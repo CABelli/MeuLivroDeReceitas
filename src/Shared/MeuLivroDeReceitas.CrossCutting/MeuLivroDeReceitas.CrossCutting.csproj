@@ -27,11 +27,16 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\Infrastructure\Resource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Update="Resources\API\Resource.en.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
+      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\API\Resource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -43,6 +48,10 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\CrossCutting\Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Infrastructure\Resource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>

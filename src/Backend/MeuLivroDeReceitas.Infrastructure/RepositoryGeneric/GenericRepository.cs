@@ -34,20 +34,17 @@ namespace MeuLivroDeReceitas.Infrastructure.RepositoryGeneric
         public async Task<T?> WhereFirstAsync(Expression<Func<T, bool>> expression)
         {
             return await _dbSet.FirstOrDefaultAsync(expression);
-        }
-        
+        }        
 
         public async Task<T> GetById(Guid id)
         {
             return await _dbSet.FirstOrDefaultAsync(d => d.Id == id);
         }
 
-
         public void Update(T entity)
         {
-            //Console.WriteLine(entity.Id);
-            //entity.SetDataHoraAlteracao(DateTime.Now);
-            //entity.SetUsuarioAlteracao(_documentSession.GetUserName() ?? "NaoInformado");
+            entity.SetAlterationDate(DateTime.Now);
+            entity.SetAlterationUsuarioId("NaoInformado");//(_documentSession.GetUserName() ?? "NaoInformado");
             _dbSet.Update(entity);
         }
 
@@ -55,14 +52,6 @@ namespace MeuLivroDeReceitas.Infrastructure.RepositoryGeneric
         {
             _dbSet.Remove(entity);
         }
-
-        //public void Update(T entity)
-        //{
-        //    Console.WriteLine(entity.Id);
-        //    entity.SetDataHoraAlteracao(DateTime.Now);
-        //    entity.SetUsuarioAlteracao(_documentSession.GetUserName() ?? "NaoInformado");
-        //    _dbSet.Update(entity);
-        //}
 
         //public void Update(List<T> entities)
         //{
@@ -72,7 +61,6 @@ namespace MeuLivroDeReceitas.Infrastructure.RepositoryGeneric
         //        entity.SetDataHoraAlteracao(DateTime.Now);
         //        entity.SetUsuarioAlteracao(_documentSession.GetUserName() ?? "NaoInformado");
         //    }
-
         //    _dbSet.UpdateRange(entities);
         //}
 
@@ -83,11 +71,6 @@ namespace MeuLivroDeReceitas.Infrastructure.RepositoryGeneric
         //        entity.SetDataHoraAlteracao(DateTime.Now);
         //    }
         //    _dbSet.UpdateRange(entities);
-        //}
-
-        //public void Delete(T entity)
-        //{
-        //    _dbSet.Remove(entity);
         //}
 
         //public async Task<T> FindAsync(Expression<Func<T, bool>> expression)

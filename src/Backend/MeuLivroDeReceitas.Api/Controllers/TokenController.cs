@@ -5,7 +5,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using MeuLivroDeReceitas.CrossCutting.Resources.API;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
+using MeuLivroDeReceitas.CrossCutting.Dto.Request.Login;
 
 namespace MeuLivroDeReceitas.Api.Controllers
 {
@@ -22,47 +24,30 @@ namespace MeuLivroDeReceitas.Api.Controllers
             _configuration = configuration;
         }
 
+        //[Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         [HttpPost("CreateUser")]
-        [ApiExplorerSettings(IgnoreApi = true)]  // o endpoint fica ignorado e nao aparece
+        //[ApiExplorerSettings(IgnoreApi = true)]  // o endpoint fica ignorado e nao aparece
         [Authorize]
-        public async Task<ActionResult> CreateUser([FromBody] LoginModel userInfo)
+        public async Task<ActionResult> CreateUser([FromBody] LoginDto loginDto)
         {
-            var result = await _authenticate.RegisterUser(userInfo.Email, userInfo.Password);
-
-            if (result)
-            {
-                return Ok($"User {userInfo.Email} login suceessfully");
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "Invalid Login attempt");
-                return BadRequest(ModelState);
-            }
+            var result = await _authenticate.RegisterUser(loginDto);
+            return Ok();
         }
 
         [AllowAnonymous]
         [HttpPost("LoginUser")]
-        public async Task<ActionResult<UserToken>> Login([FromBody] LoginModel userInfo)
+        public async Task<ActionResult<UserToken>> Login([FromBody] LoginDto loginDto)
         {
-            var result = await _authenticate.Authenticate(userInfo.Email, userInfo.Password);
-
-            if (result)
-            {
-                return GenerateToken(userInfo);
-                //return Ok($"User {userInfo.Email} login suceessfully");
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "Invalid Login attempt");
-                return BadRequest(ModelState);
-            }
+            var result = await _authenticate.Authenticate(loginDto);
+            return GenerateToken(loginDto);
         }
 
-        private UserToken GenerateToken(LoginModel userInfo)
+        private UserToken GenerateToken(LoginDto loginDto)
         {
             var claims = new[]
             {
-                new Claim("email",userInfo.Email),
+                new Claim("email",loginDto.Email),
                 new Claim("meuValor","qualquer valor"),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };

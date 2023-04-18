@@ -20,17 +20,9 @@ namespace MeuLivroDeReceitas.Domain.InterfacesGeneric
         Task<T> GetById(Guid id);
 
         //    void Create(List<T> entities);
-
-        //    void Update(List<T> entities);
-
         //    void UpdateRange(List<T> entities);
-
-        //    void Delete(T entity);
-
         //    Task<T> GetByTitle(string title);
-
         //    Task<List<T>> GetAllWhere(Expression<Func<T, bool>> expression);
-
-        //     Task<T> GetByWhere(Expression<Func<T, bool>> expression);
+        //    Task<T> GetByWhere(Expression<Func<T, bool>> expression);
     }
 }
