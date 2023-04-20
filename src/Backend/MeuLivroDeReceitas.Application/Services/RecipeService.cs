@@ -3,10 +3,10 @@ using MeuLivroDeReceitas.CrossCutting.Dto.Request;
 using MeuLivroDeReceitas.CrossCutting.Dto.Response;
 using MeuLivroDeReceitas.CrossCutting.Extensions;
 using MeuLivroDeReceitas.CrossCutting.Resources.Application;
+using MeuLivroDeReceitas.Domain.Account;
 using MeuLivroDeReceitas.Domain.Entities;
 using MeuLivroDeReceitas.Domain.Interfaces;
 using MeuLivroDeReceitas.Domain.InterfacesGeneric;
-using MeuLivroDeReceitas.Domain.InterfacesIdentity;
 using MeuLivroDeReceitas.Exceptions.ExceptionBase;
 using MeuLivroDeReceitas.Exceptions.ExceptionsBase;
 using Microsoft.AspNetCore.Http;
@@ -21,7 +21,8 @@ namespace MeuLivroDeReceitas.Application.Services
         private readonly ILogger<RecipeService> _logger;
         private IUnitOfWork _unitOfWork;
         private IRecipeRepository _recipeRepository;
-        private IUserLogged _userLogged;
+        
+        private IAuthenticate _authenticateService;
 
         public RecipeService(IServiceProvider serviceProvider, 
             IUnitOfWork unitOfWork
@@ -30,7 +31,7 @@ namespace MeuLivroDeReceitas.Application.Services
             _unitOfWork = unitOfWork;
             _logger = serviceProvider.GetRequiredService<ILogger<RecipeService>>();
             _recipeRepository = serviceProvider.GetRequiredService<IRecipeRepository>();
-            _userLogged = serviceProvider.GetRequiredService<IUserLogged>();
+            _authenticateService = serviceProvider.GetRequiredService<IAuthenticate>();
         }
 
         public async Task<IEnumerable<RecipeResponseDTO>> GetRecipies()
@@ -58,10 +59,12 @@ namespace MeuLivroDeReceitas.Application.Services
             if (recipe == null)
                 throw new ErrorsNotFoundException(new List<string>() { string.Format(Resource.GetRecipiesTitle_Info_RecipeNotFound.RemoveAccents(), nameof(GetRecipiesTitle), title.RemoveAccents()) });
 
-            //var userLogged = await _userLogged.RecuperarUsuario();
-            var email = _userLogged.RecuperarUsuario();
+            var appUserDto = await _authenticateService.RecuperarUsuario();
 
-            _logger.LogInformation("Titulo: " + title + "  -  Email: " + email );
+            _logger.LogInformation("Titulo: " + title + 
+                " , Email: " + appUserDto.Email +
+                " , UserName: " + appUserDto.UserName +
+                " , PhoneNumber: " + appUserDto.PhoneNumber);
 
             return RecipeResult(recipe);
         }

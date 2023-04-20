@@ -32,5 +32,13 @@ namespace MeuLivroDeReceitas.CrossCutting.Extensions
         {
             return string.IsNullOrEmpty(text) ? false : true;
         }
+
+        public static double ToDouble(this string stringInp)
+        {
+            if (Double.TryParse(stringInp, NumberStyles.Any, CultureInfo.InvariantCulture, out double numValue))            
+                return numValue;            
+            else            
+                return 0;
+        }
     }
 }

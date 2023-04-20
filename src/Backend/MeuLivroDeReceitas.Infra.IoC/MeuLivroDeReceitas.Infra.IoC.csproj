@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Shared\MeuLivroDeReceitas.CrossCutting\MeuLivroDeReceitas.CrossCutting.csproj" />
     <ProjectReference Include="..\MeuLivroDeReceitas.Application\MeuLivroDeReceitas.Application.csproj" />
     <ProjectReference Include="..\MeuLivroDeReceitas.Domain\MeuLivroDeReceitas.Domain.csproj" />
     <ProjectReference Include="..\MeuLivroDeReceitas.Infrastructure\MeuLivroDeReceitas.Infrastructure.csproj" />

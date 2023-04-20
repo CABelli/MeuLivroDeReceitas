@@ -17,22 +17,14 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
             _chaveDeSeguranca = chaveDeSeguranca;
         }
 
-        public string RecuperarEmail(string token)
+        public string RetrieveEmailByToken(string token)
         {
-            var claims = ValidarToken(token);
-
-            var claims1 = claims.Identity;
-
-            var claims2 = claims.Claims.FirstOrDefault();
-
-            var claims3 = claims2.Value;
-
-            return claims3 == null ? string.Empty : claims3;
-
-            //return claims.FindFirst(EmailAlias).Value;
+            var claims = RetrieveClaimsPrincipalByToken(token);
+            var claim = claims.Claims.FirstOrDefault()?.Value;
+            return claim == null ? string.Empty : claim;
         }
-
-        public ClaimsPrincipal ValidarToken(string token)
+        
+        public ClaimsPrincipal RetrieveClaimsPrincipalByToken(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -52,7 +44,6 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
 
         private SymmetricSecurityKey SimetricKey()
         {
-            //var symmetricKey = Convert.FromBase64String(_chaveDeSeguranca);
             return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_chaveDeSeguranca));
         }
     }

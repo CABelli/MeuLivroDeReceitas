@@ -1,11 +1,11 @@
 ﻿using MediatR;
 using MeuLivroDeReceitas.Application.Interfaces;
 using MeuLivroDeReceitas.Application.Services;
+using MeuLivroDeReceitas.CrossCutting.Extensions;
 using MeuLivroDeReceitas.Domain.Account;
 using MeuLivroDeReceitas.Domain.EntityGeneric;
 using MeuLivroDeReceitas.Domain.Interfaces;
 using MeuLivroDeReceitas.Domain.InterfacesGeneric;
-using MeuLivroDeReceitas.Domain.InterfacesIdentity;
 using MeuLivroDeReceitas.Domain.InterfacesRepository;
 using MeuLivroDeReceitas.Infrastructure.Context;
 using MeuLivroDeReceitas.Infrastructure.Identity;
@@ -14,8 +14,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 namespace MeuLivroDeReceitas.Infra.IoC
 {
@@ -42,12 +40,9 @@ namespace MeuLivroDeReceitas.Infra.IoC
             services.AddScoped<IRecipeRepository, RecipeRepository>();
             services.AddScoped<IIngredientRepository, IngredientRepository>();
 
-             AdicionarTokenJWT(services, configuration);
-            services.AddScoped<IUserLogged, UserLogged>();
-            //services.AddScoped<TokenService, TokenService>();
+            AdicionarTokenJWT(services, configuration);
 
             services.AddScoped<IRecipeService, RecipeService>();
-            //services.AddScoped<IIngredientService, IngredientService>();
 
             //services.AddAutoMapper(typeof(DomainToDTOMappingProfile));
 
@@ -60,17 +55,9 @@ namespace MeuLivroDeReceitas.Infra.IoC
 
         private static void AdicionarTokenJWT(IServiceCollection services, IConfiguration configuration)
         {
-            //var sectionTempoDeVida = configuration.GetRequiredSection("10");
             var sectionKey = configuration.GetRequiredSection("Jwt:SecretKey");
-            // Gerar chave privada para assinar o Token
-            //var privateKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]));
-
-            // tempo de expiração
-            //var expiration = DateTime.UtcNow.AddMinutes(10);
-
-           // services.AddScoped(option => new TokenService(int.Parse(sectionTempoDeVida.Value), sectionKey.Value));
-            services.AddScoped(option => new TokenService(10, sectionKey.Value));
-            //services.AddScoped(option => new TokenService(10, "abra#cadabra$sim@salabim*2022"));
+            var sectioLifeTime = configuration.GetRequiredSection("Jwt:SectioLifeTime").ToString();
+            services.AddScoped(option => new TokenService(sectioLifeTime.ToDouble(), sectionKey.Value));
         }
 
     }
