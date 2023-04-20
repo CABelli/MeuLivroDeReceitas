@@ -5,7 +5,7 @@ namespace MeuLivroDeReceitas.Domain.Account
 {
     public interface IAuthenticate
     {
-        Task<bool> Authenticate(LoginDto loginDto);
+        Task<UserTokenDto> Authenticate(LoginDto loginDto);
 
         Task<bool> RegisterUser(LoginDto loginDto);
 
@@ -13,8 +13,6 @@ namespace MeuLivroDeReceitas.Domain.Account
 
         Task<ApplicationUserDto> RecuperarUsuario();
 
-        //Task<ApplicationUserDto> ReadUser(string email);
-
-        //Task<ApplicationUserDto> ReadUser(ClaimsPrincipal claims);
+        Task<bool> UserChange(UserChangeDto userChangeDto);
     }
 }

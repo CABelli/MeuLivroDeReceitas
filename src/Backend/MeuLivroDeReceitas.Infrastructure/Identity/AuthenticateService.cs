@@ -1,11 +1,9 @@
 ﻿using MeuLivroDeReceitas.CrossCutting.Dto.Request.Login;
+using MeuLivroDeReceitas.CrossCutting.Resources.Infrastructure;
 using MeuLivroDeReceitas.Domain.Account;
 using MeuLivroDeReceitas.Exceptions.ExceptionsBase;
-using Microsoft.AspNetCore.Identity;
-using MeuLivroDeReceitas.CrossCutting.Resources.Infrastructure;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 
 namespace MeuLivroDeReceitas.Infrastructure.Identity
 {
@@ -27,7 +25,7 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
             _tokenService = tokenService;
         }
 
-        public async Task<bool> Authenticate(LoginDto loginDto)
+        public async Task<UserTokenDto> Authenticate(LoginDto loginDto)
         {
             var validator = new LoginValidator(loginDto.Password.Length);
             var resultadLoginValidator = validator.Validate(loginDto);
@@ -38,7 +36,7 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
             if (!result.Succeeded)
                 throw new ErrosDeValidacaoException(new List<string>() { Resource.Authenticate_Error_NotFound });
 
-            return result.Succeeded;
+            return _tokenService.GenerateToken(loginDto);
         }
 
         public async Task<bool> RegisterUser(LoginDto loginDto)
@@ -62,25 +60,6 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
             throw new ErrosDeValidacaoException(new List<string>() { string.Format(Resource.RegisterUser_Error_CreateUser, result.Errors.FirstOrDefault().Description)  });
         }
 
-        //public async Task<ApplicationUserDto> ReadUser(ClaimsPrincipal claims) //string email)
-        //{
-
-        //    var t2 = _userManager.GetUserAsync(claims); //.Usuarios.AsNoTracking()
-        //    //.FirstOrDefaultAsync(c => c.Email.Equals(email));
-        //    //var context = new IdentityDbContext();
-        //    //var users = context.Users.ToList();
-
-        //    //var user = _userManager.FindByEmailAsync(email);
-        //    //if (user == null)
-        //    //    throw new ErrosDeValidacaoException(new List<string>() { Resource.RegisterUser_Error_Found });
-        //    //else
-        //    //{
-        //    //    return new ApplicationUserDto() { UserName = "tt", Email = email };
-        //    //}
-
-        //    return new ApplicationUserDto() { UserName = "tt", Email = "xxx" };
-        //}
-
         public async Task<ApplicationUserDto> RecuperarUsuario()
         {
             var authorization = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString();
@@ -94,9 +73,47 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
             return new ApplicationUserDto { Email = user.Email, UserName = user.UserName, PhoneNumber = user.PhoneNumber };
         }
 
+        public async Task<bool> UserChange(UserChangeDto userChangeDto)
+        {
+            ////var appUser = ReadUserRegisterBase();
+            ///
+            var authorization = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString();
+
+            var token = authorization["Bearer".Length..].Trim();
+
+            var emailUsuario = _tokenService.RetrieveEmailByToken(token);
+
+            var user = await _userManager.FindByEmailAsync(emailUsuario);
+
+            var result = await _userManager.ChangePhoneNumberAsync(user == null ? new ApplicationUser() : user, userChangeDto.PhoneNumber, ReadToken());
+
+            //appUser.PhoneNumber = userChangeDto.PhoneNumber;
+            //var result = await _userManager.UpdateAsync(appUser);
+            if (result.Succeeded)
+            {
+               // await _signInManager.SignInAsync(appUser, isPersistent: false);
+                return result.Succeeded;
+            }
+            return false;
+        }
+
         public async Task Logout()
         {
             await _signInManager.SignOutAsync();
+        }
+
+        private string ReadToken()
+        {
+            var authorization = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString();
+            var token = authorization["Bearer".Length..].Trim();
+            return token;
+        }
+
+        public async Task<ApplicationUser>  ReadUserRegisterBase()
+        {
+            var emailUsuario = _tokenService.RetrieveEmailByToken(ReadToken());
+            var AppUser = await _userManager.FindByEmailAsync(emailUsuario);
+            return AppUser == null ? new ApplicationUser() : AppUser;
         }
 
         private ApplicationUser ApplicUserReady(LoginDto loginDto)

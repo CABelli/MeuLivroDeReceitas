@@ -56,9 +56,10 @@ namespace MeuLivroDeReceitas.Infra.IoC
         private static void AdicionarTokenJWT(IServiceCollection services, IConfiguration configuration)
         {
             var sectionKey = configuration.GetRequiredSection("Jwt:SecretKey");
-            var sectioLifeTime = configuration.GetRequiredSection("Jwt:SectioLifeTime").ToString();
-            services.AddScoped(option => new TokenService(sectioLifeTime.ToDouble(), sectionKey.Value));
+            var sectionLifeTime = configuration.GetRequiredSection("Jwt:SectioLifeTime");
+            var issuer = configuration.GetRequiredSection("Jwt:Issuer");
+            var audience = configuration.GetRequiredSection("Jwt:Audience");
+            services.AddScoped(option => new TokenService(sectionLifeTime.Value.ToDouble(), sectionKey.Value, issuer.Value, audience.Value));
         }
-
     }
 }

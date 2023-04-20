@@ -24,9 +24,16 @@ namespace MeuLivroDeReceitas.Api.Controllers
             _configuration = configuration;
         }
 
+        [AllowAnonymous]
+        [HttpPost("LoginUser")]
+        public async Task<ActionResult<UserTokenDto>> Login([FromBody] LoginDto loginDto)
+        {
+            return await _authenticate.Authenticate(loginDto);
+        }
+
         //[Authorize(Roles = "Admin")]
         [AllowAnonymous]
-        [HttpPost("CreateUser")]
+        [HttpPost("UserCreate")]
         //[ApiExplorerSettings(IgnoreApi = true)]  // o endpoint fica ignorado e nao aparece
         [Authorize]
         public async Task<ActionResult> CreateUser([FromBody] LoginDto loginDto)
@@ -35,53 +42,11 @@ namespace MeuLivroDeReceitas.Api.Controllers
             return Ok();
         }
 
-        [AllowAnonymous]
-        [HttpPost("LoginUser")]
-        public async Task<ActionResult<UserToken>> Login([FromBody] LoginDto loginDto)
+        [HttpPost("UserChange")]
+        public async Task<ActionResult> UserRegisterChange([FromBody] UserChangeDto userChangeDto)
         {
-            var result = await _authenticate.Authenticate(loginDto);
-            return GenerateToken(loginDto);
-        }
-
-        private UserToken GenerateToken(LoginDto loginDto)
-        {
-            var claims = new[]
-            {
-                new Claim("email",loginDto.Email),
-                new Claim("meuValor","qualquer valor"),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
-
-            // Gerar chave privada para assinar o Token
-            var privateKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]));
-
-            // Gerar a assinatura digital  de 64 bytes
-            var credentials = new SigningCredentials(privateKey, SecurityAlgorithms.HmacSha256);
-
-            // tempo de expiração
-            var expiration = DateTime.UtcNow.AddMinutes(10);
-
-            // gerar o tojen
-            JwtSecurityToken token = new JwtSecurityToken(
-                // emissor
-                issuer: _configuration["Jwt:Issuer"],
-                // audiencia
-                audience: _configuration["Jwt:Audience"],
-                // claims
-                claims: claims,
-                // data de expiração
-                expires: expiration,
-                // assinatura digital
-                signingCredentials: credentials
-                );
-
-            // retorna em formto json, ao retornar os dados pegar o token entrar no site https://jwt.io/  e conferir a conversão
-            // e conferir com a chave secreta do appSettings  e colar no site em VERIFY SIGNATURE  e verificar a validade
-            return new UserToken()
-            {
-                Token = new JwtSecurityTokenHandler().WriteToken(token),
-                Expiration = expiration
-            };
+            var result = await _authenticate.UserChange(userChangeDto);
+            return Ok();
         }
     }
 }
