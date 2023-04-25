@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using MeuLivroDeReceitas.CrossCutting.Dto.Request;
+using MeuLivroDeReceitas.CrossCutting.Extensions;
 using MeuLivroDeReceitas.CrossCutting.Resources.Application;
 using System.Text.RegularExpressions;
 
@@ -44,14 +45,11 @@ namespace MeuLivroDeReceitas.Application.Services
             {
                 RuleFor(c => c.DataDraft).Custom((cellNumber, context) =>
                 {
-                    string standardCell = "([0-9]{2,3})?([0-9]{2})([0-9]{4,5})([0-9]{4})";
-                    var isMatch = Regex.IsMatch(cellNumber, standardCell);                    
-                    if (!isMatch)
-                    {
+                    var returnValidatorPhone = cellNumber.ValidatorPhone();
+                    if (!returnValidatorPhone)
                         context.AddFailure(
-                            new FluentValidation.Results.ValidationFailure(nameof(cellNumber), 
-                            string.Format(Resource.RecipeValidator_Error_NonStandardCellNumber, nameof(RecipeValidator), cellNumber) ));
-                    }
+                            new FluentValidation.Results.ValidationFailure(nameof(cellNumber),
+                            string.Format(Resource.RecipeValidator_Error_NonStandardCellNumber, nameof(RecipeValidator), cellNumber)));
                 });
             });
         }

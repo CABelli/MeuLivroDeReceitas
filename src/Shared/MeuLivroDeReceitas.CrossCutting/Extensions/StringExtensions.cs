@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace MeuLivroDeReceitas.CrossCutting.Extensions
 {
@@ -39,6 +40,12 @@ namespace MeuLivroDeReceitas.CrossCutting.Extensions
                 return numValue;            
             else            
                 return 0;
+        }
+
+        public static bool ValidatorPhone(this string phoneNumber)
+        {
+            var match = Regex.Match(phoneNumber, "([0-9]{2,3})?([0-9]{2})([0-9]{4,5})([0-9]{4})");
+            return  match.Value.Equals(phoneNumber) ? true : false;
         }
     }
 }

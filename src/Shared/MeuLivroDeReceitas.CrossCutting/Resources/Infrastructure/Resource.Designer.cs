@@ -122,5 +122,32 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.Infrastructure {
                 return ResourceManager.GetString("RegisterUser_Error_Found", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Erro na alteração do usuário, det: {0}.
+        /// </summary>
+        public static string UserChange_Error_UpdateUser {
+            get {
+                return ResourceManager.GetString("UserChange_Error_UpdateUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login não encontrado..
+        /// </summary>
+        public static string UserChange_Error_UserNotFound {
+            get {
+                return ResourceManager.GetString("UserChange_Error_UserNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Número do telefone celular fora do padrão. Método:{0}. Número:{1}.
+        /// </summary>
+        public static string UserChangeValidator_Error_NonStandardCellNumber {
+            get {
+                return ResourceManager.GetString("UserChangeValidator_Error_NonStandardCellNumber", resourceCulture);
+            }
+        }
     }
 }

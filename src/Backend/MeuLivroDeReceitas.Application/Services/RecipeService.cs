@@ -59,7 +59,7 @@ namespace MeuLivroDeReceitas.Application.Services
             if (recipe == null)
                 throw new ErrorsNotFoundException(new List<string>() { string.Format(Resource.GetRecipiesTitle_Info_RecipeNotFound.RemoveAccents(), nameof(GetRecipiesTitle), title.RemoveAccents()) });
 
-            var appUserDto = await _authenticateService.RecuperarUsuario();
+            var appUserDto = await _authenticateService.RetrieveUserByIdentity();
 
             _logger.LogInformation("Titulo: " + title + 
                 " , Email: " + appUserDto.Email +
@@ -108,26 +108,6 @@ namespace MeuLivroDeReceitas.Application.Services
             await _unitOfWork.CommitAsync();
         }
 
-        private async Task ValidarRecipeDTO(RecipeDTO recipeDTO)
-        {
-            var recipe = await _recipeRepository.WhereFirstAsync(x => x.Title == recipeDTO.Title);
-            if (recipe != null)
-                throw new ErrosDeValidacaoException(new List<string>() { Resource.ValidarRecipeDTO_Info_RecipeAlreadyExists });
-
-            var validator = new RecipeValidator(1, recipeDTO.Title.Length);
-            var resultado = validator.Validate(recipeDTO);
-
-            //var recipies = await _recipeRepository.WhereAsync(x => x.Title == recipeDTO.Title);
-            //if (recipies.Count() > 0)            
-            //    resultado.Errors.Add(new FluentValidation.Results.ValidationFailure("Receita", Resource.ValidarRecipeDTO_Info_RecipeAlreadyExists));            
-
-            int a = 0, b = 0;
-            a = a / b;
-
-            if (!resultado.IsValid)
-                throw new ErrosDeValidacaoException(resultado.Errors.Select(c => c.ErrorMessage).ToList());
-        }
-
         public async Task UpdateRecipeDraftString(RecipeDTO recipeDTO)
         {
             var recipe = await ValidateRecipeModification(recipeDTO);
@@ -140,21 +120,6 @@ namespace MeuLivroDeReceitas.Application.Services
 
             _recipeRepository.Update(recipe);
             await _unitOfWork.CommitAsync();
-        }
-
-        private async Task<Recipe> ValidateRecipeModification(RecipeDTO recipeDTO)
-        {
-            var recipe = await _recipeRepository.WhereFirstAsync(x => x.Title == recipeDTO.Title);
-            if (recipe == null)
-                throw new ErrorsNotFoundException(new List<string>() { string.Format(Resource.ValidateRecipeModification_Info_RecipeNotFound, nameof(GetRecipiesTitle), recipeDTO.Title) });
-
-            var validator = new RecipeValidator(2, recipeDTO.Title.Length);
-            var resultado = validator.Validate(recipeDTO);
-
-            if (!resultado.IsValid)
-                throw new ErrosDeValidacaoException(resultado.Errors.Select(c => c.ErrorMessage).ToList());
-
-            return recipe;
         }
                
         public async Task<string> UpdateRecipeDraftImage(ICollection<IFormFile> files, string title)
@@ -226,6 +191,41 @@ namespace MeuLivroDeReceitas.Application.Services
                 DataDraftCel = recipe.FileExtension == "Cel" ? Encoding.ASCII.GetString(recipe.DataDraft) : null                
             };
             return recipeResponseDTO;
+        }
+
+        private async Task ValidarRecipeDTO(RecipeDTO recipeDTO)
+        {
+            var recipe = await _recipeRepository.WhereFirstAsync(x => x.Title == recipeDTO.Title);
+            if (recipe != null)
+                throw new ErrosDeValidacaoException(new List<string>() { Resource.ValidarRecipeDTO_Info_RecipeAlreadyExists });
+
+            var validator = new RecipeValidator(1, recipeDTO.Title.Length);
+            var resultado = validator.Validate(recipeDTO);
+
+            ///var recipies = await _recipeRepository.WhereAsync(x => x.Title == recipeDTO.Title);
+            ///if (recipies.Count() > 0)            
+            ///    resultado.Errors.Add(new FluentValidation.Results.ValidationFailure("Receita", Resource.ValidarRecipeDTO_Info_RecipeAlreadyExists));            
+
+            ///int a = 0, b = 0;
+            ///a = a / b;
+
+            if (!resultado.IsValid)
+                throw new ErrosDeValidacaoException(resultado.Errors.Select(c => c.ErrorMessage).ToList());
+        }
+
+        private async Task<Recipe> ValidateRecipeModification(RecipeDTO recipeDTO)
+        {
+            var recipe = await _recipeRepository.WhereFirstAsync(x => x.Title == recipeDTO.Title);
+            if (recipe == null)
+                throw new ErrorsNotFoundException(new List<string>() { string.Format(Resource.ValidateRecipeModification_Info_RecipeNotFound, nameof(GetRecipiesTitle), recipeDTO.Title) });
+
+            var validator = new RecipeValidator(2, recipeDTO.Title.Length);
+            var resultado = validator.Validate(recipeDTO);
+
+            if (!resultado.IsValid)
+                throw new ErrosDeValidacaoException(resultado.Errors.Select(c => c.ErrorMessage).ToList());
+
+            return recipe;
         }
 
         private byte[] ConverteFilesToBytes(ICollection<IFormFile> files)

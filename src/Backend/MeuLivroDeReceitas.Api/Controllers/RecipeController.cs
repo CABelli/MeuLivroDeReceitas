@@ -26,7 +26,7 @@ namespace MeuLivroDeReceitas.Api.Controllers
         [HttpGet]
         [Route("get-title")]
         public async Task<ActionResult<RecipeResponseDTO>> Get(string title) => Ok(await _recipeService.GetRecipiesTitle(title));
-        
+
         [HttpGet]
         [Route("get-id")]
         public async Task<IActionResult> Get(Guid id) => Ok(await _recipeService.GetRecipeById(id));
@@ -66,10 +66,7 @@ namespace MeuLivroDeReceitas.Api.Controllers
 
         [HttpDelete]
         [Route("delete-recipe")]
-        public async Task<ActionResult> Delete(string title)
-        {
-            await _recipeService.DeleteRecipeByTitle(title);
-            return Ok();
-        }
+        public async Task DeleteId(string title) => await _recipeService.DeleteRecipeByTitle(title);
+
     }
 }

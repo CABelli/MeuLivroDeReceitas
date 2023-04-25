@@ -11,7 +11,7 @@ namespace MeuLivroDeReceitas.Domain.Account
 
         Task Logout();
 
-        Task<ApplicationUserDto> RecuperarUsuario();
+        Task<ApplicationUserDto> RetrieveUserByIdentity();
 
         Task<bool> UserChange(UserChangeDto userChangeDto);
     }

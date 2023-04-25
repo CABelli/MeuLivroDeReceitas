@@ -138,4 +138,13 @@
   <data name="RegisterUser_Error_Found" xml:space="preserve">
     <value>Login found.</value>
   </data>
+  <data name="UserChangeValidator_Error_NonStandardCellNumber" xml:space="preserve">
+    <value>Non-standard cell phone number. Method:{0}. Number:{1}.</value>
+  </data>
+  <data name="UserChange_Error_UpdateUser" xml:space="preserve">
+    <value>Error updating user, det: {0}</value>
+  </data>
+  <data name="UserChange_Error_UserNotFound" xml:space="preserve">
+    <value>Login not found.</value>
+  </data>
 </root>
