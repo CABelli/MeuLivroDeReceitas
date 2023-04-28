@@ -106,6 +106,15 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.Infrastructure {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Login não encontrado..
+        /// </summary>
+        public static string PasswordChangeByForgot_Error_UserNotFound {
+            get {
+                return ResourceManager.GetString("PasswordChangeByForgot_Error_UserNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Erro na criação do usuário, det: {0}.
         /// </summary>
         public static string RegisterUser_Error_CreateUser {

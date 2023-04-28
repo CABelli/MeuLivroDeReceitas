@@ -14,5 +14,7 @@ namespace MeuLivroDeReceitas.Domain.Account
         Task<ApplicationUserDto> RetrieveUserByIdentity();
 
         Task<bool> UserChange(UserChangeDto userChangeDto);
+
+        Task<bool> PasswordChangeByForgot(PasswordChangeDto passwordChangeDto);
     }
 }

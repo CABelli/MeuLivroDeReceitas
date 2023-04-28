@@ -4,7 +4,6 @@ using MeuLivroDeReceitas.Domain.Account;
 using MeuLivroDeReceitas.Exceptions.ExceptionsBase;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using System.Text.RegularExpressions;
 
 namespace MeuLivroDeReceitas.Infrastructure.Identity
 {
@@ -14,16 +13,19 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly TokenService _tokenService;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public AuthenticateService(UserManager<ApplicationUser> userManeger,
             SignInManager<ApplicationUser> signInManager,
             IHttpContextAccessor httpContextAccessor,
-            TokenService tokenService)
+            TokenService tokenService,
+            RoleManager<IdentityRole> roleManeger)
         {
             _userManager = userManeger;
             _signInManager = signInManager;
             _httpContextAccessor = httpContextAccessor;
             _tokenService = tokenService;
+            _roleManager = roleManeger;
         }
 
         public async Task<UserTokenDto> Authenticate(LoginDto loginDto)
@@ -62,12 +64,37 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
 
             var emailUsuario = ReadEmailToken();
             var applicationUser = await _userManager.FindByEmailAsync(emailUsuario);
-            if (applicationUser == null)
-                throw new ErrosDeValidacaoException(new List<string>() { Resource.UserChange_Error_UserNotFound });
+            if (applicationUser == null) throw new ErrosDeValidacaoException(new List<string>() { Resource.UserChange_Error_UserNotFound });
 
             applicationUser.PhoneNumber = userChangeDto.PhoneNumber;
 
             var result = await _userManager.UpdateAsync(applicationUser);
+            if (!result.Succeeded)
+                throw new ErrosDeValidacaoException(new List<string>() { string.Format(Resource.UserChange_Error_UpdateUser, result.Errors.FirstOrDefault().Description) });
+
+            return result.Succeeded;
+        }
+
+        public async Task<bool> PasswordChangeByForgot(PasswordChangeDto passwordChangeDto)
+        {
+            if (passwordChangeDto.NewPassword != passwordChangeDto.RepeatNewPassword)
+                throw new ErrosDeValidacaoException(new List<string>() { "Senha de confirmação diferente da senha nova" });
+
+            var appUserDto = await RetrieveUserByIdentity();
+
+            var appUserView = await _userManager.FindByNameAsync(appUserDto.Email);
+
+            var rolesName = await _userManager.GetRolesAsync(appUserView);
+            if (rolesName.FirstOrDefault() != "Admin")
+                throw new ErrosDeValidacaoException(new List<string>() { "Somente Admin pode trocar senha" });
+
+            var appUser = await _userManager.FindByEmailAsync(passwordChangeDto.Email);
+            if (appUser == null) throw new ErrosDeValidacaoException(new List<string>() { Resource.PasswordChangeByForgot_Error_UserNotFound });
+
+            appUser.PasswordHash = _userManager.PasswordHasher.HashPassword(appUser, passwordChangeDto.NewPassword);
+
+            var result = await _userManager.UpdateAsync(appUser);
+
             if (!result.Succeeded)
                 throw new ErrosDeValidacaoException(new List<string>() { string.Format(Resource.UserChange_Error_UpdateUser, result.Errors.FirstOrDefault().Description) });
 
@@ -83,7 +110,12 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
         {
             var emailUsuario = ReadEmailToken();
             var appUser = await _userManager.FindByEmailAsync(emailUsuario);
-            return new ApplicationUserDto { Email = appUser.Email, UserName = appUser.UserName, PhoneNumber = appUser.PhoneNumber };
+            return new ApplicationUserDto { 
+                Email = appUser.Email, 
+                UserName = appUser.UserName, 
+                PhoneNumber = appUser.PhoneNumber//,
+               // Id = appUser.Id 
+            };
         }
 
         private string ReadEmailToken()

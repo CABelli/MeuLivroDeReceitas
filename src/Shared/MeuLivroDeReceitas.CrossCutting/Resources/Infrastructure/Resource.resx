@@ -132,6 +132,9 @@
   <data name="LoginValidator_Error_PasswordIsRequired" xml:space="preserve">
     <value>Password é obrigatória.</value>
   </data>
+  <data name="PasswordChangeByForgot_Error_UserNotFound" xml:space="preserve">
+    <value>Login não encontrado.</value>
+  </data>
   <data name="RegisterUser_Error_CreateUser" xml:space="preserve">
     <value>Erro na criação do usuário, det: {0}</value>
   </data>

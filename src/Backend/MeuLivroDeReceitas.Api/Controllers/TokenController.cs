@@ -7,6 +7,7 @@ namespace MeuLivroDeReceitas.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TokenController : ControllerBase
     {
         private readonly IAuthenticate _authenticate;
@@ -24,7 +25,7 @@ namespace MeuLivroDeReceitas.Api.Controllers
             => Ok(await _authenticate.Authenticate(loginDto));
         
         //[Authorize(Roles = "Admin")]
-        [AllowAnonymous]
+        //[AllowAnonymous]
         [HttpPost("UserCreate")]
         //[ApiExplorerSettings(IgnoreApi = true)]  // o endpoint fica ignorado e nao aparece
         [Authorize]
@@ -34,5 +35,10 @@ namespace MeuLivroDeReceitas.Api.Controllers
         [HttpPut("UserChange")]
         public async Task<ActionResult> UserRegisterChange([FromBody] UserChangeDto userChangeDto) 
             => Ok(await _authenticate.UserChange(userChangeDto));
+
+        //[Authorize(Roles = "Admin")]
+        [HttpPut("PasswordChangeForgot")]
+        public async Task<ActionResult> PasswordChange([FromBody] PasswordChangeDto passwordChangeDto)
+            => Ok(await _authenticate.PasswordChangeByForgot(passwordChangeDto));
     }
 }
