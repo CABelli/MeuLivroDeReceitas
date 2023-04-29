@@ -11,13 +11,8 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
 
         public LoginValidator(int CharactersTitle)
         {
-            RuleFor(c => c.Email).NotEmpty()
+            RuleFor(c => c.UserName).NotEmpty()
                 .WithMessage(string.Format(Resource.LoginValidator_Error_EmailIsRequired));
-
-            When(c => !string.IsNullOrWhiteSpace(c.Email), () =>
-            {
-                RuleFor(c => c.Email).EmailAddress().WithMessage(Resource.LoginValidator_Error_EmailIsInvalid);
-            });
 
             RuleFor(c => c.Password).NotEmpty()
                 .WithMessage(string.Format(Resource.LoginValidator_Error_PasswordIsRequired));

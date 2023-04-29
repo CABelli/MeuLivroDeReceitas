@@ -25,13 +25,10 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
         {
             var claims = new[]
             {
-                new Claim("email",loginDto.Email),
+                new Claim("email",loginDto.UserName),
                 new Claim("meuValor","qualquer valor"),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
-
-            // Gerar chave privada para assinar o Token
-            // var privateKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]));
 
             // Gerar a assinatura digital  de 64 bytes
             var credentials = new SigningCredentials(SimetricKey(), SecurityAlgorithms.HmacSha256);
@@ -89,6 +86,7 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
 
         private SymmetricSecurityKey SimetricKey()
         {
+            // Gerar chave privada para assinar o Token
             return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_chaveDeSeguranca));
         }
     }

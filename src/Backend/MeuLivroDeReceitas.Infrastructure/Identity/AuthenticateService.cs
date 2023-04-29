@@ -1,7 +1,10 @@
-﻿using MeuLivroDeReceitas.CrossCutting.Dto.Request.Login;
+﻿using MeuLivroDeReceitas.CrossCutting.Dto.Login;
+using MeuLivroDeReceitas.CrossCutting.Dto.Request.Login;
+using MeuLivroDeReceitas.CrossCutting.EnumClass;
 using MeuLivroDeReceitas.CrossCutting.Resources.Infrastructure;
 using MeuLivroDeReceitas.Domain.Account;
 using MeuLivroDeReceitas.Exceptions.ExceptionsBase;
+using MeuLivroDeReceitas.Infrastructure.IdentityValidator;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 
@@ -29,24 +32,33 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
         }
 
         public async Task<UserTokenDto> Authenticate(LoginDto loginDto)
-        {
-            AuthenticateValidate(loginDto);
-            var result = await _signInManager.PasswordSignInAsync(loginDto.Email, loginDto.Password, false, lockoutOnFailure: false);
+        {           
+            var validator = new UserValidator(loginDto.Password.Length, MethodUserValidator.Authenticate);
+            var resultadAddUserVal = validator.Validate(new UserValidatorDto { UserName = loginDto.UserName, Password = loginDto.Password});
+            if (!resultadAddUserVal.IsValid)
+                throw new ErrosDeValidacaoException(resultadAddUserVal.Errors.Select(c => c.ErrorMessage).ToList());
+
+            var result = await _signInManager.PasswordSignInAsync(loginDto.UserName, loginDto.Password, false, lockoutOnFailure: false);
             if (!result.Succeeded)
                 throw new ErrosDeValidacaoException(new List<string>() { Resource.Authenticate_Error_NotFound });
 
             return _tokenService.GenerateToken(loginDto);
         }
 
-        public async Task<bool> RegisterUser(LoginDto loginDto)
+        public async Task<bool> AddUser(UserDto userDto)
         {
-            AuthenticateValidate( loginDto);
-            if (_userManager.FindByEmailAsync(loginDto.Email).Result != null)
+            var validator = new UserValidator(userDto.Password.Length, MethodUserValidator.AddUser);
+            var resultadAddUserVal = validator.Validate(new UserValidatorDto 
+                {  UserName = userDto.UserName, Email = userDto.Email, Password = userDto.Password, PhoneNumber = userDto.PhoneNumber});
+            if (!resultadAddUserVal.IsValid)
+                throw new ErrosDeValidacaoException(resultadAddUserVal.Errors.Select(c => c.ErrorMessage).ToList());
+
+            if (_userManager.FindByEmailAsync(userDto.Email).Result != null)
                 throw new ErrosDeValidacaoException(new List<string>() { Resource.RegisterUser_Error_Found });
 
-            var applicationUser = ApplicUserReady(loginDto);
+            var applicationUser = ApplicUserReady(userDto);
 
-            var result = await _userManager.CreateAsync(applicationUser, loginDto.Password);
+            var result = await _userManager.CreateAsync(applicationUser, userDto.Password);
             if (result.Succeeded)
             {
                 _userManager.AddToRoleAsync(applicationUser, "User").Wait();
@@ -60,10 +72,14 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
          
         public async Task<bool> UserChange(UserChangeDto userChangeDto)
         {
-            UserChangeValidate(userChangeDto);
+            var validator = new UserValidator(0, MethodUserValidator.UserChange);
+            var resultadAddUserVal = validator.Validate(new UserValidatorDto { PhoneNumber = userChangeDto.PhoneNumber });
+            if (!resultadAddUserVal.IsValid)
+                throw new ErrosDeValidacaoException(resultadAddUserVal.Errors.Select(c => c.ErrorMessage).ToList());
 
-            var emailUsuario = ReadEmailToken();
-            var applicationUser = await _userManager.FindByEmailAsync(emailUsuario);
+            var nameUsuario = ReadEmailToken();
+            //var applicationUser = await _userManager.FindByEmailAsync(emailUsuario);
+            var applicationUser = await _userManager.FindByNameAsync(nameUsuario);
             if (applicationUser == null) throw new ErrosDeValidacaoException(new List<string>() { Resource.UserChange_Error_UserNotFound });
 
             applicationUser.PhoneNumber = userChangeDto.PhoneNumber;
@@ -77,16 +93,25 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
 
         public async Task<bool> PasswordChangeByForgot(PasswordChangeDto passwordChangeDto)
         {
+            var appUserDto = await RetrieveUserByIdentity();
+            var appUserView = await _userManager.FindByNameAsync(appUserDto.UserName);
+            var rolesName = await _userManager.GetRolesAsync(appUserView);
+
+            var validator = new UserValidator(0, MethodUserValidator.PasswordChangeByForgot);
+            var resultadAddUserVal = validator.Validate(new UserValidatorDto { Password = passwordChangeDto.NewPassword });
+            if (!resultadAddUserVal.IsValid)
+                throw new ErrosDeValidacaoException(resultadAddUserVal.Errors.Select(c => c.ErrorMessage).ToList());
+
             if (passwordChangeDto.NewPassword != passwordChangeDto.RepeatNewPassword)
                 throw new ErrosDeValidacaoException(new List<string>() { "Senha de confirmação diferente da senha nova" });
 
-            var appUserDto = await RetrieveUserByIdentity();
+            //var appUserDto = await RetrieveUserByIdentity();
 
-            var appUserView = await _userManager.FindByNameAsync(appUserDto.Email);
+            //var appUserView = await _userManager.FindByNameAsync(appUserDto.UserName);
 
-            var rolesName = await _userManager.GetRolesAsync(appUserView);
-            if (rolesName.FirstOrDefault() != "Admin")
-                throw new ErrosDeValidacaoException(new List<string>() { "Somente Admin pode trocar senha" });
+            //var rolesName = await _userManager.GetRolesAsync(appUserView);
+            //if (rolesName.FirstOrDefault() != "Admin")
+                //throw new ErrosDeValidacaoException(new List<string>() { "Somente Admin pode trocar senha" });
 
             var appUser = await _userManager.FindByEmailAsync(passwordChangeDto.Email);
             if (appUser == null) throw new ErrosDeValidacaoException(new List<string>() { Resource.PasswordChangeByForgot_Error_UserNotFound });
@@ -108,8 +133,8 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
         
         public async Task<ApplicationUserDto> RetrieveUserByIdentity()
         {
-            var emailUsuario = ReadEmailToken();
-            var appUser = await _userManager.FindByEmailAsync(emailUsuario);
+            var nameUsuario = ReadEmailToken();
+            var appUser = await _userManager.FindByNameAsync(nameUsuario);
             return new ApplicationUserDto { 
                 Email = appUser.Email, 
                 UserName = appUser.UserName, 
@@ -126,14 +151,14 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
             return emailUsuario;
         }
 
-        private ApplicationUser ApplicUserReady(LoginDto loginDto)
+        private ApplicationUser ApplicUserReady(UserDto userDto)
         {
             return new ApplicationUser
             {
-                UserName = loginDto.Email,     
-                Email = loginDto.Email, 
-                NormalizedUserName = loginDto.Email.ToUpper(),     
-                NormalizedEmail = loginDto.Email.ToUpper(), 
+                UserName = userDto.UserName,     
+                Email = userDto.Email, 
+                NormalizedUserName = userDto.UserName?.ToUpper(),     
+                NormalizedEmail = userDto.Email?.ToUpper(), 
                 EmailConfirmed = true,
                 LockoutEnabled = false,
                 SecurityStamp = Guid.NewGuid().ToString()
@@ -146,14 +171,6 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
             var resultadLoginValidator = validator.Validate(loginDto);
             if (!resultadLoginValidator.IsValid)
                 throw new ErrosDeValidacaoException(resultadLoginValidator.Errors.Select(c => c.ErrorMessage).ToList());
-        }
-
-        private void UserChangeValidate(UserChangeDto UserChangeDto)
-        {
-            var validator = new UserChangeValidator();
-            var resultadUserChangeValidator = validator.Validate(UserChangeDto);
-            if (!resultadUserChangeValidator.IsValid)
-                throw new ErrosDeValidacaoException(resultadUserChangeValidator.Errors.Select(c => c.ErrorMessage).ToList());
         }
     }
 }

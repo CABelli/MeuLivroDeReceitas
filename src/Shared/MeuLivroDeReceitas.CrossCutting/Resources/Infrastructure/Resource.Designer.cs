@@ -158,5 +158,23 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.Infrastructure {
                 return ResourceManager.GetString("UserChangeValidator_Error_NonStandardCellNumber", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Telefone celular é obrigatório..
+        /// </summary>
+        public static string UserValidator_Error_PhoneNumberIsRequired {
+            get {
+                return ResourceManager.GetString("UserValidator_Error_PhoneNumberIsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Usuário é obrigatório..
+        /// </summary>
+        public static string UserValidator_Error_UserNameIsRequired {
+            get {
+                return ResourceManager.GetString("UserValidator_Error_UserNameIsRequired", resourceCulture);
+            }
+        }
     }
 }

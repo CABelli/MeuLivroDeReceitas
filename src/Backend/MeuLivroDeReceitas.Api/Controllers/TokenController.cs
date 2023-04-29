@@ -29,14 +29,13 @@ namespace MeuLivroDeReceitas.Api.Controllers
         [HttpPost("UserCreate")]
         //[ApiExplorerSettings(IgnoreApi = true)]  // o endpoint fica ignorado e nao aparece
         [Authorize]
-        public async Task<ActionResult> CreateUser([FromBody] LoginDto loginDto) 
-            => Ok(await _authenticate.RegisterUser(loginDto));
+        public async Task<ActionResult> CreateUser([FromBody] UserDto userDto) 
+            => Ok(await _authenticate.AddUser(userDto));
         
         [HttpPut("UserChange")]
         public async Task<ActionResult> UserRegisterChange([FromBody] UserChangeDto userChangeDto) 
             => Ok(await _authenticate.UserChange(userChangeDto));
 
-        //[Authorize(Roles = "Admin")]
         [HttpPut("PasswordChangeForgot")]
         public async Task<ActionResult> PasswordChange([FromBody] PasswordChangeDto passwordChangeDto)
             => Ok(await _authenticate.PasswordChangeByForgot(passwordChangeDto));

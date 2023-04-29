@@ -21,7 +21,6 @@ namespace MeuLivroDeReceitas.Domain.InterfacesGeneric
 
         //    void Create(List<T> entities);
         //    void UpdateRange(List<T> entities);
-        //    Task<T> GetByTitle(string title);
         //    Task<List<T>> GetAllWhere(Expression<Func<T, bool>> expression);
         //    Task<T> GetByWhere(Expression<Func<T, bool>> expression);
     }

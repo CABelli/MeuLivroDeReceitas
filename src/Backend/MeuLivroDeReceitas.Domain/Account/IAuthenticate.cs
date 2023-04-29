@@ -1,5 +1,4 @@
 ﻿using MeuLivroDeReceitas.CrossCutting.Dto.Request.Login;
-using System.Security.Claims;
 
 namespace MeuLivroDeReceitas.Domain.Account
 {
@@ -7,7 +6,7 @@ namespace MeuLivroDeReceitas.Domain.Account
     {
         Task<UserTokenDto> Authenticate(LoginDto loginDto);
 
-        Task<bool> RegisterUser(LoginDto loginDto);
+        Task<bool> AddUser(UserDto userDto);
 
         Task Logout();
 

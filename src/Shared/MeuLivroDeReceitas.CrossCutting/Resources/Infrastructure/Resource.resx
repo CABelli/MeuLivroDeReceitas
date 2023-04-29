@@ -150,4 +150,10 @@
   <data name="UserChange_Error_UserNotFound" xml:space="preserve">
     <value>Login não encontrado.</value>
   </data>
+  <data name="UserValidator_Error_PhoneNumberIsRequired" xml:space="preserve">
+    <value>Telefone celular é obrigatório.</value>
+  </data>
+  <data name="UserValidator_Error_UserNameIsRequired" xml:space="preserve">
+    <value>Usuário é obrigatório.</value>
+  </data>
 </root>
