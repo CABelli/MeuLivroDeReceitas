@@ -120,18 +120,6 @@
   <data name="Authenticate_Error_NotFound" xml:space="preserve">
     <value>Login não encontrado.</value>
   </data>
-  <data name="LoginValidator_Error_CharactersPassword" xml:space="preserve">
-    <value>Caracteres da password não pode ser {0}, deve ficar entre {1} e {2}.</value>
-  </data>
-  <data name="LoginValidator_Error_EmailIsInvalid" xml:space="preserve">
-    <value>Email é invalido.</value>
-  </data>
-  <data name="LoginValidator_Error_EmailIsRequired" xml:space="preserve">
-    <value>Email é obrigatório.</value>
-  </data>
-  <data name="LoginValidator_Error_PasswordIsRequired" xml:space="preserve">
-    <value>Password é obrigatória.</value>
-  </data>
   <data name="PasswordChangeByForgot_Error_UserNotFound" xml:space="preserve">
     <value>Login não encontrado.</value>
   </data>
@@ -140,9 +128,6 @@
   </data>
   <data name="RegisterUser_Error_Found" xml:space="preserve">
     <value>Login encontrado.</value>
-  </data>
-  <data name="UserChangeValidator_Error_NonStandardCellNumber" xml:space="preserve">
-    <value>Número do telefone celular fora do padrão. Método:{0}. Número:{1}</value>
   </data>
   <data name="UserChange_Error_UpdateUser" xml:space="preserve">
     <value>Erro na alteração do usuário, det: {0}</value>
@@ -155,5 +140,29 @@
   </data>
   <data name="UserValidator_Error_UserNameIsRequired" xml:space="preserve">
     <value>Usuário é obrigatório.</value>
+  </data>
+  <data name="ValidatorEmail_Error_EmailIsInvalid" xml:space="preserve">
+    <value>Email é invalido.</value>
+  </data>
+  <data name="ValidatorEmail_Error_EmailIsRequired" xml:space="preserve">
+    <value>Email é obrigatório.</value>
+  </data>
+  <data name="ValidatorPassword_Error_CharactersPassword" xml:space="preserve">
+    <value>Caracteres da password não pode ser {0}, deve ficar entre {1} e {2}.</value>
+  </data>
+  <data name="ValidatorPassword_Error_PasswordIsRequired" xml:space="preserve">
+    <value>Password é obrigatória.</value>
+  </data>
+  <data name="ValidatorPhoneNumber_Error_NonStandardCellNumber" xml:space="preserve">
+    <value>Número do telefone celular fora do padrão. Método:{0}. Número:{1}</value>
+  </data>
+  <data name="ValidatorRolesName_Error_Empty" xml:space="preserve">
+    <value>Roles vazia.</value>
+  </data>
+  <data name="ValidatorRolesName_Error_NotAdmin" xml:space="preserve">
+    <value>Usuário com Role não autorizada</value>
+  </data>
+  <data name="ValidatorRolesName_Error_NotAdminList" xml:space="preserve">
+    <value>Usuário com Role não autorizada, rolename: {0}</value>
   </data>
 </root>

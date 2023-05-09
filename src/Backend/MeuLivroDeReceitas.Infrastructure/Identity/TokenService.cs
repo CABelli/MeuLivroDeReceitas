@@ -8,16 +8,15 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
 {
     public class TokenService
     {
-        private const string EmailAlias = "email";
-        private readonly string _chaveDeSeguranca;
-        private readonly double _tempoDeVidaDoTokenEmMinutos;
+        private readonly string _secretKey;
+        private readonly double _tokenLifetimeInMinutes;
         private readonly string _issuer;
         private readonly string _audience;
 
-        public TokenService(double tempoDeVidaDoTokenEmMinutos, string chaveDeSeguranca, string issuer, string audience)
+        public TokenService(double tokenLifetimeInMinutes, string secretKey, string issuer, string audience)
         {
-            _tempoDeVidaDoTokenEmMinutos = tempoDeVidaDoTokenEmMinutos;
-            _chaveDeSeguranca = chaveDeSeguranca;
+            _tokenLifetimeInMinutes = tokenLifetimeInMinutes;
+            _secretKey = secretKey;
             _issuer = issuer;
             _audience = audience;
         }
@@ -25,8 +24,8 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
         {
             var claims = new[]
             {
-                new Claim("email",loginDto.UserName),
-                new Claim("meuValor","qualquer valor"),
+                new Claim("userName",loginDto.UserName),
+                new Claim("meuValor","any value"),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
@@ -34,7 +33,7 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
             var credentials = new SigningCredentials(SimetricKey(), SecurityAlgorithms.HmacSha256);
 
             // tempo de expiração
-            var expiration = DateTime.UtcNow.AddMinutes(_tempoDeVidaDoTokenEmMinutos);
+            var expiration = DateTime.UtcNow.AddMinutes(_tokenLifetimeInMinutes);
 
             // gerar o tojen
             JwtSecurityToken token = new JwtSecurityToken(
@@ -87,7 +86,7 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
         private SymmetricSecurityKey SimetricKey()
         {
             // Gerar chave privada para assinar o Token
-            return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_chaveDeSeguranca));
+            return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
         }
     }
 }

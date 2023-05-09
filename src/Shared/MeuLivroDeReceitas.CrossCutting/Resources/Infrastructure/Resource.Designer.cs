@@ -70,42 +70,6 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.Infrastructure {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Caracteres da password não pode ser {0}, deve ficar entre {1} e {2}..
-        /// </summary>
-        public static string LoginValidator_Error_CharactersPassword {
-            get {
-                return ResourceManager.GetString("LoginValidator_Error_CharactersPassword", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Email é invalido..
-        /// </summary>
-        public static string LoginValidator_Error_EmailIsInvalid {
-            get {
-                return ResourceManager.GetString("LoginValidator_Error_EmailIsInvalid", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Email é obrigatório..
-        /// </summary>
-        public static string LoginValidator_Error_EmailIsRequired {
-            get {
-                return ResourceManager.GetString("LoginValidator_Error_EmailIsRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Password é obrigatória..
-        /// </summary>
-        public static string LoginValidator_Error_PasswordIsRequired {
-            get {
-                return ResourceManager.GetString("LoginValidator_Error_PasswordIsRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Login não encontrado..
         /// </summary>
         public static string PasswordChangeByForgot_Error_UserNotFound {
@@ -151,15 +115,6 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.Infrastructure {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Número do telefone celular fora do padrão. Método:{0}. Número:{1}.
-        /// </summary>
-        public static string UserChangeValidator_Error_NonStandardCellNumber {
-            get {
-                return ResourceManager.GetString("UserChangeValidator_Error_NonStandardCellNumber", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Telefone celular é obrigatório..
         /// </summary>
         public static string UserValidator_Error_PhoneNumberIsRequired {
@@ -174,6 +129,78 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.Infrastructure {
         public static string UserValidator_Error_UserNameIsRequired {
             get {
                 return ResourceManager.GetString("UserValidator_Error_UserNameIsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email é invalido..
+        /// </summary>
+        public static string ValidatorEmail_Error_EmailIsInvalid {
+            get {
+                return ResourceManager.GetString("ValidatorEmail_Error_EmailIsInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email é obrigatório..
+        /// </summary>
+        public static string ValidatorEmail_Error_EmailIsRequired {
+            get {
+                return ResourceManager.GetString("ValidatorEmail_Error_EmailIsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Caracteres da password não pode ser {0}, deve ficar entre {1} e {2}..
+        /// </summary>
+        public static string ValidatorPassword_Error_CharactersPassword {
+            get {
+                return ResourceManager.GetString("ValidatorPassword_Error_CharactersPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password é obrigatória..
+        /// </summary>
+        public static string ValidatorPassword_Error_PasswordIsRequired {
+            get {
+                return ResourceManager.GetString("ValidatorPassword_Error_PasswordIsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Número do telefone celular fora do padrão. Método:{0}. Número:{1}.
+        /// </summary>
+        public static string ValidatorPhoneNumber_Error_NonStandardCellNumber {
+            get {
+                return ResourceManager.GetString("ValidatorPhoneNumber_Error_NonStandardCellNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roles vazia..
+        /// </summary>
+        public static string ValidatorRolesName_Error_Empty {
+            get {
+                return ResourceManager.GetString("ValidatorRolesName_Error_Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Usuário com Role não autorizada.
+        /// </summary>
+        public static string ValidatorRolesName_Error_NotAdmin {
+            get {
+                return ResourceManager.GetString("ValidatorRolesName_Error_NotAdmin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Usuário com Role não autorizada, rolename: {0}.
+        /// </summary>
+        public static string ValidatorRolesName_Error_NotAdminList {
+            get {
+                return ResourceManager.GetString("ValidatorRolesName_Error_NotAdminList", resourceCulture);
             }
         }
     }

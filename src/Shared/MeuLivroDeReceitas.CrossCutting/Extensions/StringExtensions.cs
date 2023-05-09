@@ -47,5 +47,10 @@ namespace MeuLivroDeReceitas.CrossCutting.Extensions
             var match = Regex.Match(phoneNumber, "([0-9]{2,3})?([0-9]{2})([0-9]{4,5})([0-9]{4})");
             return  match.Value.Equals(phoneNumber) ? true : false;
         }
+
+        public static int StringLengthText(this string text)
+        {
+            return text == null ? 0 : text.Length;
+        }
     }
 }

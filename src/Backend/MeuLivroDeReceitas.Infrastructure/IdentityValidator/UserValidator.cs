@@ -1,10 +1,8 @@
 ﻿using FluentValidation;
 using MeuLivroDeReceitas.CrossCutting.Dto.Login;
-using MeuLivroDeReceitas.CrossCutting.Dto.Request.Login;
 using MeuLivroDeReceitas.CrossCutting.EnumClass;
 using MeuLivroDeReceitas.CrossCutting.Extensions;
 using MeuLivroDeReceitas.CrossCutting.Resources.Infrastructure;
-using MeuLivroDeReceitas.Infrastructure.Identity;
 
 namespace MeuLivroDeReceitas.Infrastructure.IdentityValidator
 {
@@ -13,28 +11,28 @@ namespace MeuLivroDeReceitas.Infrastructure.IdentityValidator
         public int MinimumNumberOfCharactersInPassword = 10;
         public int MaximumNumberOfCharactersInPassword = 20;
 
-        public UserValidator(int charactersTitle, MethodUserValidator method)
+        public UserValidator(MethodUserValidator method)
         {            
             switch (method)
             {
-                case MethodUserValidator.Authenticate: ValidatorAuthenticate(charactersTitle); return;
-                case MethodUserValidator.AddUser: ValidatorAddUser(charactersTitle); return;
+                case MethodUserValidator.Authenticate: ValidatorAuthenticate(); return;
+                case MethodUserValidator.AddUser: ValidatorAddUser(); return;
                 case MethodUserValidator.UserChange: ValidatorUserChange(); return;
-                case MethodUserValidator.PasswordChangeByForgot: ValidatorPasswordChangeByForgot(charactersTitle); return;                    
+                case MethodUserValidator.PasswordChangeByForgot: ValidatorPasswordChangeByForgot(); return;                    
             };
         }
 
-        public void ValidatorAuthenticate(int charactersTitle)
+        public void ValidatorAuthenticate()
         {
             ValidatorUserName();
-            ValidatorPassword(charactersTitle);
+            ValidatorPassword();
         }
 
-        public void ValidatorAddUser(int charactersTitle)
+        public void ValidatorAddUser()
         {
             ValidatorUserName();
             ValidatorPhoneNumber();
-            ValidatorPassword(charactersTitle);
+            ValidatorPassword();
             ValidatorEmail();
         }
 
@@ -43,9 +41,9 @@ namespace MeuLivroDeReceitas.Infrastructure.IdentityValidator
             ValidatorPhoneNumber();
         }
 
-        public void ValidatorPasswordChangeByForgot(int charactersTitle)
+        public void ValidatorPasswordChangeByForgot()
         {
-            ValidatorPassword(charactersTitle);
+            ValidatorPassword();
             ValidatorRolesName();
         }
 
@@ -54,15 +52,39 @@ namespace MeuLivroDeReceitas.Infrastructure.IdentityValidator
             RuleFor(c => c.UserName).NotEmpty().WithMessage(string.Format(Resource.UserValidator_Error_UserNameIsRequired));
         }
 
-        public void ValidatorPassword(int charactersTitle)
+        public void ValidatorPassword()
         {
-            RuleFor(c => c.Password).NotEmpty().WithMessage(string.Format(Resource.LoginValidator_Error_PasswordIsRequired));
-
-            RuleFor(c => c.Password).Length(MinimumNumberOfCharactersInPassword, MaximumNumberOfCharactersInPassword)
-                .WithMessage(string.Format(Resource.LoginValidator_Error_CharactersPassword,
-                charactersTitle,
+            RuleFor(c => c.Password).NotEmpty().WithMessage(string.Format(Resource.ValidatorPassword_Error_PasswordIsRequired));
+            
+            RuleFor(customer => customer.Password)
+                .Length(MinimumNumberOfCharactersInPassword, MaximumNumberOfCharactersInPassword)
+                .WithMessage(customer => string.Format(Resource.ValidatorPassword_Error_CharactersPassword,               
+                customer.Password.StringLengthText(),
                 MinimumNumberOfCharactersInPassword,
                 MaximumNumberOfCharactersInPassword));
+
+            //RuleFor.Custom(c => c.PhoneNumber).NotEmpty().WithMessage(" erro ");
+
+            //When(c => c.Password != null, () =>
+            //{
+            //    RuleFor(c => c.Password).Custom((password, context) =>
+            //    {
+            //        var passwordNew = " ==1 " + password;
+            //        context.AddFailure(new FluentValidation.Results.ValidationFailure(
+            //            nameof(password), string.Format(passwordNew)));
+            //    });
+            //});
+
+            //RuleFor(c => c.Password)
+            //    .Length(MinimumNumberOfCharactersInPassword, MaximumNumberOfCharactersInPassword)
+            //    .Custom((cellNumber, context) =>
+            //    {
+            //        var returnValidatorPhone = cellNumber.ValidatorPhone();
+            //        if (!returnValidatorPhone)
+            //            context.AddFailure(new FluentValidation.Results.ValidationFailure(nameof(cellNumber),
+            //                            string.Format(Resource.UserChangeValidator_Error_NonStandardCellNumber,
+            //                            nameof(UserChangeValidator), cellNumber)));
+            //    });
         }
 
         public void ValidatorPhoneNumber()
@@ -77,8 +99,8 @@ namespace MeuLivroDeReceitas.Infrastructure.IdentityValidator
                     var returnValidatorPhone = cellNumber.ValidatorPhone();
                     if (!returnValidatorPhone)
                         context.AddFailure(new FluentValidation.Results.ValidationFailure(nameof(cellNumber),
-                                            string.Format(Resource.UserChangeValidator_Error_NonStandardCellNumber,
-                                            nameof(UserChangeValidator), cellNumber)));
+                                            string.Format(Resource.ValidatorPhoneNumber_Error_NonStandardCellNumber,
+                                            nameof(ValidatorPhoneNumber), cellNumber)));
                 });
             });
         }
@@ -86,25 +108,45 @@ namespace MeuLivroDeReceitas.Infrastructure.IdentityValidator
         public void ValidatorEmail()
         {
             RuleFor(c => c.Email).NotEmpty()
-                .WithMessage(string.Format(Resource.LoginValidator_Error_EmailIsRequired));
+                .WithMessage(string.Format(Resource.ValidatorEmail_Error_EmailIsRequired));
 
             When(c => !string.IsNullOrWhiteSpace(c.Email), () =>
             {
-                RuleFor(c => c.Email).EmailAddress().WithMessage(Resource.LoginValidator_Error_EmailIsInvalid);
+                RuleFor(c => c.Email).EmailAddress().WithMessage(Resource.ValidatorEmail_Error_EmailIsInvalid);
             });
         }
 
         public void ValidatorRolesName()
         {
-            RuleFor(c => c.RolesName).NotEmpty().WithMessage(string.Format("Somente Admin pode trocar senha"));
-           // RuleFor(c => c.RolesName).NotEqual("Admin").WithMessage(string.Format("Somente Admin pode trocar senha"));
+            RuleForEach(c => c.RolesName).NotEmpty().WithMessage(string.Format(Resource.ValidatorRolesName_Error_Empty));
+            
+            RuleForEach(c => c.RolesName).Equal("Admin").WithMessage(string.Format(Resource.ValidatorRolesName_Error_NotAdmin));           
 
-            // .Must(x => x.All(x =>
+            RuleForEach(x => x.RolesName)
+           .Equal("Admin")
+           .WithMessage((rolesName, context) => string.Format(Resource.ValidatorRolesName_Error_NotAdminList, rolesName.RolesName.FirstOrDefault()));
+           //.WithMessage((rolesName, context) => $"001 - RolesName {rolesName.RolesName.FirstOrDefault()} Somente Admin pode trocar senha");
 
-            RuleFor(c => c.RolesName)
-               // .Must(x => x.All().NotEqual("Admin")
-                .Must(x => x.All(x => !x.Equals("Admin"))) //NotEqual("Admin"))
-                .WithMessage(string.Format("Somente Admin pode trocar senha"));
+            RuleForEach(x => x.RolesName)
+            .ChildRules(rolesName =>
+            {
+                rolesName.RuleFor(rolesName => rolesName)
+                    .NotNull()
+                    .NotEmpty()
+                    .Equal("Admin")
+                    .WithMessage(rolesName => string.Format(Resource.ValidatorRolesName_Error_NotAdminList, rolesName));
+                    //.WithMessage(rolesName => $"002 - RolesName:  {rolesName} Somente Admin pode trocar senha");
+            });
+
+            When(c => c.RolesName.FirstOrDefault() != "Admin", () =>
+            {
+                RuleForEach(c => c.RolesName).Custom((rolesName, context) =>
+                {
+                    var text = string.Format(Resource.ValidatorRolesName_Error_NotAdminList, rolesName);
+                    context.AddFailure(new FluentValidation.Results.ValidationFailure(nameof(rolesName), string.Format(Resource.ValidatorRolesName_Error_NotAdminList, rolesName)));
+                    //nameof(rolesName), string.Format($"003 - RolesName {rolesName} Somente Admin pode trocar senha")));
+                });
+            });
         }
     }
 }

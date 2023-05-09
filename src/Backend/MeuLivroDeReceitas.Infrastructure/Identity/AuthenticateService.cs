@@ -33,13 +33,14 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
 
         public async Task<UserTokenDto> Authenticate(LoginDto loginDto)
         {           
-            var validator = new UserValidator(loginDto.Password.Length, MethodUserValidator.Authenticate);
+            var validator = new UserValidator(MethodUserValidator.Authenticate);
             var resultadAddUserVal = validator.Validate(new UserValidatorDto { UserName = loginDto.UserName, Password = loginDto.Password});
             if (!resultadAddUserVal.IsValid)
                 throw new ErrosDeValidacaoException(resultadAddUserVal.Errors.Select(c => c.ErrorMessage).ToList());
 
             var result = await _signInManager.PasswordSignInAsync(loginDto.UserName, loginDto.Password, false, lockoutOnFailure: false);
             if (!result.Succeeded)
+                //  Acesso invalido, login ou password
                 throw new ErrosDeValidacaoException(new List<string>() { Resource.Authenticate_Error_NotFound });
 
             return _tokenService.GenerateToken(loginDto);
@@ -47,7 +48,7 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
 
         public async Task<bool> AddUser(UserDto userDto)
         {
-            var validator = new UserValidator(userDto.Password.Length, MethodUserValidator.AddUser);
+            var validator = new UserValidator(MethodUserValidator.AddUser);
             var resultadAddUserVal = validator.Validate(new UserValidatorDto 
                 {  UserName = userDto.UserName, Email = userDto.Email, Password = userDto.Password, PhoneNumber = userDto.PhoneNumber});
             if (!resultadAddUserVal.IsValid)
@@ -72,7 +73,7 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
          
         public async Task<bool> UserChange(UserChangeDto userChangeDto)
         {
-            var validator = new UserValidator(0, MethodUserValidator.UserChange);
+            var validator = new UserValidator(MethodUserValidator.UserChange);
             var resultadAddUserVal = validator.Validate(new UserValidatorDto { PhoneNumber = userChangeDto.PhoneNumber });
             if (!resultadAddUserVal.IsValid)
                 throw new ErrosDeValidacaoException(resultadAddUserVal.Errors.Select(c => c.ErrorMessage).ToList());
@@ -97,21 +98,13 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
             var appUserView = await _userManager.FindByNameAsync(appUserDto.UserName);
             var rolesName = await _userManager.GetRolesAsync(appUserView);
 
-            var validator = new UserValidator(0, MethodUserValidator.PasswordChangeByForgot);
-            var resultadAddUserVal = validator.Validate(new UserValidatorDto { Password = passwordChangeDto.NewPassword });
+            var validator = new UserValidator(MethodUserValidator.PasswordChangeByForgot);
+            var resultadAddUserVal = validator.Validate(new UserValidatorDto { Password = passwordChangeDto.NewPassword , RolesName = rolesName.ToList() });
             if (!resultadAddUserVal.IsValid)
                 throw new ErrosDeValidacaoException(resultadAddUserVal.Errors.Select(c => c.ErrorMessage).ToList());
 
             if (passwordChangeDto.NewPassword != passwordChangeDto.RepeatNewPassword)
-                throw new ErrosDeValidacaoException(new List<string>() { "Senha de confirmação diferente da senha nova" });
-
-            //var appUserDto = await RetrieveUserByIdentity();
-
-            //var appUserView = await _userManager.FindByNameAsync(appUserDto.UserName);
-
-            //var rolesName = await _userManager.GetRolesAsync(appUserView);
-            //if (rolesName.FirstOrDefault() != "Admin")
-                //throw new ErrosDeValidacaoException(new List<string>() { "Somente Admin pode trocar senha" });
+                throw new ErrosDeValidacaoException(new List<string>() { "Senha de confirmação diferente da senha nova" });            
 
             var appUser = await _userManager.FindByEmailAsync(passwordChangeDto.Email);
             if (appUser == null) throw new ErrosDeValidacaoException(new List<string>() { Resource.PasswordChangeByForgot_Error_UserNotFound });
@@ -138,8 +131,7 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
             return new ApplicationUserDto { 
                 Email = appUser.Email, 
                 UserName = appUser.UserName, 
-                PhoneNumber = appUser.PhoneNumber//,
-               // Id = appUser.Id 
+                PhoneNumber = appUser.PhoneNumber
             };
         }
 
@@ -163,14 +155,6 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
                 LockoutEnabled = false,
                 SecurityStamp = Guid.NewGuid().ToString()
             };
-        }
-
-        private void AuthenticateValidate(LoginDto loginDto)
-        {
-            var validator = new LoginValidator(loginDto.Password.Length);
-            var resultadLoginValidator = validator.Validate(loginDto);
-            if (!resultadLoginValidator.IsValid)
-                throw new ErrosDeValidacaoException(resultadLoginValidator.Errors.Select(c => c.ErrorMessage).ToList());
         }
     }
 }
