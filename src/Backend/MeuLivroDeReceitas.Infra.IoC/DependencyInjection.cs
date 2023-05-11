@@ -39,14 +39,11 @@ namespace MeuLivroDeReceitas.Infra.IoC
             services.AddScoped<IRecipeRepository, RecipeRepository>();
             //services.AddTransient(typeof(IRecipeRepository), typeof(RecipeRepository));
 
-
             services.AddScoped<IIngredientRepository, IngredientRepository>();
 
             services.AddScoped<IRecipeService, RecipeService>();
-           /// services.AddTransient(typeof(IRecipeService), typeof(RecipeService));
-
-
-            //services.AddScoped<IIngredientService, IngredientService>();
+            /// services.AddTransient(typeof(IRecipeService), typeof(RecipeService));
+            services.AddScoped<IIngredientService, IngredientService>();
 
             services.AddScoped<IAuthenticate, AuthenticateService>();
             services.AddScoped<ISeedUserRoleInitial, SeedUserRoleInitial>();

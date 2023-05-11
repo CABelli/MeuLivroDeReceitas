@@ -4,6 +4,7 @@ using MeuLivroDeReceitas.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MeuLivroDeReceitas.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230509212438_AddIngredientRecipeId")]
+    partial class AddIngredientRecipeId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,7 +28,6 @@ namespace MeuLivroDeReceitas.Infrastructure.Migrations
             modelBuilder.Entity("MeuLivroDeReceitas.Domain.Entities.Ingredient", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("AlterationDate")
@@ -45,8 +47,7 @@ namespace MeuLivroDeReceitas.Infrastructure.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<Guid?>("RecipeId")
-                        .IsRequired()
+                    b.Property<Guid>("RecipeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Sku")
@@ -55,8 +56,6 @@ namespace MeuLivroDeReceitas.Infrastructure.Migrations
                         .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RecipeId");
 
                     b.ToTable("Ingredients");
                 });
@@ -309,7 +308,7 @@ namespace MeuLivroDeReceitas.Infrastructure.Migrations
                 {
                     b.HasOne("MeuLivroDeReceitas.Domain.Entities.Recipe", "Recipe")
                         .WithMany("Ingredients")
-                        .HasForeignKey("RecipeId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

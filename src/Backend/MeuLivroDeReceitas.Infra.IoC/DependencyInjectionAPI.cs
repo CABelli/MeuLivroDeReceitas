@@ -43,6 +43,7 @@ namespace MeuLivroDeReceitas.Infra.IoC
             AdicionarTokenJWT(services, configuration);
 
             services.AddScoped<IRecipeService, RecipeService>();
+            services.AddScoped<IIngredientService, IngredientService>();
 
             //services.AddAutoMapper(typeof(DomainToDTOMappingProfile));
 
