@@ -1,4 +1,4 @@
-﻿using MeuLivroDeReceitas.CrossCutting.Dto.Request.Login;
+﻿using MeuLivroDeReceitas.CrossCutting.Dto.Login;
 
 namespace MeuLivroDeReceitas.Domain.Account
 {

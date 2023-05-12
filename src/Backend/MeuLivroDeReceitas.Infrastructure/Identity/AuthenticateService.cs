@@ -1,5 +1,4 @@
 ﻿using MeuLivroDeReceitas.CrossCutting.Dto.Login;
-using MeuLivroDeReceitas.CrossCutting.Dto.Request.Login;
 using MeuLivroDeReceitas.CrossCutting.EnumClass;
 using MeuLivroDeReceitas.CrossCutting.Resources.Infrastructure;
 using MeuLivroDeReceitas.Domain.Account;

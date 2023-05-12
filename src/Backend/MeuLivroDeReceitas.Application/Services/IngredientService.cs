@@ -1,6 +1,6 @@
 ﻿using MeuLivroDeReceitas.Application.Interfaces;
 using MeuLivroDeReceitas.CrossCutting.Dto.Ingredient;
-using MeuLivroDeReceitas.CrossCutting.Dto.Response;
+using MeuLivroDeReceitas.CrossCutting.Dto.Recipess;
 using MeuLivroDeReceitas.CrossCutting.EnumClass;
 using MeuLivroDeReceitas.Domain.Account;
 using MeuLivroDeReceitas.Domain.Entities;

@@ -1,4 +1,4 @@
-﻿using MeuLivroDeReceitas.CrossCutting.Dto.Request.Login;
+﻿using MeuLivroDeReceitas.CrossCutting.Dto.Login;
 using MeuLivroDeReceitas.Domain.Account;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

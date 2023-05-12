@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using MeuLivroDeReceitas.CrossCutting.Dto.Request;
+using MeuLivroDeReceitas.CrossCutting.Dto.Recipess;
 using MeuLivroDeReceitas.CrossCutting.Extensions;
 using MeuLivroDeReceitas.CrossCutting.Resources.Application;
 using System.Text.RegularExpressions;

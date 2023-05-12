@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace MeuLivroDeReceitas.CrossCutting.Dto.Response
+namespace MeuLivroDeReceitas.CrossCutting.Dto.Recipess
 {
-    public class RecipeImageDraftDTO
+    public class RecipeResponseImageDraftDTO
     {
         [JsonProperty("title")]
         public string? Title { get; set; }

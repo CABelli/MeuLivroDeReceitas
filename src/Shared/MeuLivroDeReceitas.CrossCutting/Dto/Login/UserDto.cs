@@ -1,4 +1,4 @@
-﻿namespace MeuLivroDeReceitas.CrossCutting.Dto.Request.Login
+﻿namespace MeuLivroDeReceitas.CrossCutting.Dto.Login
 {
     public class UserDto
     {

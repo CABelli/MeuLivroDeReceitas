@@ -1,4 +1,4 @@
-﻿using MeuLivroDeReceitas.CrossCutting.Dto.Response;
+﻿using MeuLivroDeReceitas.CrossCutting.Dto.TextFilters;
 using MeuLivroDeReceitas.CrossCutting.Resources.API;
 using MeuLivroDeReceitas.Exceptions.ExceptionBase;
 using MeuLivroDeReceitas.Exceptions.ExceptionsBase;
@@ -8,14 +8,14 @@ using System.Net;
 using System.Web;
 
 namespace MeuLivroDeReceitas.Api.Filtros;
-
-public class FiltroDasExceptions : IExceptionFilter
+ 
+public class MessageOrExceptionFilter : IExceptionFilter
 {
-    private readonly ILogger<FiltroDasExceptions> _logger;
+    private readonly ILogger<MessageOrExceptionFilter> _logger;
 
-    public FiltroDasExceptions(IServiceProvider serviceProvider)
+    public MessageOrExceptionFilter(IServiceProvider serviceProvider)
     {
-        _logger = serviceProvider.GetRequiredService<ILogger<FiltroDasExceptions>>();
+        _logger = serviceProvider.GetRequiredService<ILogger<MessageOrExceptionFilter>>();
     }
 
     public void OnException(ExceptionContext context)
@@ -60,7 +60,7 @@ public class FiltroDasExceptions : IExceptionFilter
     {
         var erroDeValidacaoException = context.Exception as ErrosDeValidacaoException;
         context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-        context.Result = new ObjectResult(new RespostaErroJson(erroDeValidacaoException.MensagensDeErro));
+        context.Result = new ObjectResult(new TextFilterResponseDto(erroDeValidacaoException.MensagensDeErro));
     }
 
     private static void TratarErrorsNotFoundException(ExceptionContext context)
@@ -74,6 +74,6 @@ public class FiltroDasExceptions : IExceptionFilter
     private static void ThrowUnknownError(ExceptionContext context)
     {
         context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-        context.Result = new ObjectResult(new RespostaErroJson(string.Format(Resource.ThrowUnknownError_Error_Throw, nameof(ThrowUnknownError), context.Exception.Message)));
+        context.Result = new ObjectResult(new TextFilterResponseDto(string.Format(Resource.ThrowUnknownError_Error_Throw, nameof(ThrowUnknownError), context.Exception.Message)));
     }
 }

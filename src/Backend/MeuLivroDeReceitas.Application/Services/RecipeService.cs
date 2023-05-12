@@ -1,6 +1,5 @@
 ﻿using MeuLivroDeReceitas.Application.Interfaces;
-using MeuLivroDeReceitas.CrossCutting.Dto.Request;
-using MeuLivroDeReceitas.CrossCutting.Dto.Response;
+using MeuLivroDeReceitas.CrossCutting.Dto.Recipess;
 using MeuLivroDeReceitas.CrossCutting.Extensions;
 using MeuLivroDeReceitas.CrossCutting.Resources.Application;
 using MeuLivroDeReceitas.Domain.Account;
@@ -65,7 +64,7 @@ namespace MeuLivroDeReceitas.Application.Services
             return RecipeResult(recipe);
         }
 
-        public async Task<RecipeImageDraftDTO> GetRecipiesDownLoad(string title)
+        public async Task<RecipeResponseImageDraftDTO> GetRecipiesDownLoad(string title)
         {
             await GenerateLogAudit(nameof(GetRecipiesDownLoad) + " , key: " + title);
             var recipe = await _recipeRepository.WhereFirstAsync(x => x.Title == title);
@@ -75,7 +74,7 @@ namespace MeuLivroDeReceitas.Application.Services
             if (recipe.FileExtension == null || String.IsNullOrEmpty(recipe.FileExtension))
                 throw new ErrosDeValidacaoException(new List<string>() { string.Format(Resource.GetRecipiesDownLoad_Info_NotContainImageFile, nameof(GetRecipiesTitle), title) });
 
-            return new RecipeImageDraftDTO
+            return new RecipeResponseImageDraftDTO
             {
                 Title = recipe.Title,
                 NameFile = recipe.Title?.TitleNameFileExtension(recipe.FileExtension),

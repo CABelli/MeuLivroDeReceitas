@@ -1,4 +1,4 @@
-﻿namespace MeuLivroDeReceitas.CrossCutting.Dto.Request.Login
+﻿namespace MeuLivroDeReceitas.CrossCutting.Dto.Login
 {
     public class ApplicationUserDto
     {
@@ -7,7 +7,5 @@
         public string? Email { get; set; }
 
         public string? PhoneNumber { get; set; }
-
-       // public string? Id { get; set; }
     }
 }

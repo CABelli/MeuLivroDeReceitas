@@ -1,6 +1,5 @@
 ﻿using MeuLivroDeReceitas.Application.Interfaces;
-using MeuLivroDeReceitas.CrossCutting.Dto.Request;
-using MeuLivroDeReceitas.CrossCutting.Dto.Response;
+using MeuLivroDeReceitas.CrossCutting.Dto.Recipess;
 using MeuLivroDeReceitas.CrossCutting.Resources.API;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

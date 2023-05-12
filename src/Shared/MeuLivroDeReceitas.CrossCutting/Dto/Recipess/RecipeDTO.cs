@@ -1,7 +1,7 @@
 ﻿using MeuLivroDeReceitas.CrossCutting.EnumClass;
 using System.ComponentModel;
 
-namespace MeuLivroDeReceitas.CrossCutting.Dto.Request
+namespace MeuLivroDeReceitas.CrossCutting.Dto.Recipess
 {
     public class RecipeDTO
     {

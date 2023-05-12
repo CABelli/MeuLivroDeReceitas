@@ -1,7 +1,4 @@
 ﻿using AutoMapper;
-using MeuLivroDeReceitas.CrossCutting.Dto.Request;
-using MeuLivroDeReceitas.CrossCutting.Dto.Request.Ingredient;
-using MeuLivroDeReceitas.Domain.Entities;
 
 namespace MeuLivroDeReceitas.Application.Mappings
 {
