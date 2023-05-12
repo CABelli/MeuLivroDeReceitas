@@ -2,8 +2,8 @@
 {
     public class IngredientListDetailsDTO
     {
-        public string Sku { get; set; }
+        public string? Sku { get; set; }
 
-        public string Quantity { get; set; }
+        public string? Quantity { get; set; }
     }
 }

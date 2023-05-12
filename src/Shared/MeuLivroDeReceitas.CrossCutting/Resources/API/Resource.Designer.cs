@@ -61,6 +61,15 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.API {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Inclusão do ingrediente com sucesso..
+        /// </summary>
+        public static string IncludeIngredient_Return_Successfully {
+            get {
+                return ResourceManager.GetString("IncludeIngredient_Return_Successfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Inclusão da receita com sucesso..
         /// </summary>
         public static string IncludeRecipe_Return_Successfully {

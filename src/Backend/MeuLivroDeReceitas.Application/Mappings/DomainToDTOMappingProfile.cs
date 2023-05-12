@@ -9,8 +9,8 @@ namespace MeuLivroDeReceitas.Application.Mappings
     {
         public DomainToDTOMappingProfile()
         {
-            CreateMap<Recipe, RecipeDTO>().ReverseMap();
-            CreateMap<Ingredient, IngredientDTO>().ReverseMap();
+            //CreateMap<Recipe, RecipeDTO>().ReverseMap();
+           // CreateMap<Ingredient, IngredientDTO>().ReverseMap();
         }
     }
 }

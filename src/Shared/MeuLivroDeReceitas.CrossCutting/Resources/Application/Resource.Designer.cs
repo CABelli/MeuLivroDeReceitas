@@ -61,20 +61,20 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.Application {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Iniciando. Método: {0}. Título: {1}.
-        /// </summary>
-        public static string AddRecipe_Info_Starting {
-            get {
-                return ResourceManager.GetString("AddRecipe_Info_Starting", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Receita nao encontrada. Metodo {0}. Titulo {1}.
         /// </summary>
         public static string DeleteRecipeByTitle_Info_RecipeNotFound {
             get {
                 return ResourceManager.GetString("DeleteRecipeByTitle_Info_RecipeNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to *** *** Log *** *** Metodo: {0}, chave: {1}, usuario: {2}, fone: {3}, email: {4}.
+        /// </summary>
+        public static string GenerateLogAudit_LogWarning {
+            get {
+                return ResourceManager.GetString("GenerateLogAudit_LogWarning", resourceCulture);
             }
         }
         
@@ -246,6 +246,42 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.Application {
         public static string ValidateRecipeModification_Info_RecipeNotFound {
             get {
                 return ResourceManager.GetString("ValidateRecipeModification_Info_RecipeNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quantity  não preenchido..
+        /// </summary>
+        public static string ValidatorQuantity_Error_IsRequired {
+            get {
+                return ResourceManager.GetString("ValidatorQuantity_Error_IsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Caracteres do atributo quantity não pode ser {0}, deve ficar entre {1} e {2}. Método:{3}..
+        /// </summary>
+        public static string ValidatorQuantity_Error_LengthCharacters {
+            get {
+                return ResourceManager.GetString("ValidatorQuantity_Error_LengthCharacters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nome do ingrediente não preenchido..
+        /// </summary>
+        public static string ValidatorSku_Error_IsRequired {
+            get {
+                return ResourceManager.GetString("ValidatorSku_Error_IsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Caracteres do atributo sku não pode ser {0}, deve ficar entre {1} e {2}. Método:{3}..
+        /// </summary>
+        public static string ValidatorSku_Error_LengthCharacters {
+            get {
+                return ResourceManager.GetString("ValidatorSku_Error_LengthCharacters", resourceCulture);
             }
         }
     }

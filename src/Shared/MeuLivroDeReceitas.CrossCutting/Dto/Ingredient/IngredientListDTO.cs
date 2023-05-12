@@ -3,6 +3,6 @@
     public class IngredientListDTO
     {
         public string Title { get; set; }
-        public List<IngredientListDetailsDTO> Items { get; set; } = new List<IngredientListDetailsDTO>();
+        public List<IngredientListDetailsDTO> RecipeItems { get; set; } = new List<IngredientListDetailsDTO>();
     }
 }

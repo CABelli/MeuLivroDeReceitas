@@ -36,6 +36,7 @@ namespace MeuLivroDeReceitas.Application.Services
 
         public async Task<IEnumerable<RecipeResponseDTO>> GetRecipies()
         {
+            await GenerateLogAudit(nameof(GetRecipies));
             var recipies = await _recipeRepository.GetAll();
             if (recipies == null)
                 throw new ErrorsNotFoundException(new List<string>() { string.Format(Resource.GetRecipies_Info_RecipeNotFound, nameof(GetRecipies)) });
@@ -46,6 +47,7 @@ namespace MeuLivroDeReceitas.Application.Services
 
         public async Task<RecipeResponseDTO> GetRecipeById(Guid id)
         {
+            GenerateLogAudit(nameof(GetRecipeById) + " , key: " + id);
             var recipe = await _recipeRepository.GetById(id);
             if (recipe == null)
                 throw new ErrorsNotFoundException(new List<string>() { string.Format(Resource.GetRecipeById_Info_RecipeNotFound, nameof(GetRecipeById), id) });
@@ -55,22 +57,17 @@ namespace MeuLivroDeReceitas.Application.Services
 
         public async Task<RecipeResponseDTO> GetRecipiesTitle(string title)
         {
+            await GenerateLogAudit(nameof(GetRecipiesTitle) + " , key: " + title);
             var recipe = await _recipeRepository.WhereFirstAsync(x => x.Title == title);
             if (recipe == null)
                 throw new ErrorsNotFoundException(new List<string>() { string.Format(Resource.GetRecipiesTitle_Info_RecipeNotFound.RemoveAccents(), nameof(GetRecipiesTitle), title.RemoveAccents()) });
-
-            var appUserDto = await _authenticateService.RetrieveUserByIdentity();
-
-            _logger.LogInformation("Titulo: " + title + 
-                " , Email: " + appUserDto.Email +
-                " , UserName: " + appUserDto.UserName +
-                " , PhoneNumber: " + appUserDto.PhoneNumber);
 
             return RecipeResult(recipe);
         }
 
         public async Task<RecipeImageDraftDTO> GetRecipiesDownLoad(string title)
         {
+            await GenerateLogAudit(nameof(GetRecipiesDownLoad) + " , key: " + title);
             var recipe = await _recipeRepository.WhereFirstAsync(x => x.Title == title);
 
             if (recipe == null)
@@ -88,9 +85,9 @@ namespace MeuLivroDeReceitas.Application.Services
 
         public async Task AddRecipe(RecipeDTO recipeDTO)
         {
-            _logger.LogInformation(Resource.AddRecipe_Info_Starting, nameof(AddRecipe), recipeDTO.Title);
-
-            await ValidarRecipeDTO(recipeDTO);
+            await GenerateLogAudit(nameof(AddRecipe) + " , key: " + recipeDTO.Title);
+            
+            await ValidateRecipeDTO(recipeDTO);
 
             var recipe = new Recipe()
             {
@@ -110,6 +107,7 @@ namespace MeuLivroDeReceitas.Application.Services
 
         public async Task UpdateRecipeDraftString(RecipeDTO recipeDTO)
         {
+            await GenerateLogAudit(nameof(UpdateRecipeDraftString) + " , key: " + recipeDTO.Title);
             var recipe = await ValidateRecipeModification(recipeDTO);
 
             recipe.PreparationTime = recipeDTO.PreparationTime == 0 ? recipe.PreparationTime : recipeDTO.PreparationTime;
@@ -124,6 +122,7 @@ namespace MeuLivroDeReceitas.Application.Services
                
         public async Task<string> UpdateRecipeDraftImage(ICollection<IFormFile> files, string title)
         {
+            await GenerateLogAudit(nameof(UpdateRecipeDraftImage) + " , key: " + title);
             if (files.Count() == 0) 
                 throw new ErrosDeValidacaoException(new List<string>() { Resource.UpdateRecipeDraftImage_Error_DataDraftIsNull });
 
@@ -155,12 +154,24 @@ namespace MeuLivroDeReceitas.Application.Services
 
         public async Task DeleteRecipeByTitle(string title)
         {
+            await GenerateLogAudit(nameof(UpdateRecipeDraftImage) + " , key: " + title);
             var recipies = await _recipeRepository.WhereAsync(x => x.Title == title);
             if (recipies.Count() == 0)
                 throw new ErrorsNotFoundException(new List<string>() { string.Format(Resource.DeleteRecipeByTitle_Info_RecipeNotFound, nameof(DeleteRecipeByTitle), title) });
 
             _recipeRepository.Delete(await _recipeRepository.GetById(recipies.First().Id));
             await _unitOfWork.CommitAsync();
+        }
+
+        public async Task GenerateLogAudit(string text) 
+        {
+            var appUserDto = await _authenticateService.RetrieveUserByIdentity();
+            _logger.LogWarning(Resource.GenerateLogAudit_LogWarning, 
+                nameof(GenerateLogAudit),
+                text,
+                appUserDto.UserName,
+                appUserDto.PhoneNumber,
+                appUserDto.Email);
         }
 
         #region Private
@@ -193,7 +204,7 @@ namespace MeuLivroDeReceitas.Application.Services
             return recipeResponseDTO;
         }
 
-        private async Task ValidarRecipeDTO(RecipeDTO recipeDTO)
+        private async Task ValidateRecipeDTO(RecipeDTO recipeDTO)
         {
             var recipe = await _recipeRepository.WhereFirstAsync(x => x.Title == recipeDTO.Title);
             if (recipe != null)

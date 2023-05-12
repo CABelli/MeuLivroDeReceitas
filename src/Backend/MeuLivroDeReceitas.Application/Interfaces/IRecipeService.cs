@@ -21,5 +21,7 @@ namespace MeuLivroDeReceitas.Application.Interfaces
         Task<string> UpdateRecipeDraftImage(ICollection<IFormFile> files, string title);
 
         Task DeleteRecipeByTitle(string title);
+
+        Task GenerateLogAudit(string title);
     }
 }

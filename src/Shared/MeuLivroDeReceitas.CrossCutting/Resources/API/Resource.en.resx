@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="IncludeIngredient_Return_Successfully" xml:space="preserve">
+    <value>Successfully entered the igredient.</value>
+  </data>
   <data name="IncludeRecipe_Return_Successfully" xml:space="preserve">
     <value>Successfully entered the recipe.</value>
   </data>
@@ -125,9 +128,6 @@
   </data>
   <data name="OnException_Error_UnknownShortMessage" xml:space="preserve">
     <value>Short message. Method:{0}, Error:{1}</value>
-  </data>
-  <data name="RecipeValidator_Error_UnfilledTitle" xml:space="preserve">
-    <value>xxx</value>
   </data>
   <data name="ThrowUnknownError_Error_Throw" xml:space="preserve">
     <value>Untranslated error. Method:{0}, Description:{1}</value>

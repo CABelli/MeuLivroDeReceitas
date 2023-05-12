@@ -6,6 +6,9 @@ using MeuLivroDeReceitas.Domain.Account;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
 var KeyVaultGlobalCultureLanguage = "pt"; /// en pt(Default)
 Resource.Culture = new System.Globalization.CultureInfo(KeyVaultGlobalCultureLanguage);
 ResourcesApplication.Resource.Culture = new System.Globalization.CultureInfo(KeyVaultGlobalCultureLanguage);

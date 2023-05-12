@@ -27,8 +27,8 @@ public class FiltroDasExceptions : IExceptionFilter
         }
         else
         {
-            _logger.LogInformation(string.Format(Resource.OnException_Error_UnknownShortMessage, nameof(OnException), context.Exception.Message));
-            _logger.LogInformation(string.Format(Resource.OnException_Error_UnknownCompleteMessage, nameof(OnException), context.Exception.StackTrace));
+            _logger.LogError(string.Format(Resource.OnException_Error_UnknownShortMessage, nameof(OnException), context.Exception.Message));
+            _logger.LogError(string.Format(Resource.OnException_Error_UnknownCompleteMessage, nameof(OnException), context.Exception.StackTrace));
             ThrowUnknownError(context);
         }
     }

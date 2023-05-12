@@ -5,8 +5,6 @@ namespace MeuLivroDeReceitas.Application.Interfaces
 {
     public interface IIngredientService
     {
-        Task<IEnumerable<IngredientDTO>> GetRecipies();
-
         Task AddIngredient(IngredientAddDto ingredientAddDto);
 
         Task<IngredientListDTO> GetIngredients(string title);

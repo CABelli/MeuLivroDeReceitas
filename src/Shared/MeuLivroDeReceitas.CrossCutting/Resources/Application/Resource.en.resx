@@ -117,14 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AddRecipe_Info_Starting" xml:space="preserve">
-    <value>Starting. Method:{0}. Title:{1}.</value>
-  </data>
   <data name="DataDraft não preenchido. Método:{0}." xml:space="preserve">
     <value>FileExtension not filled. Method:{0}.</value>
   </data>
   <data name="DeleteRecipeByTitle_Info_RecipeNotFound" xml:space="preserve">
     <value>Recipe not found. Method:{0}. Title:{1}.</value>
+  </data>
+  <data name="GenerateLogAudit_LogWarning" xml:space="preserve">
+    <value>*** *** Log *** *** Method:{0}, key: {1}, user: {2}, phone: {3}, email: {4}</value>
   </data>
   <data name="GetRecipeById_Info_RecipeNotFound" xml:space="preserve">
     <value>Recipe not found. Method:{0}. Title:{1}.</value>
@@ -179,5 +179,17 @@
   </data>
   <data name="ValidateRecipeModification_Info_RecipeNotFound" xml:space="preserve">
     <value>Recipe not found. Method:{0}. Title: {1}.</value>
+  </data>
+  <data name="ValidatorQuantity_Error_IsRequired" xml:space="preserve">
+    <value>Quantity not filled.</value>
+  </data>
+  <data name="ValidatorQuantity_Error_LengthCharacters" xml:space="preserve">
+    <value>Quantity attribute characters cannot be {0}, must be between {1} and {2}. Method:{3}.</value>
+  </data>
+  <data name="ValidatorSku_Error_IsRequired" xml:space="preserve">
+    <value>Ingredient name not filled.</value>
+  </data>
+  <data name="ValidatorSku_Error_LengthCharacters" xml:space="preserve">
+    <value>Sku attribute characters cannot be {0}, must be between {1} and {2}. Method:{3}.</value>
   </data>
 </root>

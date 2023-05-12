@@ -1,13 +1,12 @@
 ﻿using MeuLivroDeReceitas.Application.Interfaces;
 using MeuLivroDeReceitas.CrossCutting.Dto.Ingredient;
-using MeuLivroDeReceitas.CrossCutting.Dto.Request.Ingredient;
 using MeuLivroDeReceitas.CrossCutting.Dto.Response;
+using MeuLivroDeReceitas.CrossCutting.EnumClass;
 using MeuLivroDeReceitas.Domain.Account;
 using MeuLivroDeReceitas.Domain.Entities;
-using MeuLivroDeReceitas.Domain.Interfaces;
 using MeuLivroDeReceitas.Domain.InterfacesGeneric;
 using MeuLivroDeReceitas.Domain.InterfacesRepository;
-using MeuLivroDeReceitas.Exceptions.ExceptionBase;
+using MeuLivroDeReceitas.Exceptions.ExceptionsBase;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -32,35 +31,28 @@ namespace MeuLivroDeReceitas.Application.Services
             _authenticateService = serviceProvider.GetRequiredService<IAuthenticate>();
         }
 
-        public async Task<IEnumerable<IngredientDTO>> GetRecipies()
-        {
-            return new List<IngredientDTO>();
-        }
-
         public async Task AddIngredient(IngredientAddDto ingredientAddDTO)
         {
-            var recipe = await _recipeService.GetRecipiesTitle(ingredientAddDTO.Title);
+            await _recipeService.GenerateLogAudit(nameof(GetIngredients) + " , key: " + ingredientAddDTO.Title);
 
-            ////  AaAaAa
-            
-            ////int recipeId = recipe.Id.GetHashCode();
-            if (recipe != null)
+            var recipe = await ValidateIngredient(ingredientAddDTO);
+
+            var ingredient = new Ingredient()
             {
-                var ingredient = new Ingredient()
-                {
-                    Sku = ingredientAddDTO.Sku,
-                    Quantity = ingredientAddDTO.Quantity,
-                    RecipeId = recipe.Id
-                };
-                _ingredientRepository.Create(ingredient);
+                Sku = ingredientAddDTO.Sku,
+                Quantity = ingredientAddDTO.Quantity,
+                RecipeId = recipe.Id
+            };
 
-                await _unitOfWork.CommitAsync();
-            }
+            _ingredientRepository.Create(ingredient);
 
+            await _unitOfWork.CommitAsync();           
         }
 
         public async Task<IngredientListDTO> GetIngredients(string title)
         {
+            await _recipeService.GenerateLogAudit(nameof(GetIngredients) + " , key: " + title);
+
             var recipe = await _recipeService.GetRecipiesTitle(title);
 
             var ingredients = await _ingredientRepository.WhereAsync(x => x.RecipeId == recipe.Id);
@@ -70,18 +62,35 @@ namespace MeuLivroDeReceitas.Application.Services
                 Title = title
             };
 
-            foreach ( var ingr in ingredients )
-            {
-                var ingredientListDetails = new IngredientListDetailsDTO()
+            ingredients.ForEach(ingredList => ingredientList.RecipeItems.Add(
+                new IngredientListDetailsDTO()
                 {
-                    Sku = ingr.Sku,
-                    Quantity = ingr.Quantity
-                };
+                    Sku = ingredList.Sku,
+                    Quantity = ingredList.Quantity
+                }));
 
-                ingredientList.Items.Add(ingredientListDetails);
-            }
+            //foreach ( var ingr in ingredients )
+            //{
+            //    var ingredientListDetails = new IngredientListDetailsDTO()
+            //    {
+            //        Sku = ingr.Sku,
+            //        Quantity = ingr.Quantity
+            //    };
+            //
+            //    ingredientList.RecipeItems.Add(ingredientListDetails);
+            //}
 
             return ingredientList;
+        }
+
+        private async Task<RecipeResponseDTO> ValidateIngredient(IngredientAddDto ingredientAddDTO)
+        {
+            var validator = new IngredientValidator(MethodIngredientValidator.AddIngredient);
+            var resultado = validator.Validate(ingredientAddDTO);
+            if (!resultado.IsValid)
+                throw new ErrosDeValidacaoException(resultado.Errors.Select(c => c.ErrorMessage).ToList());
+            
+            return await _recipeService.GetRecipiesTitle(ingredientAddDTO.Title);
         }
     }
 }
