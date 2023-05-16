@@ -13,9 +13,9 @@ namespace MeuLivroDeReceitas.Application.Interfaces
 
         Task<RecipeResponseImageDraftDTO> GetRecipiesDownLoad(string title);
 
-        Task AddRecipe(RecipeDTO recipeDTO);
+        Task AddRecipe(AddRecipeDTO addRecipeDTO);
 
-        Task UpdateRecipeDraftString(RecipeDTO recipeDTO);
+        Task UpdateRecipeDraftString(ModifyRecipeDTO modifyRecipeDTO);
 
         Task<string> UpdateRecipeDraftImage(ICollection<IFormFile> files, string title);
 

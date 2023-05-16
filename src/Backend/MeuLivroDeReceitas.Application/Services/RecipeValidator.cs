@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 using MeuLivroDeReceitas.CrossCutting.Dto.Recipess;
+using MeuLivroDeReceitas.CrossCutting.EnumClass;
 using MeuLivroDeReceitas.CrossCutting.Extensions;
 using MeuLivroDeReceitas.CrossCutting.Resources.Application;
-using System.Text.RegularExpressions;
 
 namespace MeuLivroDeReceitas.Application.Services
 {
@@ -11,35 +11,74 @@ namespace MeuLivroDeReceitas.Application.Services
         public int MinimumNumberOfCharactersInTitle = 5;
         public int MaximumNumberOfCharactersInTitle = 20;
 
-        public RecipeValidator(int action, int CharactersTitle)
+        public RecipeValidator(MethodRecipeValidator method)
+        {
+            switch (method)
+            {
+                case MethodRecipeValidator.AddRecipe: ValidatorAddRecipe(); return;
+                case MethodRecipeValidator.ModifyRecipe: ValidatorModifyRecipe(); return;
+            };
+        }
+
+        public void ValidatorAddRecipe()
+        {
+            ValidatorTitle();
+            ValidatorPreparationMode();
+            ValidatorPreparationTime();
+            ValidatorPreparationCategory();
+        }
+
+        public void ValidatorModifyRecipe()
+        {
+            ValidatorTitle();
+            ValidatorPreparationMode();
+            ValidatorPreparationTime();
+            ValidatorPreparationCategory();
+            ValidatorFileExtension();
+        }
+
+        public void ValidatorTitle()
         {
             RuleFor(c => c.Title).NotEmpty()
                 .WithMessage(string.Format(Resource.RecipeValidator_Error_UnfilledTitle, nameof(RecipeValidator)));
 
-            RuleFor(c => c.Title).Length(MinimumNumberOfCharactersInTitle, MaximumNumberOfCharactersInTitle)
-                .WithMessage(string.Format(Resource.RecipeValidator_Error_CharactersTitle, 
-                CharactersTitle, 
-                MinimumNumberOfCharactersInTitle, 
-                MaximumNumberOfCharactersInTitle, 
+            RuleFor(RecTile => RecTile.Title).Length(MinimumNumberOfCharactersInTitle, MaximumNumberOfCharactersInTitle)
+                .WithMessage(RecTile => string.Format(Resource.RecipeValidator_Error_CharactersTitle,
+                RecTile.Title.Length,
+                MinimumNumberOfCharactersInTitle,
+                MaximumNumberOfCharactersInTitle,
                 nameof(RecipeValidator)));
+        }
 
-            if (action == 1) 
-                RuleFor(c => c.PreparationMode).NotEmpty()
-                    .WithMessage(string.Format(Resource.RecipeValidator_Error_UnfilledPreparationMode, nameof(RecipeValidator)));
-            
-            if (action == 1) 
-                RuleFor(c => c.PreparationTime).NotEmpty()
-                    .WithMessage(string.Format(Resource.RecipeValidator_Error_UnfilledPreparationTime, nameof(RecipeValidator)));
-            
-            RuleFor(c => c.Category).NotEmpty()
+        public void ValidatorPreparationMode()
+        {
+            RuleFor(c => c.PreparationMode).NotEmpty()
+                .WithMessage(string.Format(Resource.RecipeValidator_Error_UnfilledPreparationMode, nameof(RecipeValidator)));
+        }
+
+        public void ValidatorPreparationTime()
+        {
+            RuleFor(c => c.PreparationTime).NotEmpty()
+                .WithMessage(string.Format(Resource.RecipeValidator_Error_UnfilledPreparationTime, nameof(RecipeValidator)));
+        }
+
+        public void ValidatorPreparationCategory()
+        {
+            RuleFor(c => c.CategoryRecipe).NotEmpty()
                 .WithMessage(string.Format(Resource.RecipeValidator_Error_UnfilledCategory, nameof(RecipeValidator)));
+        }
 
-            RuleFor(c => c.FileExtension).Empty().When(c => c.DataDraft == null || c.DataDraft == "")
-                .WithMessage(string.Format(Resource.RecipeValidator_Error_DataDraftIsNull, nameof(RecipeValidator)));
+        public void ValidatorFileExtension()
+        {
+            //RuleFor(c => c.FileExtension).Empty().When(c => c.DataDraft == null || c.DataDraft == "")
+                //.WithMessage(string.Format(Resource.RecipeValidator_Error_DataDraftIsNull, nameof(RecipeValidator)));
 
-            RuleFor(c => c.DataDraft).Empty().When(c => c.FileExtension == null || c.FileExtension == "")
-                .WithMessage(string.Format(Resource.RecipeValidator_Error_FileExtensionIsNull, nameof(RecipeValidator)));
+            //RuleFor(c => c.DataDraft).Empty().When(c => c.FileExtension == null || c.FileExtension == "")
+                //.WithMessage(string.Format(Resource.RecipeValidator_Error_FileExtensionIsNull, nameof(RecipeValidator)));
+        }
 
+        public void ValidatorDataDraft(MethodRecipeValidator method)
+        {
             When(c => c.FileExtension == "Cel" && 
             !string.IsNullOrWhiteSpace(c.DataDraft), () =>
             {

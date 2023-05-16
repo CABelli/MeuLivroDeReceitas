@@ -169,6 +169,15 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.Infrastructure {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Senha de confirmação diferente da senha nova..
+        /// </summary>
+        public static string ValidatorPasswordRepeatNewPassword_error_different {
+            get {
+                return ResourceManager.GetString("ValidatorPasswordRepeatNewPassword_error_different", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Número do telefone celular fora do padrão. Método:{0}. Número:{1}.
         /// </summary>
         public static string ValidatorPhoneNumber_Error_NonStandardCellNumber {

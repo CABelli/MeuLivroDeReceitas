@@ -44,6 +44,7 @@ namespace MeuLivroDeReceitas.Infrastructure.IdentityValidator
         public void ValidatorPasswordChangeByForgot()
         {
             ValidatorPassword();
+            ValidatorPasswordRepeatNewPassword();
             ValidatorRolesName();
         }
 
@@ -116,6 +117,11 @@ namespace MeuLivroDeReceitas.Infrastructure.IdentityValidator
             });
         }
 
+        public void ValidatorPasswordRepeatNewPassword()
+        {
+            RuleFor(c => c.Password == c.RepeatNewPassword).Equal(true).WithMessage(Resource.ValidatorPasswordRepeatNewPassword_error_different);
+        }
+
         public void ValidatorRolesName()
         {
             RuleForEach(c => c.RolesName).NotEmpty().WithMessage(string.Format(Resource.ValidatorRolesName_Error_Empty));
@@ -123,10 +129,9 @@ namespace MeuLivroDeReceitas.Infrastructure.IdentityValidator
             RuleForEach(c => c.RolesName).Equal("Admin").WithMessage(string.Format(Resource.ValidatorRolesName_Error_NotAdmin));           
 
             RuleForEach(x => x.RolesName)
-           .Equal("Admin")
-           .WithMessage((rolesName, context) => string.Format(Resource.ValidatorRolesName_Error_NotAdminList, rolesName.RolesName.FirstOrDefault()));
-           //.WithMessage((rolesName, context) => $"001 - RolesName {rolesName.RolesName.FirstOrDefault()} Somente Admin pode trocar senha");
-
+            .Equal("Admin")
+            .WithMessage((rolesName, context) => string.Format(Resource.ValidatorRolesName_Error_NotAdminList, rolesName.RolesName.FirstOrDefault()));
+           
             RuleForEach(x => x.RolesName)
             .ChildRules(rolesName =>
             {

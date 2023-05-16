@@ -8,7 +8,9 @@
 
         public string? Email { get; set; }
 
-        public string? Password { get; set; }        
+        public string? Password { get; set; }
+
+        public string? RepeatNewPassword { get; set; }
 
         public List<string>? RolesName { get; set; }
     }

@@ -38,9 +38,8 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
                 throw new ErrosDeValidacaoException(resultadAddUserVal.Errors.Select(c => c.ErrorMessage).ToList());
 
             var result = await _signInManager.PasswordSignInAsync(loginDto.UserName, loginDto.Password, false, lockoutOnFailure: false);
-            if (!result.Succeeded)
-                //  Acesso invalido, login ou password
-                throw new ErrosDeValidacaoException(new List<string>() { Resource.Authenticate_Error_NotFound });
+            if (!result.Succeeded)              
+                throw new ErrosDeValidacaoException(new List<string>() { Resource.Authenticate_Error_NotFound }); // Acesso invalido, login ou password
 
             return _tokenService.GenerateToken(loginDto);
         }
@@ -98,12 +97,9 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
             var rolesName = await _userManager.GetRolesAsync(appUserView);
 
             var validator = new UserValidator(MethodUserValidator.PasswordChangeByForgot);
-            var resultadAddUserVal = validator.Validate(new UserValidatorDto { Password = passwordChangeDto.NewPassword , RolesName = rolesName.ToList() });
+            var resultadAddUserVal = validator.Validate(new UserValidatorDto { Password = passwordChangeDto.NewPassword, RepeatNewPassword = passwordChangeDto.RepeatNewPassword , RolesName = rolesName.ToList() });
             if (!resultadAddUserVal.IsValid)
-                throw new ErrosDeValidacaoException(resultadAddUserVal.Errors.Select(c => c.ErrorMessage).ToList());
-
-            if (passwordChangeDto.NewPassword != passwordChangeDto.RepeatNewPassword)
-                throw new ErrosDeValidacaoException(new List<string>() { "Senha de confirmação diferente da senha nova" });            
+                throw new ErrosDeValidacaoException(resultadAddUserVal.Errors.Select(c => c.ErrorMessage).ToList());          
 
             var appUser = await _userManager.FindByEmailAsync(passwordChangeDto.Email);
             if (appUser == null) throw new ErrosDeValidacaoException(new List<string>() { Resource.PasswordChangeByForgot_Error_UserNotFound });

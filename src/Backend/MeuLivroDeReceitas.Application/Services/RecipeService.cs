@@ -1,5 +1,6 @@
 ﻿using MeuLivroDeReceitas.Application.Interfaces;
 using MeuLivroDeReceitas.CrossCutting.Dto.Recipess;
+using MeuLivroDeReceitas.CrossCutting.EnumClass;
 using MeuLivroDeReceitas.CrossCutting.Extensions;
 using MeuLivroDeReceitas.CrossCutting.Resources.Application;
 using MeuLivroDeReceitas.Domain.Account;
@@ -11,7 +12,6 @@ using MeuLivroDeReceitas.Exceptions.ExceptionsBase;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System.Text;
 
 namespace MeuLivroDeReceitas.Application.Services
 {
@@ -46,7 +46,7 @@ namespace MeuLivroDeReceitas.Application.Services
 
         public async Task<RecipeResponseDTO> GetRecipeById(Guid id)
         {
-            GenerateLogAudit(nameof(GetRecipeById) + " , key: " + id);
+            await GenerateLogAudit(nameof(GetRecipeById) + " , key: " + id);
             var recipe = await _recipeRepository.GetById(id);
             if (recipe == null)
                 throw new ErrorsNotFoundException(new List<string>() { string.Format(Resource.GetRecipeById_Info_RecipeNotFound, nameof(GetRecipeById), id) });
@@ -82,38 +82,36 @@ namespace MeuLivroDeReceitas.Application.Services
             };
         }
 
-        public async Task AddRecipe(RecipeDTO recipeDTO)
+        public async Task AddRecipe(AddRecipeDTO addRecipeDTO)
         {
-            await GenerateLogAudit(nameof(AddRecipe) + " , key: " + recipeDTO.Title);
+            await GenerateLogAudit(nameof(AddRecipe) + " , key: " + addRecipeDTO.Title);
             
-            await ValidateRecipeDTO(recipeDTO);
+            await ValidateRecipeDTO(addRecipeDTO);
 
             var recipe = new Recipe()
             {
-                Title = recipeDTO.Title,
-                PreparationMode = recipeDTO.PreparationMode,
-                PreparationTime = recipeDTO.PreparationTime,
-                Category = recipeDTO.Category,
-                FileExtension = recipeDTO.FileExtension
+                Title = addRecipeDTO.Title,
+                PreparationMode = addRecipeDTO.PreparationMode,
+                PreparationTime = addRecipeDTO.PreparationTime,
+                Category = addRecipeDTO.CategoryRecipe,
+                FileExtension = ""
             };
-
-            if (recipeDTO.FileExtension == "Cel") recipe.DataDraft = Encoding.ASCII.GetBytes(recipeDTO.DataDraft);
 
             _recipeRepository.Create(recipe);
 
             await _unitOfWork.CommitAsync();
         }
 
-        public async Task UpdateRecipeDraftString(RecipeDTO recipeDTO)
+        public async Task UpdateRecipeDraftString(ModifyRecipeDTO modifyRecipeDTO)
         {
-            await GenerateLogAudit(nameof(UpdateRecipeDraftString) + " , key: " + recipeDTO.Title);
-            var recipe = await ValidateRecipeModification(recipeDTO);
+            await GenerateLogAudit(nameof(UpdateRecipeDraftString) + " , key: " + modifyRecipeDTO.Title);
+            var recipe = await ValidateRecipeModification(modifyRecipeDTO);
 
-            recipe.PreparationTime = recipeDTO.PreparationTime == 0 ? recipe.PreparationTime : recipeDTO.PreparationTime;
-            recipe.PreparationMode = recipeDTO.PreparationMode == null ? recipe.PreparationMode : recipeDTO.PreparationMode;
-            recipe.Category = recipeDTO.Category;
-            recipe.FileExtension = recipeDTO.FileExtension;
-            if (recipeDTO.FileExtension != null) recipe.DataDraft = Encoding.ASCII.GetBytes(recipeDTO.DataDraft);
+            recipe.PreparationTime = modifyRecipeDTO.PreparationTime == 0 ? recipe.PreparationTime : modifyRecipeDTO.PreparationTime;
+            recipe.PreparationMode = modifyRecipeDTO.PreparationMode == null ? recipe.PreparationMode : modifyRecipeDTO.PreparationMode;         
+            recipe.Category = modifyRecipeDTO.Category;
+            recipe.FileExtension = modifyRecipeDTO.FileExtension;
+            if (string.IsNullOrEmpty(modifyRecipeDTO.FileExtension)) recipe.DataDraft = null;
 
             _recipeRepository.Update(recipe);
             await _unitOfWork.CommitAsync();
@@ -188,29 +186,42 @@ namespace MeuLivroDeReceitas.Application.Services
 
         private RecipeResponseDTO RecipeResult(Recipe recipe)
         {
+            //var NameCategory = recipe.Category.GetDescriptionResources(),
+            //var x = Category(recipe.Category);
+            //YourEnum foo = (YourEnum)yourInt;
+
+            Category category = (Category)recipe.Category;
+            string nameCategory = category.GetDescriptionResources();
+
             var recipeResponseDTO = new RecipeResponseDTO()
             {
                 Id = recipe.Id,
                 Title = recipe.Title,
                 Category = recipe.Category,
-                NameCategoty = recipe.Category.GetDescriptionResources(),
+                NameCategory = nameCategory,
                 PreparationMode = recipe.PreparationMode,
                 PreparationTime = recipe.PreparationTime,
-                DataDraftBool = recipe.FileExtension.EmptyOrFilledText(),
-                FileExtension = recipe.FileExtension,
-                DataDraftCel = recipe.FileExtension == "Cel" ? Encoding.ASCII.GetString(recipe.DataDraft) : null                
+                FileExtension = recipe.FileExtension                
             };
             return recipeResponseDTO;
         }
 
-        private async Task ValidateRecipeDTO(RecipeDTO recipeDTO)
+        private async Task ValidateRecipeDTO(AddRecipeDTO addRecipeDTO)
         {
-            var recipe = await _recipeRepository.WhereFirstAsync(x => x.Title == recipeDTO.Title);
+            var validator = new RecipeValidator(MethodRecipeValidator.AddRecipe);
+
+            var resultado = validator.Validate(new RecipeDTO() { 
+                Title = addRecipeDTO.Title,
+                CategoryRecipe =  addRecipeDTO.CategoryRecipe, 
+                PreparationMode = addRecipeDTO.PreparationMode, 
+                PreparationTime = addRecipeDTO.PreparationTime });
+
+            if (!resultado.IsValid)
+                throw new ErrosDeValidacaoException(resultado.Errors.Select(c => c.ErrorMessage).ToList());
+
+            var recipe = await _recipeRepository.WhereFirstAsync(x => x.Title == addRecipeDTO.Title);
             if (recipe != null)
                 throw new ErrosDeValidacaoException(new List<string>() { Resource.ValidarRecipeDTO_Info_RecipeAlreadyExists });
-
-            var validator = new RecipeValidator(1, recipeDTO.Title.Length);
-            var resultado = validator.Validate(recipeDTO);
 
             ///var recipies = await _recipeRepository.WhereAsync(x => x.Title == recipeDTO.Title);
             ///if (recipies.Count() > 0)            
@@ -218,22 +229,26 @@ namespace MeuLivroDeReceitas.Application.Services
 
             ///int a = 0, b = 0;
             ///a = a / b;
-
-            if (!resultado.IsValid)
-                throw new ErrosDeValidacaoException(resultado.Errors.Select(c => c.ErrorMessage).ToList());
         }
 
-        private async Task<Recipe> ValidateRecipeModification(RecipeDTO recipeDTO)
+        private async Task<Recipe> ValidateRecipeModification(ModifyRecipeDTO modifyRecipeDTO)
         {
-            var recipe = await _recipeRepository.WhereFirstAsync(x => x.Title == recipeDTO.Title);
-            if (recipe == null)
-                throw new ErrorsNotFoundException(new List<string>() { string.Format(Resource.ValidateRecipeModification_Info_RecipeNotFound, nameof(GetRecipiesTitle), recipeDTO.Title) });
-
-            var validator = new RecipeValidator(2, recipeDTO.Title.Length);
-            var resultado = validator.Validate(recipeDTO);
+            var validator = new RecipeValidator(MethodRecipeValidator.ModifyRecipe);
+            var resultado = validator.Validate(new RecipeDTO()
+            {
+                Title = modifyRecipeDTO.Title,
+                CategoryRecipe = modifyRecipeDTO.Category,
+                PreparationMode = modifyRecipeDTO.PreparationMode,
+                PreparationTime = modifyRecipeDTO.PreparationTime,
+                FileExtension = modifyRecipeDTO.FileExtension
+            });
 
             if (!resultado.IsValid)
                 throw new ErrosDeValidacaoException(resultado.Errors.Select(c => c.ErrorMessage).ToList());
+
+            var recipe = await _recipeRepository.WhereFirstAsync(x => x.Title == modifyRecipeDTO.Title);
+            if (recipe == null)
+                throw new ErrorsNotFoundException(new List<string>() { string.Format(Resource.ValidateRecipeModification_Info_RecipeNotFound, nameof(GetRecipiesTitle), modifyRecipeDTO.Title) });
 
             return recipe;
         }

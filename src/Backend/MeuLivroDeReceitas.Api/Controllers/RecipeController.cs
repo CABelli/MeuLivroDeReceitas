@@ -41,18 +41,18 @@ namespace MeuLivroDeReceitas.Api.Controllers
         [HttpPost]
         [Route("post-add")]
         //[ProducesResponseType(typeof(RecipeResponseDTO), StatusCodes.Status201Created)]
-        public async Task<ActionResult> IncludeRecipe([FromBody] RecipeDTO recipeDTO)
+        public async Task<ActionResult> IncludeRecipe([FromBody] AddRecipeDTO addRecipeDTO)
         {
-            await _recipeService.AddRecipe(recipeDTO);
+            await _recipeService.AddRecipe(addRecipeDTO);
             return CreatedAtAction(nameof(IncludeRecipe), Resource.IncludeRecipe_Return_Successfully);
         }
 
         [HttpPut]
         [Route("put-binaryfilestring")]
-        public async Task<ActionResult> PutString([FromBody] RecipeDTO recipeDTO)
+        public async Task<ActionResult> PutString([FromBody] ModifyRecipeDTO modifyRecipeDTO)
         {
-            await _recipeService.UpdateRecipeDraftString(recipeDTO);
-            return Ok(recipeDTO);
+            await _recipeService.UpdateRecipeDraftString(modifyRecipeDTO);
+            return Ok(modifyRecipeDTO);
         }
 
         [HttpPut]

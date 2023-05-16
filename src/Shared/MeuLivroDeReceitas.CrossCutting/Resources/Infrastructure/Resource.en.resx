@@ -147,6 +147,9 @@
   <data name="ValidatorEmail_Error_EmailIsRequired" xml:space="preserve">
     <value>Email is required.</value>
   </data>
+  <data name="ValidatorPasswordRepeatNewPassword_error_different" xml:space="preserve">
+    <value>Confirmation password different from new password.</value>
+  </data>
   <data name="ValidatorPassword_Error_CharactersPassword" xml:space="preserve">
     <value>Password characters cannot be {0}, must be between {1} and {2}.</value>
   </data>
