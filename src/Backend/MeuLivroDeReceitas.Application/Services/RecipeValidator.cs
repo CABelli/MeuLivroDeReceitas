@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using MeuLivroDeReceitas.CrossCutting.Dto.Recipess;
 using MeuLivroDeReceitas.CrossCutting.EnumClass;
-using MeuLivroDeReceitas.CrossCutting.Extensions;
 using MeuLivroDeReceitas.CrossCutting.Resources.Application;
 
 namespace MeuLivroDeReceitas.Application.Services
@@ -75,22 +74,6 @@ namespace MeuLivroDeReceitas.Application.Services
 
             //RuleFor(c => c.DataDraft).Empty().When(c => c.FileExtension == null || c.FileExtension == "")
                 //.WithMessage(string.Format(Resource.RecipeValidator_Error_FileExtensionIsNull, nameof(RecipeValidator)));
-        }
-
-        public void ValidatorDataDraft(MethodRecipeValidator method)
-        {
-            When(c => c.FileExtension == "Cel" && 
-            !string.IsNullOrWhiteSpace(c.DataDraft), () =>
-            {
-                RuleFor(c => c.DataDraft).Custom((cellNumber, context) =>
-                {
-                    var returnValidatorPhone = cellNumber.ValidatorPhone();
-                    if (!returnValidatorPhone)
-                        context.AddFailure(
-                            new FluentValidation.Results.ValidationFailure(nameof(cellNumber),
-                            string.Format(Resource.RecipeValidator_Error_NonStandardCellNumber, nameof(RecipeValidator), cellNumber)));
-                });
-            });
         }
     }
 }

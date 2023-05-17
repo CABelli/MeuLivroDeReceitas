@@ -48,10 +48,10 @@ namespace MeuLivroDeReceitas.Api.Controllers
         }
 
         [HttpPut]
-        [Route("put-binaryfilestring")]
-        public async Task<ActionResult> PutString([FromBody] ModifyRecipeDTO modifyRecipeDTO)
+        [Route("put-update")]
+        public async Task<ActionResult> AjustRecipe([FromBody] ModifyRecipeDTO modifyRecipeDTO)
         {
-            await _recipeService.UpdateRecipeDraftString(modifyRecipeDTO);
+            await _recipeService.UpdateRecipe(modifyRecipeDTO);
             return Ok(modifyRecipeDTO);
         }
 

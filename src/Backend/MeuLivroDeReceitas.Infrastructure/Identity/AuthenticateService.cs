@@ -113,11 +113,6 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
 
             return result.Succeeded;
         }
-
-        public async Task Logout()
-        {
-            await _signInManager.SignOutAsync();
-        }
         
         public async Task<ApplicationUserDto> RetrieveUserByIdentity()
         {
@@ -129,6 +124,13 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
                 PhoneNumber = appUser.PhoneNumber
             };
         }
+
+        public async Task Logout()
+        {
+            await _signInManager.SignOutAsync();
+        }
+
+        #region Private
 
         private string ReadEmailToken()
         {
@@ -151,6 +153,8 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
                 SecurityStamp = Guid.NewGuid().ToString()
             };
         }
+
+        #endregion
     }
 }
 

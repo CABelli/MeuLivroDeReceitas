@@ -23,11 +23,11 @@ namespace MeuLivroDeReceitas.Api.Controllers
         [HttpPost("LoginUser")]
         public async Task<ActionResult<UserTokenDto>> Login([FromBody] LoginDto loginDto) 
             => Ok(await _authenticate.Authenticate(loginDto));
-        
+
         //[Authorize(Roles = "Admin")]
         //[AllowAnonymous]
-        [HttpPost("UserCreate")]
         //[ApiExplorerSettings(IgnoreApi = true)]  // o endpoint fica ignorado e nao aparece
+        [HttpPost("UserCreate")]
         [Authorize]
         public async Task<ActionResult> CreateUser([FromBody] UserDto userDto) 
             => Ok(await _authenticate.AddUser(userDto));

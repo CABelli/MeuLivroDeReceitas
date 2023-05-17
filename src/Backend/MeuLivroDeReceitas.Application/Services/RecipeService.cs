@@ -86,7 +86,7 @@ namespace MeuLivroDeReceitas.Application.Services
         {
             await GenerateLogAudit(nameof(AddRecipe) + " , key: " + addRecipeDTO.Title);
             
-            await ValidateRecipeDTO(addRecipeDTO);
+            await ValidateAddRecipe(addRecipeDTO);
 
             var recipe = new Recipe()
             {
@@ -102,9 +102,10 @@ namespace MeuLivroDeReceitas.Application.Services
             await _unitOfWork.CommitAsync();
         }
 
-        public async Task UpdateRecipeDraftString(ModifyRecipeDTO modifyRecipeDTO)
+        public async Task UpdateRecipe(ModifyRecipeDTO modifyRecipeDTO)
         {
-            await GenerateLogAudit(nameof(UpdateRecipeDraftString) + " , key: " + modifyRecipeDTO.Title);
+            await GenerateLogAudit(nameof(UpdateRecipe) + " , key: " + modifyRecipeDTO.Title);
+
             var recipe = await ValidateRecipeModification(modifyRecipeDTO);
 
             recipe.PreparationTime = modifyRecipeDTO.PreparationTime == 0 ? recipe.PreparationTime : modifyRecipeDTO.PreparationTime;
@@ -206,7 +207,7 @@ namespace MeuLivroDeReceitas.Application.Services
             return recipeResponseDTO;
         }
 
-        private async Task ValidateRecipeDTO(AddRecipeDTO addRecipeDTO)
+        private async Task ValidateAddRecipe(AddRecipeDTO addRecipeDTO)
         {
             var validator = new RecipeValidator(MethodRecipeValidator.AddRecipe);
 
