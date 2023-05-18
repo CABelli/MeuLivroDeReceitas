@@ -69,6 +69,9 @@ namespace MeuLivroDeReceitas.Application.Services
 
         public void ValidatorFileExtension()
         {
+            // se houver atual  1) podera chegar nula ou igual 2) se mudar para nula deve-se anula a imagem 
+            // se atual é nula a nova deve ser nula
+
             //RuleFor(c => c.FileExtension).Empty().When(c => c.DataDraft == null || c.DataDraft == "")
                 //.WithMessage(string.Format(Resource.RecipeValidator_Error_DataDraftIsNull, nameof(RecipeValidator)));
 

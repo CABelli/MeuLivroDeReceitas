@@ -111,10 +111,16 @@ namespace MeuLivroDeReceitas.Application.Services
             recipe.PreparationTime = modifyRecipeDTO.PreparationTime == 0 ? recipe.PreparationTime : modifyRecipeDTO.PreparationTime;
             recipe.PreparationMode = modifyRecipeDTO.PreparationMode == null ? recipe.PreparationMode : modifyRecipeDTO.PreparationMode;         
             recipe.Category = modifyRecipeDTO.Category;
+
+            // se houver atual  1) podera chegar nula ou igual 2) se mudar para nula deve-se anula a imagem 
+
+            // Se atual é diferente de nula e a nova é nula 1) colocar null na extensão e no rascunho 
+
             recipe.FileExtension = modifyRecipeDTO.FileExtension;
             if (string.IsNullOrEmpty(modifyRecipeDTO.FileExtension)) recipe.DataDraft = null;
 
             _recipeRepository.Update(recipe);
+
             await _unitOfWork.CommitAsync();
         }
                
@@ -187,10 +193,6 @@ namespace MeuLivroDeReceitas.Application.Services
 
         private RecipeResponseDTO RecipeResult(Recipe recipe)
         {
-            //var NameCategory = recipe.Category.GetDescriptionResources(),
-            //var x = Category(recipe.Category);
-            //YourEnum foo = (YourEnum)yourInt;
-
             Category category = (Category)recipe.Category;
             string nameCategory = category.GetDescriptionResources();
 
@@ -235,14 +237,12 @@ namespace MeuLivroDeReceitas.Application.Services
         private async Task<Recipe> ValidateRecipeModification(ModifyRecipeDTO modifyRecipeDTO)
         {
             var validator = new RecipeValidator(MethodRecipeValidator.ModifyRecipe);
-            var resultado = validator.Validate(new RecipeDTO()
-            {
+            var resultado = validator.Validate(new RecipeDTO()  {
                 Title = modifyRecipeDTO.Title,
                 CategoryRecipe = modifyRecipeDTO.Category,
                 PreparationMode = modifyRecipeDTO.PreparationMode,
                 PreparationTime = modifyRecipeDTO.PreparationTime,
-                FileExtension = modifyRecipeDTO.FileExtension
-            });
+                FileExtension = modifyRecipeDTO.FileExtension  });
 
             if (!resultado.IsValid)
                 throw new ErrosDeValidacaoException(resultado.Errors.Select(c => c.ErrorMessage).ToList());
