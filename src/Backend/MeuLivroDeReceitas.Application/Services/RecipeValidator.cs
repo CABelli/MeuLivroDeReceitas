@@ -24,7 +24,7 @@ namespace MeuLivroDeReceitas.Application.Services
             ValidatorTitle();
             ValidatorPreparationMode();
             ValidatorPreparationTime();
-            ValidatorPreparationCategory();
+            ValidatorCategory();
         }
 
         public void ValidatorModifyRecipe()
@@ -32,7 +32,7 @@ namespace MeuLivroDeReceitas.Application.Services
             ValidatorTitle();
             ValidatorPreparationMode();
             ValidatorPreparationTime();
-            ValidatorPreparationCategory();
+            ValidatorCategory();
             ValidatorFileExtension();
         }
 
@@ -61,22 +61,51 @@ namespace MeuLivroDeReceitas.Application.Services
                 .WithMessage(string.Format(Resource.RecipeValidator_Error_UnfilledPreparationTime, nameof(RecipeValidator)));
         }
 
-        public void ValidatorPreparationCategory()
+        public void ValidatorCategory()
         {
-            RuleFor(c => c.CategoryRecipe).NotEmpty()
-                .WithMessage(string.Format(Resource.RecipeValidator_Error_UnfilledCategory, nameof(RecipeValidator)));
+            RuleFor(recipeDTO => recipeDTO).Custom((recipeDTO, context) =>
+            {
+                if (!Enum.IsDefined(typeof(Category), recipeDTO.CategoryRecipe))                
+                    context.AddFailure(new FluentValidation.Results.ValidationFailure(
+                                nameof(recipeDTO.CategoryRecipe),
+                                string.Format(Resource.ValidatorCategory_Error, recipeDTO.CategoryRecipe, nameof(ValidatorCategory) )));           
+            });
         }
 
         public void ValidatorFileExtension()
         {
-            // se houver atual  1) podera chegar nula ou igual 2) se mudar para nula deve-se anula a imagem 
-            // se atual é nula a nova deve ser nula
+            // RecipeValidator_Error_DataDraftIsNull
+            // RecipeValidator_Error_FileExtensionIsNull
 
-            //RuleFor(c => c.FileExtension).Empty().When(c => c.DataDraft == null || c.DataDraft == "")
-                //.WithMessage(string.Format(Resource.RecipeValidator_Error_DataDraftIsNull, nameof(RecipeValidator)));
+            RuleFor(c => c).Custom((custom,  context) =>
+                { 
+                    if (custom.FileExtension != custom.OldFileExtension)
+                    {
+                        if (custom.OldFileExtension == null)
+                        {
+                            context.AddFailure(new FluentValidation.Results.ValidationFailure(
+                                nameof(custom.FileExtension), "Extensão nova invalida porque a receita não contem imagem"));
+                            
+                            // Receita sem imagem não pode conter extensão de arquivo
+                            // Recipe without image cannot contain file extension
 
-            //RuleFor(c => c.DataDraft).Empty().When(c => c.FileExtension == null || c.FileExtension == "")
-                //.WithMessage(string.Format(Resource.RecipeValidator_Error_FileExtensionIsNull, nameof(RecipeValidator)));
+                            // ValidatorFileExtension_error_ExtensionWithoutImagem
+                        }
+                        else
+                        {
+                            if (custom.FileExtension != null)
+                            {
+                                context.AddFailure(new FluentValidation.Results.ValidationFailure(
+                                    nameof(custom.FileExtension), 
+                                    string.Format($"Extensão nova: {custom.FileExtension} não pode ser alterada, atual: {custom.OldFileExtension}")));
+
+                                // "Extensão: {0} não pode ser alterada, já existe a extensão: {1}
+
+                                // ValidatorFileExtension_error_ExtensionNotUpdate
+                            }
+                        }
+                    }
+            });
         }
     }
 }

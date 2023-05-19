@@ -147,9 +147,6 @@
   <data name="RecipeValidator_Error_NonStandardCellNumber" xml:space="preserve">
     <value>Número do telefone celular fora do padrão. Método:{0}. Número:{1}</value>
   </data>
-  <data name="RecipeValidator_Error_UnfilledCategory" xml:space="preserve">
-    <value>Categoria não preenchida. Método:{0}.</value>
-  </data>
   <data name="RecipeValidator_Error_UnfilledPreparationMode" xml:space="preserve">
     <value>Modo de preparo não preenchido. Método:{0}.</value>
   </data>
@@ -179,6 +176,9 @@
   </data>
   <data name="ValidateRecipeModification_Info_RecipeNotFound" xml:space="preserve">
     <value>Receita nao encontrada. Metodo {0}. Titulo {1}</value>
+  </data>
+  <data name="ValidatorCategory_Error" xml:space="preserve">
+    <value>Categoria {0} inexistente. Método:{1}.</value>
   </data>
   <data name="ValidatorQuantity_Error_IsRequired" xml:space="preserve">
     <value>Quantity  não preenchido.</value>

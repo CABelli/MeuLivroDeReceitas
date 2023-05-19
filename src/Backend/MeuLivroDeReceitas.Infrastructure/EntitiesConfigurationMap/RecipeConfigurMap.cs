@@ -14,7 +14,7 @@ namespace MeuLivroDeReceitas.Infrastructure.EntitiesConfigurationMap
             builder.Property(p => p.Category).IsRequired();
             builder.Property(p => p.PreparationMode).HasMaxLength(500).IsRequired();
             builder.Property(p => p.PreparationTime).IsRequired();
-            builder.Property(p => p.FileExtension).IsRequired();
+            builder.Property(p => p.FileExtension);
 
             builder.Property(p => p.DataDraft).IsRequired(false);
         }

@@ -151,15 +151,6 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.Application {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categoria não preenchida. Método:{0}..
-        /// </summary>
-        public static string RecipeValidator_Error_UnfilledCategory {
-            get {
-                return ResourceManager.GetString("RecipeValidator_Error_UnfilledCategory", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Modo de preparo não preenchido. Método:{0}..
         /// </summary>
         public static string RecipeValidator_Error_UnfilledPreparationMode {
@@ -246,6 +237,15 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.Application {
         public static string ValidateRecipeModification_Info_RecipeNotFound {
             get {
                 return ResourceManager.GetString("ValidateRecipeModification_Info_RecipeNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Categoria {0} inexistente. Método:{1}..
+        /// </summary>
+        public static string ValidatorCategory_Error {
+            get {
+                return ResourceManager.GetString("ValidatorCategory_Error", resourceCulture);
             }
         }
         

@@ -17,5 +17,7 @@ namespace MeuLivroDeReceitas.CrossCutting.Dto.Recipess
         public string? DataDraft { get; set; }
 
         public Category CategoryRecipe { get; set; }
+
+        public string? OldFileExtension { get; set; }
     }
 }

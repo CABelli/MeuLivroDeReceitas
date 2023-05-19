@@ -93,8 +93,7 @@ namespace MeuLivroDeReceitas.Application.Services
                 Title = addRecipeDTO.Title,
                 PreparationMode = addRecipeDTO.PreparationMode,
                 PreparationTime = addRecipeDTO.PreparationTime,
-                Category = addRecipeDTO.CategoryRecipe,
-                FileExtension = ""
+                Category = addRecipeDTO.CategoryRecipe
             };
 
             _recipeRepository.Create(recipe);
@@ -116,8 +115,12 @@ namespace MeuLivroDeReceitas.Application.Services
 
             // Se atual é diferente de nula e a nova é nula 1) colocar null na extensão e no rascunho 
 
-            recipe.FileExtension = modifyRecipeDTO.FileExtension;
-            if (string.IsNullOrEmpty(modifyRecipeDTO.FileExtension)) recipe.DataDraft = null;
+            if (string.IsNullOrEmpty(modifyRecipeDTO.FileExtension) &&
+                !string.IsNullOrEmpty(recipe.FileExtension))
+            {
+                recipe.DataDraft = null;
+                recipe.FileExtension = null;
+            }
 
             _recipeRepository.Update(recipe);
 
@@ -192,16 +195,13 @@ namespace MeuLivroDeReceitas.Application.Services
         }
 
         private RecipeResponseDTO RecipeResult(Recipe recipe)
-        {
-            Category category = (Category)recipe.Category;
-            string nameCategory = category.GetDescriptionResources();
-
+        {            
             var recipeResponseDTO = new RecipeResponseDTO()
             {
                 Id = recipe.Id,
                 Title = recipe.Title,
                 Category = recipe.Category,
-                NameCategory = nameCategory,
+                NameCategory = recipe.Category.GetDescriptionResources(),
                 PreparationMode = recipe.PreparationMode,
                 PreparationTime = recipe.PreparationTime,
                 FileExtension = recipe.FileExtension                

@@ -130,7 +130,8 @@ namespace MeuLivroDeReceitas.Infrastructure.IdentityValidator
 
             RuleForEach(x => x.RolesName)
             .Equal("Admin")
-            .WithMessage((rolesName, context) => string.Format(Resource.ValidatorRolesName_Error_NotAdminList, rolesName.RolesName.FirstOrDefault()));
+            .WithMessage((rolesName, context) => string.Format(Resource.ValidatorRolesName_Error_NotAdminList, 
+                                                                rolesName.RolesName.FirstOrDefault()));
            
             RuleForEach(x => x.RolesName)
             .ChildRules(rolesName =>
@@ -148,8 +149,8 @@ namespace MeuLivroDeReceitas.Infrastructure.IdentityValidator
                 RuleForEach(c => c.RolesName).Custom((rolesName, context) =>
                 {
                     var text = string.Format(Resource.ValidatorRolesName_Error_NotAdminList, rolesName);
-                    context.AddFailure(new FluentValidation.Results.ValidationFailure(nameof(rolesName), string.Format(Resource.ValidatorRolesName_Error_NotAdminList, rolesName)));
-                    //nameof(rolesName), string.Format($"003 - RolesName {rolesName} Somente Admin pode trocar senha")));
+                    context.AddFailure(new FluentValidation.Results.ValidationFailure(nameof(rolesName), 
+                                        string.Format(Resource.ValidatorRolesName_Error_NotAdminList, rolesName)));
                 });
             });
         }
