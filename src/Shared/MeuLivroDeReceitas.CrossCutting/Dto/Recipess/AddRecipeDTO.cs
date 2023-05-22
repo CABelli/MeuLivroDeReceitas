@@ -8,7 +8,7 @@ namespace MeuLivroDeReceitas.CrossCutting.Dto.Recipess
 
         public string? PreparationMode { get; set; }
 
-        public int PreparationTime { get; set; }
+        public int PreparationTimeMinute { get; set; }
 
         public ECategory Category { get; set; }
     }

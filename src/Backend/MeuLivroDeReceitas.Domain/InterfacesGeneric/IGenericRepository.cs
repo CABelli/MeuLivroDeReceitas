@@ -11,13 +11,13 @@ namespace MeuLivroDeReceitas.Domain.InterfacesGeneric
 
         void Delete(T entity);
 
-        Task<List<T>> GetAll();
+        Task<List<T>> GetAllAsync();
 
         Task<List<T>> WhereAsync(Expression<Func<T, bool>> expression);
 
         Task<T> WhereFirstAsync(Expression<Func<T, bool>> expression);
 
-        Task<T> GetById(Guid id);
+        Task<T> GetByIdAsync(Guid id);
 
         //    void Create(List<T> entities);
         //    void UpdateRange(List<T> entities);

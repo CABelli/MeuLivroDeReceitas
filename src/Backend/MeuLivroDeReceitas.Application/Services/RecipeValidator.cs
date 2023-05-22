@@ -7,8 +7,10 @@ namespace MeuLivroDeReceitas.Application.Services
 {
     public class RecipeValidator : AbstractValidator<RecipeDTO>
     {
-        public int MinimumNumberOfCharactersInTitle = 5;
-        public int MaximumNumberOfCharactersInTitle = 20;
+        private int MinimumNumberOfCharactersInTitle = 5;
+        private int MaximumNumberOfCharactersInTitle = 20;
+        private int MinimumPreparationTimeMinutes = 3;
+        private int MaximumPreparationTimeMinutes = 300;
 
         public RecipeValidator(EMethodRecipeValidator method)
         {
@@ -57,8 +59,13 @@ namespace MeuLivroDeReceitas.Application.Services
 
         public void ValidatorPreparationTime()
         {
-            RuleFor(c => c.PreparationTime).NotEmpty()
+            RuleFor(c => c.PreparationTimeMinute).NotEmpty()
                 .WithMessage(string.Format(Resource.RecipeValidator_Error_UnfilledPreparationTime, nameof(ValidatorPreparationTime)));
+
+            RuleFor(RecTile => RecTile.PreparationTimeMinute).InclusiveBetween(MinimumPreparationTimeMinutes, MaximumPreparationTimeMinutes)
+                .WithMessage(RecTile => string.Format(
+                    $"Tempo de preparo deve ser entre {MinimumPreparationTimeMinutes} e {MaximumPreparationTimeMinutes} minutos !!!"
+                ));
         }
 
         public void ValidatorCategory()

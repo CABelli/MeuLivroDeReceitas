@@ -37,7 +37,7 @@ namespace MeuLivroDeReceitas.Application.Services
         {
             await GenerateLogAudit(nameof(GetRecipies));
             var listRecipeResponseDTO = new List<RecipeResponseDTO>();
-            var recipies = await _recipeRepository.GetAll();
+            var recipies = await _recipeRepository.GetAllAsync();
             if (recipies != null)
                 recipies.OrderBy(x => x.Title).ToList().ForEach(userList => listRecipeResponseDTO.Add(RecipeResult(userList)));
 
@@ -47,7 +47,7 @@ namespace MeuLivroDeReceitas.Application.Services
         public async Task<RecipeResponseDTO> GetRecipeById(Guid id)
         {
             await GenerateLogAudit(nameof(GetRecipeById) + " , key: " + id);
-            var recipe = await _recipeRepository.GetById(id);
+            var recipe = await _recipeRepository.GetByIdAsync(id);
             if (recipe == null)
                 throw new ErrorsNotFoundException(new List<string>() { string.Format(Resource.GetRecipeById_Info_RecipeNotFound, nameof(GetRecipeById), id) });
 
@@ -92,7 +92,7 @@ namespace MeuLivroDeReceitas.Application.Services
             {
                 Title = addRecipeDTO.Title,
                 PreparationMode = addRecipeDTO.PreparationMode,
-                PreparationTime = addRecipeDTO.PreparationTime,
+                PreparationTime = addRecipeDTO.PreparationTimeMinute,
                 Category = addRecipeDTO.Category
             };
 
@@ -107,8 +107,8 @@ namespace MeuLivroDeReceitas.Application.Services
 
             var recipe = await ValidateRecipeModification(modifyRecipeDTO);
 
-            recipe.PreparationTime = modifyRecipeDTO.PreparationTime == 0 ? recipe.PreparationTime : modifyRecipeDTO.PreparationTime;
-            recipe.PreparationMode = modifyRecipeDTO.PreparationMode == null ? recipe.PreparationMode : modifyRecipeDTO.PreparationMode;         
+            recipe.PreparationTime = modifyRecipeDTO.PreparationTimeMinute;
+            recipe.PreparationMode = modifyRecipeDTO.PreparationMode;         
             recipe.Category = modifyRecipeDTO.Category;
             if (modifyRecipeDTO.DeleteImageFile)
             {
@@ -137,7 +137,7 @@ namespace MeuLivroDeReceitas.Application.Services
 
             var fileDrfat = ConverteFilesToBytes(files);
 
-            var recipe = await _recipeRepository.GetById(recipeTitle.Id);
+            var recipe = await _recipeRepository.GetByIdAsync(recipeTitle.Id);
             recipe.FileExtension = fileExtension;
             recipe.DataDraft = fileDrfat; 
 
@@ -160,7 +160,7 @@ namespace MeuLivroDeReceitas.Application.Services
             if (recipies.Count() == 0)
                 throw new ErrorsNotFoundException(new List<string>() { string.Format(Resource.DeleteRecipeByTitle_Info_RecipeNotFound, nameof(DeleteRecipeByTitle), title) });
 
-            _recipeRepository.Delete(await _recipeRepository.GetById(recipies.First().Id));
+            _recipeRepository.Delete(await _recipeRepository.GetByIdAsync(recipies.First().Id));
             await _unitOfWork.CommitAsync();
         }
 
@@ -186,7 +186,7 @@ namespace MeuLivroDeReceitas.Application.Services
                 Category = recipe.Category,
                 NameCategory = recipe.Category.GetLocalizedDescription(), //GetDescriptionResources(),
                 PreparationMode = recipe.PreparationMode,
-                PreparationTime = recipe.PreparationTime,
+                PreparationTimeMinute = recipe.PreparationTime,
                 FileExtension = recipe.FileExtension                
             };
             return recipeResponseDTO;
@@ -200,7 +200,7 @@ namespace MeuLivroDeReceitas.Application.Services
                 Title = addRecipeDTO.Title,
                 Category =  addRecipeDTO.Category, 
                 PreparationMode = addRecipeDTO.PreparationMode, 
-                PreparationTime = addRecipeDTO.PreparationTime });
+                PreparationTimeMinute = addRecipeDTO.PreparationTimeMinute });
 
             if (!resultado.IsValid)
                 throw new ErrosDeValidacaoException(resultado.Errors.Select(c => c.ErrorMessage).ToList());
@@ -229,7 +229,7 @@ namespace MeuLivroDeReceitas.Application.Services
                 Title = modifyRecipeDTO.Title,
                 Category = modifyRecipeDTO.Category,
                 PreparationMode = modifyRecipeDTO.PreparationMode,
-                PreparationTime = modifyRecipeDTO.PreparationTime,
+                PreparationTimeMinute = modifyRecipeDTO.PreparationTimeMinute,
                 OldFileExtension = recipe.FileExtension,
                 DeleteImageFile = modifyRecipeDTO.DeleteImageFile});
 

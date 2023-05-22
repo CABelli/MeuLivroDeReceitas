@@ -21,7 +21,7 @@ namespace MeuLivroDeReceitas.Infrastructure.RepositoryGeneric
             _dbSet.Add(entity);
         }
 
-        public Task<List<T>> GetAll()
+        public Task<List<T>> GetAllAsync()
         {
             return _dbSet.AsQueryable().ToListAsync<T>();
         }
@@ -36,7 +36,7 @@ namespace MeuLivroDeReceitas.Infrastructure.RepositoryGeneric
             return await _dbSet.FirstOrDefaultAsync(expression);
         }        
 
-        public async Task<T> GetById(Guid id)
+        public async Task<T> GetByIdAsync(Guid id)
         {
             return await _dbSet.FirstOrDefaultAsync(d => d.Id == id);
         }
