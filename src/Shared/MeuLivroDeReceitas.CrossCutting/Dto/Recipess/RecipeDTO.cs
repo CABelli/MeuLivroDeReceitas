@@ -12,12 +12,10 @@ namespace MeuLivroDeReceitas.CrossCutting.Dto.Recipess
 
         public int PreparationTime { get; set; }
 
-        public string? FileExtension { get; set; }
-
-        public string? DataDraft { get; set; }
-
-        public Category CategoryRecipe { get; set; }
+        public ECategory Category { get; set; }
 
         public string? OldFileExtension { get; set; }
+
+        public bool DeleteImageFile { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace MeuLivroDeReceitas.CrossCutting.EnumClass
 {
-    public enum MethodUserValidator
+    public enum EMethodUserValidator
     {
         [Description("Authenticate")]
         Authenticate = 1,            

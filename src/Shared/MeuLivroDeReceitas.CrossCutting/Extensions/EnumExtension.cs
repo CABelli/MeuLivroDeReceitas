@@ -1,26 +1,45 @@
-﻿using MeuLivroDeReceitas.CrossCutting.Resources.CrossCutting;
+﻿using MeuLivroDeReceitas.CrossCutting.EnumClass;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 namespace MeuLivroDeReceitas.CrossCutting.Extensions
 {
     [ExcludeFromCodeCoverage]
     public static class EnumExtension
     {
-        public static string GetDescriptionResources<T>(this T enumValue) where T : Enum
+        public static string GetLocalizedDescription(this Enum enumeration)
         {
-            var description = enumValue.ToString();
-            var fieldInfo = enumValue.GetType().GetField(enumValue.ToString());
+            if (enumeration == null) return null;
 
-            if (fieldInfo != null)
+            string description = enumeration.ToString();
+
+            FieldInfo fieldInfo = enumeration.GetType().GetField(description);
+            DescriptionAttribute[] attributes = (DescriptionAttribute[])fieldInfo.GetCustomAttributes(typeof(DescriptionAttribute), false);
+
+            if (attributes.Any()) return attributes[0].Description;
+
+            return description;
+        }
+
+        public static List<string> GetAllEnumDescription()
+        {
+            List<string> resultado = new List<string>();
+
+            foreach (ECategory value in Enum.GetValues(typeof(ECategory)))
             {
-                var attrs = fieldInfo.GetCustomAttributes(typeof(DescriptionAttribute), true);
-                if (attrs != null && attrs.Length > 0)
-                {
-                    description = ((DescriptionAttribute)attrs[0]).Description;
-                }
+                FieldInfo fi = value.GetType().GetField(value.ToString());
+
+                LocalizedEnumAttribute[] attributes =
+                    (LocalizedEnumAttribute[])fi.GetCustomAttributes(typeof(LocalizedEnumAttribute), false);
+
+                if (attributes != null && attributes.Length > 0)
+                    resultado.Add(value.GetLocalizedDescription());
+                else
+                    resultado.Add(value.ToString());
             }
-            return Resource.ResourceManager.GetString(description);
+
+            return resultado;
         }
     }
 }

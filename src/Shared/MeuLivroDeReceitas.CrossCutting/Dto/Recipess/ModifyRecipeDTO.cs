@@ -1,4 +1,6 @@
 ﻿using MeuLivroDeReceitas.CrossCutting.EnumClass;
+using System.ComponentModel;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MeuLivroDeReceitas.CrossCutting.Dto.Recipess
 {
@@ -10,8 +12,9 @@ namespace MeuLivroDeReceitas.CrossCutting.Dto.Recipess
 
         public int PreparationTime { get; set; }
 
-        public Category Category { get; set; }
+        public ECategory Category { get; set; }
 
-        public string? FileExtension { get; set; }
+        [DefaultValue(false)]
+        public bool DeleteImageFile { get; set; } = false;
     }
 }

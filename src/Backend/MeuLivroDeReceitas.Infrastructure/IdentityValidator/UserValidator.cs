@@ -11,14 +11,14 @@ namespace MeuLivroDeReceitas.Infrastructure.IdentityValidator
         public int MinimumNumberOfCharactersInPassword = 10;
         public int MaximumNumberOfCharactersInPassword = 20;
 
-        public UserValidator(MethodUserValidator method)
+        public UserValidator(EMethodUserValidator method)
         {            
             switch (method)
             {
-                case MethodUserValidator.Authenticate: ValidatorAuthenticate(); return;
-                case MethodUserValidator.AddUser: ValidatorAddUser(); return;
-                case MethodUserValidator.UserChange: ValidatorUserChange(); return;
-                case MethodUserValidator.PasswordChangeByForgot: ValidatorPasswordChangeByForgot(); return;                    
+                case EMethodUserValidator.Authenticate: ValidatorAuthenticate(); return;
+                case EMethodUserValidator.AddUser: ValidatorAddUser(); return;
+                case EMethodUserValidator.UserChange: ValidatorUserChange(); return;
+                case EMethodUserValidator.PasswordChangeByForgot: ValidatorPasswordChangeByForgot(); return;                    
             };
         }
 

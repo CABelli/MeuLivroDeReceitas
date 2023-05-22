@@ -7,7 +7,7 @@ namespace MeuLivroDeReceitas.Domain.Entities
     {
         public string? Title { get; set; }
 
-        public Category Category { get; set; }
+        public ECategory Category { get; set; }
 
         public string? PreparationMode { get; set; }
 

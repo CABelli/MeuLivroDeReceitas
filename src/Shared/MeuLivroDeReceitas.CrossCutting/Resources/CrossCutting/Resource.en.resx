@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Category_Enum_Breakfast" xml:space="preserve">
-    <value>Breakfast</value>
+    <value>Big Breakfast</value>
   </data>
   <data name="Category_Enum_Dessert" xml:space="preserve">
-    <value>Category_Enum_Dessert</value>
+    <value>Dessert</value>
   </data>
   <data name="Category_Enum_Dinner" xml:space="preserve">
     <value>Dinner</value>

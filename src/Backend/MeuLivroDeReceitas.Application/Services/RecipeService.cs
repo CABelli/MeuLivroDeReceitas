@@ -93,7 +93,7 @@ namespace MeuLivroDeReceitas.Application.Services
                 Title = addRecipeDTO.Title,
                 PreparationMode = addRecipeDTO.PreparationMode,
                 PreparationTime = addRecipeDTO.PreparationTime,
-                Category = addRecipeDTO.CategoryRecipe
+                Category = addRecipeDTO.Category
             };
 
             _recipeRepository.Create(recipe);
@@ -110,13 +110,7 @@ namespace MeuLivroDeReceitas.Application.Services
             recipe.PreparationTime = modifyRecipeDTO.PreparationTime == 0 ? recipe.PreparationTime : modifyRecipeDTO.PreparationTime;
             recipe.PreparationMode = modifyRecipeDTO.PreparationMode == null ? recipe.PreparationMode : modifyRecipeDTO.PreparationMode;         
             recipe.Category = modifyRecipeDTO.Category;
-
-            // se houver atual  1) podera chegar nula ou igual 2) se mudar para nula deve-se anula a imagem 
-
-            // Se atual é diferente de nula e a nova é nula 1) colocar null na extensão e no rascunho 
-
-            if (string.IsNullOrEmpty(modifyRecipeDTO.FileExtension) &&
-                !string.IsNullOrEmpty(recipe.FileExtension))
+            if (modifyRecipeDTO.DeleteImageFile)
             {
                 recipe.DataDraft = null;
                 recipe.FileExtension = null;
@@ -201,7 +195,7 @@ namespace MeuLivroDeReceitas.Application.Services
                 Id = recipe.Id,
                 Title = recipe.Title,
                 Category = recipe.Category,
-                NameCategory = recipe.Category.GetDescriptionResources(),
+                NameCategory = recipe.Category.GetLocalizedDescription(), //GetDescriptionResources(),
                 PreparationMode = recipe.PreparationMode,
                 PreparationTime = recipe.PreparationTime,
                 FileExtension = recipe.FileExtension                
@@ -211,11 +205,11 @@ namespace MeuLivroDeReceitas.Application.Services
 
         private async Task ValidateAddRecipe(AddRecipeDTO addRecipeDTO)
         {
-            var validator = new RecipeValidator(MethodRecipeValidator.AddRecipe);
+            var validator = new RecipeValidator(EMethodRecipeValidator.AddRecipe);
 
             var resultado = validator.Validate(new RecipeDTO() { 
                 Title = addRecipeDTO.Title,
-                CategoryRecipe =  addRecipeDTO.CategoryRecipe, 
+                Category =  addRecipeDTO.Category, 
                 PreparationMode = addRecipeDTO.PreparationMode, 
                 PreparationTime = addRecipeDTO.PreparationTime });
 
@@ -236,20 +230,22 @@ namespace MeuLivroDeReceitas.Application.Services
 
         private async Task<Recipe> ValidateRecipeModification(ModifyRecipeDTO modifyRecipeDTO)
         {
-            var validator = new RecipeValidator(MethodRecipeValidator.ModifyRecipe);
+            var recipe = await _recipeRepository.WhereFirstAsync(x => x.Title == modifyRecipeDTO.Title);
+            if (recipe == null)
+                throw new ErrorsNotFoundException(new List<string>() 
+                { string.Format(Resource.ValidateRecipeModification_Info_RecipeNotFound, nameof(GetRecipiesTitle), modifyRecipeDTO.Title) });
+
+            var validator = new RecipeValidator(EMethodRecipeValidator.ModifyRecipe);
             var resultado = validator.Validate(new RecipeDTO()  {
                 Title = modifyRecipeDTO.Title,
-                CategoryRecipe = modifyRecipeDTO.Category,
+                Category = modifyRecipeDTO.Category,
                 PreparationMode = modifyRecipeDTO.PreparationMode,
                 PreparationTime = modifyRecipeDTO.PreparationTime,
-                FileExtension = modifyRecipeDTO.FileExtension  });
+                OldFileExtension = recipe.FileExtension,
+                DeleteImageFile = modifyRecipeDTO.DeleteImageFile});
 
             if (!resultado.IsValid)
                 throw new ErrosDeValidacaoException(resultado.Errors.Select(c => c.ErrorMessage).ToList());
-
-            var recipe = await _recipeRepository.WhereFirstAsync(x => x.Title == modifyRecipeDTO.Title);
-            if (recipe == null)
-                throw new ErrorsNotFoundException(new List<string>() { string.Format(Resource.ValidateRecipeModification_Info_RecipeNotFound, nameof(GetRecipiesTitle), modifyRecipeDTO.Title) });
 
             return recipe;
         }

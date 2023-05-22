@@ -1,5 +1,8 @@
 ﻿using MeuLivroDeReceitas.Application.Interfaces;
+using MeuLivroDeReceitas.CrossCutting.Dto.CategoriesDto;
 using MeuLivroDeReceitas.CrossCutting.Dto.Recipess;
+using MeuLivroDeReceitas.CrossCutting.EnumClass;
+using MeuLivroDeReceitas.CrossCutting.Extensions;
 using MeuLivroDeReceitas.CrossCutting.Resources.API;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -36,6 +39,23 @@ namespace MeuLivroDeReceitas.Api.Controllers
         {
             var listRecImageDraftDTO = await _recipeService.GetRecipiesDownLoad(title);
             return File(listRecImageDraftDTO.DataDraft, "image/png", listRecImageDraftDTO.NameFile);
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("get-categories")]
+        public async Task<ActionResult<CategoryListDto>> ListCategories()
+        {            
+            var categoryList = new CategoryListDto() { };
+            Enum.GetValues(typeof(ECategory)).Cast<ECategory>().ToList()
+                .ForEach(categories => categoryList.CategoryItems.Add(new CategoryListDetailsDTO()
+                {
+                    IdCategory = (int)categories,
+                    NameCategory = Enum.GetName(typeof(ECategory), categories),
+                    DescriptionCategory = categories.GetLocalizedDescription()
+                }));
+
+            return categoryList;
         }
 
         [HttpPost]

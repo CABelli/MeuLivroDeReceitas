@@ -2,6 +2,8 @@ using MeuLivroDeReceitas.Api.Filtros;
 using MeuLivroDeReceitas.Infra.IoC;
 using MeuLivroDeReceitas.CrossCutting.Resources.API;
 using ResourcesApplication = MeuLivroDeReceitas.CrossCutting.Resources.Application;
+using ResourcesCrossCutting = MeuLivroDeReceitas.CrossCutting.Resources.CrossCutting;
+using ResourcesInfrastructure = MeuLivroDeReceitas.CrossCutting.Resources.Infrastructure;
 using MeuLivroDeReceitas.Domain.Account;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,9 +11,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
-var KeyVaultGlobalCultureLanguage = "en"; /// en pt(Default)
+var KeyVaultGlobalCultureLanguage = "pt"; /// en pt(Default)
 Resource.Culture = new System.Globalization.CultureInfo(KeyVaultGlobalCultureLanguage);
 ResourcesApplication.Resource.Culture = new System.Globalization.CultureInfo(KeyVaultGlobalCultureLanguage);
+ResourcesCrossCutting.Resource.Culture = new System.Globalization.CultureInfo(KeyVaultGlobalCultureLanguage);
+ResourcesInfrastructure.Resource.Culture = new System.Globalization.CultureInfo(KeyVaultGlobalCultureLanguage);
 
 // Add services to the container.
 

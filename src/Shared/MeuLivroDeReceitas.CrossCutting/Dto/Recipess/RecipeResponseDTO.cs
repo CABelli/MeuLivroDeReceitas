@@ -14,7 +14,7 @@ namespace MeuLivroDeReceitas.CrossCutting.Dto.Recipess
 
         public int PreparationTime { get; set; }
 
-        public Category Category { get; set; }
+        public ECategory Category { get; set; }
 
         public string? NameCategory { get; set; }
 

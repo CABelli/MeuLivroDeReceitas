@@ -2,7 +2,7 @@
 
 namespace MeuLivroDeReceitas.CrossCutting.EnumClass
 {
-    public enum MethodIngredientValidator
+    public enum EMethodIngredientValidator
     {
         [Description("AddIngredient")]
         AddIngredient = 1,

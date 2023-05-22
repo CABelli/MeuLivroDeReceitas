@@ -32,7 +32,7 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
 
         public async Task<UserTokenDto> Authenticate(LoginDto loginDto)
         {           
-            var validator = new UserValidator(MethodUserValidator.Authenticate);
+            var validator = new UserValidator(EMethodUserValidator.Authenticate);
             var resultadAddUserVal = validator.Validate(new UserValidatorDto { 
                 UserName = loginDto.UserName, 
                 Password = loginDto.Password});
@@ -53,7 +53,7 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
 
         public async Task<bool> AddUser(UserDto userDto)
         {
-            var validator = new UserValidator(MethodUserValidator.AddUser);
+            var validator = new UserValidator(EMethodUserValidator.AddUser);
             var resultadAddUserVal = validator.Validate(new UserValidatorDto { 
                 UserName = userDto.UserName, 
                 Email = userDto.Email, 
@@ -83,7 +83,7 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
          
         public async Task<bool> UserChange(UserChangeDto userChangeDto)
         {
-            var validator = new UserValidator(MethodUserValidator.UserChange);
+            var validator = new UserValidator(EMethodUserValidator.UserChange);
             var resultadAddUserVal = validator.Validate(new UserValidatorDto { PhoneNumber = userChangeDto.PhoneNumber });
             if (!resultadAddUserVal.IsValid)
                 throw new ErrosDeValidacaoException(resultadAddUserVal.Errors.Select(c => c.ErrorMessage).ToList());
@@ -109,7 +109,7 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
             var appUserView = await _userManager.FindByNameAsync(appUserDto.UserName);
             var rolesName = await _userManager.GetRolesAsync(appUserView);
 
-            var validator = new UserValidator(MethodUserValidator.PasswordChangeByForgot);
+            var validator = new UserValidator(EMethodUserValidator.PasswordChangeByForgot);
             var resultadAddUserVal = validator.Validate(new UserValidatorDto { 
                 Password = passwordChangeDto.NewPassword, 
                 RepeatNewPassword = passwordChangeDto.RepeatNewPassword , 

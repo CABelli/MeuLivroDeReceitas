@@ -85,7 +85,7 @@ namespace MeuLivroDeReceitas.Application.Services
 
         private async Task<RecipeResponseDTO> ValidateIngredient(IngredientAddDto ingredientAddDTO)
         {
-            var validator = new IngredientValidator(MethodIngredientValidator.AddIngredient);
+            var validator = new IngredientValidator(EMethodIngredientValidator.AddIngredient);
             var resultado = validator.Validate(ingredientAddDTO);
             if (!resultado.IsValid)
                 throw new ErrosDeValidacaoException(resultado.Errors.Select(c => c.ErrorMessage).ToList());

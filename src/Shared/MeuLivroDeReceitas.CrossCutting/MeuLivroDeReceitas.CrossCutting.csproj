@@ -46,8 +46,11 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\CrossCutting\Resource.en.resx">
+      <Generator></Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\CrossCutting\Resource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Infrastructure\Resource.resx">

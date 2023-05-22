@@ -124,33 +124,6 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.Application {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DataDraft não preenchido. Método:{0}..
-        /// </summary>
-        public static string RecipeValidator_Error_DataDraftIsNull {
-            get {
-                return ResourceManager.GetString("RecipeValidator_Error_DataDraftIsNull", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to FileExtension não preenchido. Método:{0}..
-        /// </summary>
-        public static string RecipeValidator_Error_FileExtensionIsNull {
-            get {
-                return ResourceManager.GetString("RecipeValidator_Error_FileExtensionIsNull", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Número do telefone celular fora do padrão. Método:{0}. Número:{1}.
-        /// </summary>
-        public static string RecipeValidator_Error_NonStandardCellNumber {
-            get {
-                return ResourceManager.GetString("RecipeValidator_Error_NonStandardCellNumber", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Modo de preparo não preenchido. Método:{0}..
         /// </summary>
         public static string RecipeValidator_Error_UnfilledPreparationMode {
@@ -246,6 +219,15 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.Application {
         public static string ValidatorCategory_Error {
             get {
                 return ResourceManager.GetString("ValidatorCategory_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exclusão invalida, receita não contem imagem. Método:{0}..
+        /// </summary>
+        public static string ValidatorDeleteImageFile_error_WithoutImagem {
+            get {
+                return ResourceManager.GetString("ValidatorDeleteImageFile_error_WithoutImagem", resourceCulture);
             }
         }
         

@@ -12,11 +12,11 @@ namespace MeuLivroDeReceitas.Application.Services
         public int MinimumNumberOfCharactersInQuantity = 3;
         public int MaximumNumberOfCharactersInQuantity = 15;
 
-        public IngredientValidator(MethodIngredientValidator method)
+        public IngredientValidator(EMethodIngredientValidator method)
         {
             switch (method)
             {
-                case MethodIngredientValidator.AddIngredient: ValidatorAddIngredient(); return;
+                case EMethodIngredientValidator.AddIngredient: ValidatorAddIngredient(); return;
             };
         }
 
