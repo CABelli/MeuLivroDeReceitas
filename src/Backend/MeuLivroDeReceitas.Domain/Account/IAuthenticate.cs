@@ -1,4 +1,5 @@
 ﻿using MeuLivroDeReceitas.CrossCutting.Dto.Login;
+using MeuLivroDeReceitas.CrossCutting.Dto.Recipess;
 
 namespace MeuLivroDeReceitas.Domain.Account
 {
@@ -15,5 +16,7 @@ namespace MeuLivroDeReceitas.Domain.Account
         Task<bool> UserChange(UserChangeDto userChangeDto);
 
         Task<bool> PasswordChangeByForgot(PasswordChangeDto passwordChangeDto);
+
+        Task<IEnumerable<UserResponseDto>> GetUsers();
     }
 }

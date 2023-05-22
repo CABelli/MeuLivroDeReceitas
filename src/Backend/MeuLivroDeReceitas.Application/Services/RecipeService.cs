@@ -36,11 +36,11 @@ namespace MeuLivroDeReceitas.Application.Services
         public async Task<IEnumerable<RecipeResponseDTO>> GetRecipies()
         {
             await GenerateLogAudit(nameof(GetRecipies));
+            var listRecipeResponseDTO = new List<RecipeResponseDTO>();
             var recipies = await _recipeRepository.GetAll();
-            if (recipies == null)
-                throw new ErrorsNotFoundException(new List<string>() { string.Format(Resource.GetRecipies_Info_RecipeNotFound, nameof(GetRecipies)) });
+            if (recipies != null)
+                recipies.OrderBy(x => x.Title).ToList().ForEach(userList => listRecipeResponseDTO.Add(RecipeResult(userList)));
 
-            var listRecipeResponseDTO = ListRecipeResponseDTO(recipies);
             return listRecipeResponseDTO;
         }
 
@@ -176,17 +176,6 @@ namespace MeuLivroDeReceitas.Application.Services
         }
 
         #region Private
-
-        private List<RecipeResponseDTO> ListRecipeResponseDTO(IEnumerable<Recipe> recipies)
-        {
-            List<RecipeResponseDTO> listRecipeResponseDTO = new List<RecipeResponseDTO>();
-            foreach (var recipe in recipies)
-            {
-                var recipeResponseDTO = RecipeResult(recipe);
-                listRecipeResponseDTO.Add(recipeResponseDTO);
-            }
-            return listRecipeResponseDTO;
-        }
 
         private RecipeResponseDTO RecipeResult(Recipe recipe)
         {            

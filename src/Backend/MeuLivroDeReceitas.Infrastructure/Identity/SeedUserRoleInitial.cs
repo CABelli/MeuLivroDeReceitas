@@ -20,9 +20,9 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
             if (_userManager.FindByEmailAsync("usuario@localhost").Result == null)
             {
                 ApplicationUser user = new ApplicationUser();
-                user.UserName = "usuario@localhost";
+                user.UserName = "usuario local";
                 user.Email = "usuario@localhost";
-                user.NormalizedUserName = "USUARIO@LOCALHOST";
+                user.NormalizedUserName = "USUARIO LOCAL";
                 user.NormalizedEmail = "USUARIO@LOCALHOST";
                 user.EmailConfirmed = true;
                 user.LockoutEnabled = false;

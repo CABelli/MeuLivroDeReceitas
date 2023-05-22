@@ -44,9 +44,8 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
                 loginDto.Password, 
                 false, 
                 lockoutOnFailure: false);
-            if (!result.Succeeded)              
-                throw new ErrosDeValidacaoException(new List<string>() { Resource.Authenticate_Error_NotFound }); 
-                // Acesso invalido, login ou password
+            if (!result.Succeeded) // Acesso invalido, login ou password             
+                throw new ErrosDeValidacaoException(new List<string>() { Resource.Authenticate_Error_NotFound });                 
 
             return _tokenService.GenerateToken(loginDto);
         }
@@ -145,6 +144,21 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
         public async Task Logout()
         {
             await _signInManager.SignOutAsync();
+        }
+
+        public async Task<IEnumerable<UserResponseDto>> GetUsers()
+        {
+            var listUser = await _userManager.GetUsersInRoleAsync("User");
+            var listUserResponseDTO = new List<UserResponseDto>();
+            if (listUser != null)
+                listUser.OrderBy(x => x.UserName).ToList().ForEach(userList => listUserResponseDTO.Add(new UserResponseDto()
+                {
+                    UserName = userList.UserName,
+                    Email = userList.Email,
+                    PhoneNumber = userList.PhoneNumber
+                }));
+
+            return listUserResponseDTO;
         }
 
         #region Private

@@ -19,13 +19,11 @@ namespace MeuLivroDeReceitas.CrossCutting.Extensions
 
         public static string RemoveAccents(this string text)
         {
-            StringBuilder sbReturn = new StringBuilder();
-            var arrayText = text.Normalize(NormalizationForm.FormD).ToCharArray();
-            foreach (char letter in arrayText)
-            {
-                if (CharUnicodeInfo.GetUnicodeCategory(letter) != UnicodeCategory.NonSpacingMark)
-                    sbReturn.Append(letter);
-            }
+            var sbReturn = new StringBuilder();
+            text.Normalize(NormalizationForm.FormD).ToCharArray()
+                .Where(x => CharUnicodeInfo.GetUnicodeCategory(x) != UnicodeCategory.NonSpacingMark)
+                .ToList().ForEach(letter => sbReturn.Append(letter));
+
             return sbReturn.ToString();
         }
 
