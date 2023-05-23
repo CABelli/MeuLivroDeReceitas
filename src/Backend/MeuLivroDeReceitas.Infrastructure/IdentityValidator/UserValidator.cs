@@ -141,7 +141,6 @@ namespace MeuLivroDeReceitas.Infrastructure.IdentityValidator
                     .NotEmpty()
                     .Equal("Admin")
                     .WithMessage(rolesName => string.Format(Resource.ValidatorRolesName_Error_NotAdminList, rolesName));
-                    //.WithMessage(rolesName => $"002 - RolesName:  {rolesName} Somente Admin pode trocar senha");
             });
 
             When(c => c.RolesName.FirstOrDefault() != "Admin", () =>

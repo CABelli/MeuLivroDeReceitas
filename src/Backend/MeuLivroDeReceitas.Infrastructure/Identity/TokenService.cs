@@ -13,13 +13,17 @@ namespace MeuLivroDeReceitas.Infrastructure.Identity
         private readonly string _issuer;
         private readonly string _audience;
 
-        public TokenService(double tokenLifetimeInMinutes, string secretKey, string issuer, string audience)
+        public TokenService(double tokenLifetimeInMinutes, 
+            string secretKey, 
+            string issuer, 
+            string audience)
         {
             _tokenLifetimeInMinutes = tokenLifetimeInMinutes;
             _secretKey = secretKey;
             _issuer = issuer;
             _audience = audience;
         }
+
         public UserTokenDto GenerateToken(LoginDto loginDto)
         {
             var claims = new[]

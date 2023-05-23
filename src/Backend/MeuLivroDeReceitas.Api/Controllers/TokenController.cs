@@ -20,22 +20,22 @@ namespace MeuLivroDeReceitas.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("LoginUser")]
+        [HttpPost("post-login-user")]
         public async Task<ActionResult<UserTokenDto>> Login([FromBody] LoginDto loginDto)
             => Ok(await _authenticate.Authenticate(loginDto));
 
         //[Authorize(Roles = "Admin")]
         //[ApiExplorerSettings(IgnoreApi = true)]  // o endpoint fica ignorado e nao aparece
-        [HttpPost("UserCreate")]
+        [HttpPost("post-user-create")]
         [Authorize]
         public async Task<ActionResult> CreateUser([FromBody] UserDto userDto) 
             => Ok(await _authenticate.AddUser(userDto));
         
-        [HttpPut("UserChange")]
+        [HttpPut("put-user-change")]
         public async Task<ActionResult> UserRegisterChange([FromBody] UserChangeDto userChangeDto) 
             => Ok(await _authenticate.UserChange(userChangeDto));
 
-        [HttpPut("PasswordChangeForgot")]
+        [HttpPut("put-password-change-forgot")]
         public async Task<ActionResult> PasswordChange([FromBody] PasswordChangeDto passwordChangeDto)
             => Ok(await _authenticate.PasswordChangeByForgot(passwordChangeDto));
 
