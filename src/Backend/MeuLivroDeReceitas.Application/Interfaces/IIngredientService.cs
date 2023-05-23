@@ -6,6 +6,6 @@ namespace MeuLivroDeReceitas.Application.Interfaces
     {
         Task AddIngredient(IngredientAddDto ingredientAddDto);
 
-        Task<IngredientListDTO> GetIngredients(string title);
+        Task<IngredientListDTO> GetIngredients(string titleRecipe);
     }
 }

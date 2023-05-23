@@ -49,20 +49,20 @@ namespace MeuLivroDeReceitas.Application.Services
             await _unitOfWork.CommitAsync();           
         }
 
-        public async Task<IngredientListDTO> GetIngredients(string title)
+        public async Task<IngredientListDTO> GetIngredients(string titleRecipe)
         {
-            await _recipeService.GenerateLogAudit(nameof(GetIngredients) + " , key: " + title);
+            await _recipeService.GenerateLogAudit(nameof(GetIngredients) + " , key: " + titleRecipe);
 
-            var recipe = await _recipeService.GetRecipiesTitle(title);
+            var recipe = await _recipeService.GetRecipiesTitle(titleRecipe);
 
             var ingredients = await _ingredientRepository.WhereAsync(x => x.RecipeId == recipe.Id);
 
-            var ingredientList = new IngredientListDTO()
+            var ingredientListDTO = new IngredientListDTO()
             {
-                Title = title
+                TitleRecipe = recipe.Title
             };
 
-            ingredients.ForEach(ingredList => ingredientList.RecipeItems.Add(
+            ingredients.ForEach(ingredList => ingredientListDTO.RecipeItems.Add(
                 new IngredientListDetailsDTO()
                 {
                     Sku = ingredList.Sku,
@@ -80,7 +80,7 @@ namespace MeuLivroDeReceitas.Application.Services
             //    ingredientList.RecipeItems.Add(ingredientListDetails);
             //}
 
-            return ingredientList;
+            return ingredientListDTO;
         }
 
         private async Task<RecipeResponseDTO> ValidateIngredient(IngredientAddDto ingredientAddDTO)

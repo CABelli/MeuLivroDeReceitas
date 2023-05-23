@@ -28,6 +28,6 @@ namespace MeuLivroDeReceitas.Api.Controllers
 
         [HttpGet]
         [Route("get-list")]
-        public async Task<ActionResult<IngredientListDTO>> Get(string title) => Ok(await _ingredientService.GetIngredients(title));
+        public async Task<ActionResult<IngredientListDTO>> Get(string titleRecipe) => Ok(await _ingredientService.GetIngredients(titleRecipe));
     }
 }
