@@ -84,7 +84,7 @@ namespace MeuLivroDeReceitas.Application.Services
 
         public async Task AddRecipe(AddRecipeDTO addRecipeDTO)
         {
-            await GenerateLogAudit(nameof(AddRecipe) + " , key: " + addRecipeDTO.Title);
+            var usuarioId = await GenerateLogAudit(nameof(AddRecipe) + " , key: " + addRecipeDTO.Title);
             
             await ValidateAddRecipe(addRecipeDTO);
 
@@ -95,6 +95,7 @@ namespace MeuLivroDeReceitas.Application.Services
                 PreparationTime = addRecipeDTO.PreparationTimeMinute,
                 Category = addRecipeDTO.Category
             };
+            recipe.SetCreationUsuarioId(usuarioId);
 
             _recipeRepository.Create(recipe);
 
@@ -103,10 +104,11 @@ namespace MeuLivroDeReceitas.Application.Services
 
         public async Task UpdateRecipe(ModifyRecipeDTO modifyRecipeDTO)
         {
-            await GenerateLogAudit(nameof(UpdateRecipe) + " , key: " + modifyRecipeDTO.Title);
+            var usuarioId = await GenerateLogAudit(nameof(UpdateRecipe) + " , key: " + modifyRecipeDTO.Title);
 
             var recipe = await ValidateRecipeModification(modifyRecipeDTO);
 
+            recipe.SetAlterationUsuarioId(usuarioId);
             recipe.PreparationTime = modifyRecipeDTO.PreparationTimeMinute;
             recipe.PreparationMode = modifyRecipeDTO.PreparationMode;         
             recipe.Category = modifyRecipeDTO.Category;
@@ -123,7 +125,7 @@ namespace MeuLivroDeReceitas.Application.Services
                
         public async Task<string> UpdateRecipeDraftImage(ICollection<IFormFile> files, string title)
         {
-            await GenerateLogAudit(nameof(UpdateRecipeDraftImage) + " , key: " + title);
+            var usuarioId = await GenerateLogAudit(nameof(UpdateRecipeDraftImage) + " , key: " + title);
             if (files.Count() == 0) 
                 throw new ErrosDeValidacaoException(new List<string>() { Resource.UpdateRecipeDraftImage_Error_DataDraftIsNull });
 
@@ -138,6 +140,7 @@ namespace MeuLivroDeReceitas.Application.Services
             var fileDrfat = ConverteFilesToBytes(files);
 
             var recipe = await _recipeRepository.GetByIdAsync(recipeTitle.Id);
+            recipe.SetAlterationUsuarioId(usuarioId);
             recipe.FileExtension = fileExtension;
             recipe.DataDraft = fileDrfat; 
 
@@ -164,7 +167,7 @@ namespace MeuLivroDeReceitas.Application.Services
             await _unitOfWork.CommitAsync();
         }
 
-        public async Task GenerateLogAudit(string text) 
+        public async Task<string> GenerateLogAudit(string text) 
         {
             var appUserDto = await _authenticateService.RetrieveUserByIdentity();
             _logger.LogWarning(Resource.GenerateLogAudit_LogWarning, 
@@ -173,6 +176,7 @@ namespace MeuLivroDeReceitas.Application.Services
                 appUserDto.UserName,
                 appUserDto.PhoneNumber,
                 appUserDto.Email);
+            return appUserDto.UserName;
         }
 
         #region Private

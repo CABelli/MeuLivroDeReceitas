@@ -44,7 +44,7 @@ namespace MeuLivroDeReceitas.Infrastructure.RepositoryGeneric
         public void Update(T entity)
         {
             entity.SetAlterationDate(DateTime.Now);
-            entity.SetAlterationUsuarioId("NaoInformado");//(_documentSession.GetUserName() ?? "NaoInformado");
+            //entity.SetAlterationUsuarioId("NaoInformado");//(_documentSession.GetUserName() ?? "NaoInformado");
             _dbSet.Update(entity);
         }
 

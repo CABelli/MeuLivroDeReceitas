@@ -138,6 +138,9 @@
   <data name="RecipeValidator_Error_CharactersTitle" xml:space="preserve">
     <value>Title attribute characters cannot be {0}, must be between {1} and {2}. Method:{3}.</value>
   </data>
+  <data name="RecipeValidator_Error_InvalidTimeRange" xml:space="preserve">
+    <value>Prep time should be between {0} and {1} minutes. Method:{2}.</value>
+  </data>
   <data name="RecipeValidator_Error_UnfilledPreparationMode" xml:space="preserve">
     <value>Preparation Mode not filled. Method:{0}.</value>
   </data>

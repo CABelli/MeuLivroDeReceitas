@@ -1,21 +1,21 @@
 using MeuLivroDeReceitas.Api.Filtros;
-using MeuLivroDeReceitas.Infra.IoC;
 using MeuLivroDeReceitas.CrossCutting.Resources.API;
+using MeuLivroDeReceitas.Domain.Account;
+using MeuLivroDeReceitas.Infra.IoC;
 using ResourcesApplication = MeuLivroDeReceitas.CrossCutting.Resources.Application;
 using ResourcesCrossCutting = MeuLivroDeReceitas.CrossCutting.Resources.CrossCutting;
 using ResourcesInfrastructure = MeuLivroDeReceitas.CrossCutting.Resources.Infrastructure;
-using MeuLivroDeReceitas.Domain.Account;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
-var KeyVaultGlobalCultureLanguage = "pt"; /// en pt(Default)
-Resource.Culture = new System.Globalization.CultureInfo(KeyVaultGlobalCultureLanguage);
-ResourcesApplication.Resource.Culture = new System.Globalization.CultureInfo(KeyVaultGlobalCultureLanguage);
-ResourcesCrossCutting.Resource.Culture = new System.Globalization.CultureInfo(KeyVaultGlobalCultureLanguage);
-ResourcesInfrastructure.Resource.Culture = new System.Globalization.CultureInfo(KeyVaultGlobalCultureLanguage);
+var KeyVaultGlobalCultureLanguage = builder.Configuration.GetRequiredSection("KeyVault:KeyVaultGlobalCultureLanguage");
+Resource.Culture = new System.Globalization.CultureInfo(KeyVaultGlobalCultureLanguage.Value);
+ResourcesApplication.Resource.Culture = new System.Globalization.CultureInfo(KeyVaultGlobalCultureLanguage.Value);
+ResourcesCrossCutting.Resource.Culture = new System.Globalization.CultureInfo(KeyVaultGlobalCultureLanguage.Value);
+ResourcesInfrastructure.Resource.Culture = new System.Globalization.CultureInfo(KeyVaultGlobalCultureLanguage.Value);
 
 // Add services to the container.
 

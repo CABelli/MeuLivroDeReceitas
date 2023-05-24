@@ -18,6 +18,6 @@
 
         public void SetCreationUsuarioId(string creationUsuarioId) => CreationUsuarioId = creationUsuarioId;
 
-        public void SetAlterationUsuarioId(string alterationUsuarioId) => AlterationUsuarioId = AlterationUsuarioId;
+        public void SetAlterationUsuarioId(string alterationUsuarioId) => AlterationUsuarioId = alterationUsuarioId;
     }
 }

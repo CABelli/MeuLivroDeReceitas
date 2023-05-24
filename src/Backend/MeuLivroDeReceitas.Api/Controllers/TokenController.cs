@@ -39,6 +39,7 @@ namespace MeuLivroDeReceitas.Api.Controllers
         public async Task<ActionResult> PasswordChange([FromBody] PasswordChangeDto passwordChangeDto)
             => Ok(await _authenticate.PasswordChangeByForgot(passwordChangeDto));
 
+        [AllowAnonymous]
         [HttpGet]
         [Route("get-list")]
         public async Task<ActionResult<IEnumerable<UserResponseDto>>> Get() => Ok(await _authenticate.GetUsers());

@@ -124,6 +124,15 @@ namespace MeuLivroDeReceitas.CrossCutting.Resources.Application {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tempo de preparo deve ser entre {0} e {1} minutos. Método:{2}..
+        /// </summary>
+        public static string RecipeValidator_Error_InvalidTimeRange {
+            get {
+                return ResourceManager.GetString("RecipeValidator_Error_InvalidTimeRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Modo de preparo não preenchido. Método:{0}..
         /// </summary>
         public static string RecipeValidator_Error_UnfilledPreparationMode {

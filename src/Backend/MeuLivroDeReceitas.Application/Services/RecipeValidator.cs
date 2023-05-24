@@ -63,9 +63,15 @@ namespace MeuLivroDeReceitas.Application.Services
                 .WithMessage(string.Format(Resource.RecipeValidator_Error_UnfilledPreparationTime, nameof(ValidatorPreparationTime)));
 
             RuleFor(RecTile => RecTile.PreparationTimeMinute).InclusiveBetween(MinimumPreparationTimeMinutes, MaximumPreparationTimeMinutes)
-                .WithMessage(RecTile => string.Format(
-                    $"Tempo de preparo deve ser entre {MinimumPreparationTimeMinutes} e {MaximumPreparationTimeMinutes} minutos !!!"
+                .WithMessage(RecTile => string.Format(Resource.RecipeValidator_Error_InvalidTimeRange,
+                MinimumPreparationTimeMinutes,
+                MaximumPreparationTimeMinutes,
+                nameof(ValidatorPreparationTime)
                 ));
+
+            // $"Tempo de preparo deve ser entre {MinimumPreparationTimeMinutes} e {MaximumPreparationTimeMinutes} minutos !!!"
+            // RecipeValidator_Error_InvalidTimeRange
+            // Prep time should be between {0} and {1} minutes. Method:{2}.
         }
 
         public void ValidatorCategory()

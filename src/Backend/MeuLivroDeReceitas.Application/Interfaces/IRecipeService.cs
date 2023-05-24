@@ -21,6 +21,6 @@ namespace MeuLivroDeReceitas.Application.Interfaces
 
         Task DeleteRecipeByTitle(string title);
 
-        Task GenerateLogAudit(string title);
+        Task<string> GenerateLogAudit(string title);
     }
 }
