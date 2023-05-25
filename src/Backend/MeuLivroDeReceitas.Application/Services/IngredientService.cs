@@ -33,7 +33,7 @@ namespace MeuLivroDeReceitas.Application.Services
 
         public async Task AddIngredient(IngredientAddDto ingredientAddDTO)
         {
-            await _recipeService.GenerateLogAudit(nameof(GetIngredients) + " , key: " + ingredientAddDTO.Title);
+            var usuarioId = await _recipeService.GenerateLogAudit(nameof(GetIngredients) + " , key: " + ingredientAddDTO.Title);
 
             var recipe = await ValidateIngredient(ingredientAddDTO);
 
@@ -43,6 +43,7 @@ namespace MeuLivroDeReceitas.Application.Services
                 Quantity = ingredientAddDTO.Quantity,
                 RecipeId = recipe.Id
             };
+            ingredient.SetCreationUsuarioId(usuarioId);
 
             _ingredientRepository.Create(ingredient);
 

@@ -71,8 +71,9 @@ namespace MeuLivroDeReceitas.Application.Services
 
             if (recipe == null)
                 throw new ErrorsNotFoundException(new List<string>() { string.Format(Resource.GetRecipiesTitle_Info_RecipeNotFound, nameof(GetRecipiesTitle), title) });
-            if (recipe.FileExtension == null || String.IsNullOrEmpty(recipe.FileExtension))
-                throw new ErrosDeValidacaoException(new List<string>() { string.Format(Resource.GetRecipiesDownLoad_Info_NotContainImageFile, nameof(GetRecipiesTitle), title) });
+            
+            if (string.IsNullOrEmpty(recipe.FileExtension))
+                    throw new ErrosDeValidacaoException(new List<string>() { string.Format(Resource.GetRecipiesDownLoad_Info_NotContainImageFile, nameof(GetRecipiesTitle), title) });
 
             return new RecipeResponseImageDraftDTO
             {
@@ -164,6 +165,7 @@ namespace MeuLivroDeReceitas.Application.Services
                 throw new ErrorsNotFoundException(new List<string>() { string.Format(Resource.DeleteRecipeByTitle_Info_RecipeNotFound, nameof(DeleteRecipeByTitle), title) });
 
             _recipeRepository.Delete(await _recipeRepository.GetByIdAsync(recipies.First().Id));
+            
             await _unitOfWork.CommitAsync();
         }
 
@@ -176,6 +178,7 @@ namespace MeuLivroDeReceitas.Application.Services
                 appUserDto.UserName,
                 appUserDto.PhoneNumber,
                 appUserDto.Email);
+            
             return appUserDto.UserName;
         }
 
@@ -188,7 +191,7 @@ namespace MeuLivroDeReceitas.Application.Services
                 Id = recipe.Id,
                 Title = recipe.Title,
                 Category = recipe.Category,
-                NameCategory = recipe.Category.GetLocalizedDescription(), //GetDescriptionResources(),
+                NameCategory = recipe.Category.GetLocalizedDescription(),
                 PreparationMode = recipe.PreparationMode,
                 PreparationTimeMinute = recipe.PreparationTime,
                 FileExtension = recipe.FileExtension                
