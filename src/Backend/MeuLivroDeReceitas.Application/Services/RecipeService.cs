@@ -127,14 +127,8 @@ namespace MeuLivroDeReceitas.Application.Services
         public async Task<string> UpdateRecipeDraftImage(ICollection<IFormFile> files, string title)
         {
             var usuarioId = await GenerateLogAudit(nameof(UpdateRecipeDraftImage) + " , key: " + title);
-            if (files.Count() == 0) 
-                throw new ErrosDeValidacaoException(new List<string>() { Resource.UpdateRecipeDraftImage_Error_DataDraftIsNull });
 
-            string fileExtension = Path.GetExtension(files.FirstOrDefault().FileName);
-
-            if (!fileExtension.ExtensionToBool())           
-                throw new ErrosDeValidacaoException(new List<string>() 
-                { string.Format(Resource.UpdateRecipeDraftImage_Info_FileExtensionNotAccepted, nameof(UpdateRecipeDraftImage), title, fileExtension) });            
+            var fileExtension = await ValidateFile(files, title);
 
             var recipeTitle = await GetRecipiesTitle(title);
 
@@ -183,6 +177,20 @@ namespace MeuLivroDeReceitas.Application.Services
         }
 
         #region Private
+
+        private async Task<string> ValidateFile(ICollection<IFormFile> files, string title)
+        {
+            if (files.Count() == 0)
+                throw new ErrosDeValidacaoException(new List<string>() { Resource.UpdateRecipeDraftImage_Error_DataDraftIsNull });
+
+            string fileExtension = Path.GetExtension(files.FirstOrDefault().FileName);
+
+            if (!fileExtension.ExtensionToBool())
+                throw new ErrosDeValidacaoException(new List<string>()
+                { string.Format(Resource.UpdateRecipeDraftImage_Info_FileExtensionNotAccepted, nameof(UpdateRecipeDraftImage), title, fileExtension) });
+
+            return fileExtension;
+        }
 
         private RecipeResponseDTO RecipeResult(Recipe recipe)
         {            
